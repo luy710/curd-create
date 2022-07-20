@@ -7,8 +7,21 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    BasicArrow: typeof import('./../src/components/Basic/src/BasicArrow.vue')['default']
     BasicForm: typeof import('./../src/components/Form/src/BasicForm.vue')['default']
+    BasicHelp: typeof import('./../src/components/Basic/src/BasicHelp.vue')['default']
+    BasicTitle: typeof import('./../src/components/Basic/src/BasicTitle.vue')['default']
+    ElButton: typeof import('element-plus/es')['ElButton']
+    ElCard: typeof import('element-plus/es')['ElCard']
+    ElCol: typeof import('element-plus/es')['ElCol']
+    ElForm: typeof import('element-plus/es')['ElForm']
+    ElFormItem: typeof import('element-plus/es')['ElFormItem']
     'ElInput.password': typeof import('element-plus/es')['ElInput.password']
+    ElRow: typeof import('element-plus/es')['ElRow']
+    FormAction: typeof import('./../src/components/Form/src/components/FormAction.vue')['default']
+    FormItem: typeof import('./../src/components/Form/src/components/FormItem.vue')['default']
     HelloWorld: typeof import('./../src/components/HelloWorld.vue')['default']
+    RouterLink: typeof import('vue-router')['RouterLink']
+    RouterView: typeof import('vue-router')['RouterView']
   }
 }

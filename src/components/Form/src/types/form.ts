@@ -1,10 +1,10 @@
 import type { CSSProperties, VNode } from 'vue'
 import type { ColEx, ComponentType } from './index'
-import type { ButtonProps, RowProps, FormRules, FormItemProp } from 'element-plus'
+import type { ButtonProps, RowProps, FormItemRule, FormItemProp } from 'element-plus'
 import { TableActionType } from '@/components/Table/src/types/table'
 
 export type FieldMapToTime = [string, [string, string], string?][]
-export type Rule = FormRules & {
+export type Rule = FormItemRule & {
   trigger?: 'blur' | 'change' | ['change', 'blur']
 }
 
@@ -32,9 +32,9 @@ export interface FormActionType {
     prefixField: string | undefined,
     first?: boolean | undefined
   ) => Promise<void>
-  validateFields: (nameList?: NamePath[]) => Promise<any>
-  validate: (nameList?: NamePath[]) => Promise<any>
-  scrollToField: (name: NamePath, options?: ScrollOptions) => Promise<void>
+  validateField: (props?: FormItemProp, callback?: (isValid: boolean, invalidFields?: any) => void) => Promise<any>
+  validate: (callback?: (isValid: boolean, invalidFields?: any) => void) => Promise<any>
+  scrollToField: (prop: FormItemProp) => void
 }
 
 // 表单参数类型
