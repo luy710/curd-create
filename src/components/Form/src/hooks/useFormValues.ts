@@ -51,7 +51,6 @@ export default function useFormValues({ defaultValueRef, getSchema, formModel, g
   // 预处理表单 values
   const handleFormValues = (values: Recordable) => {
     if (!isObject(values)) return {}
-
     const res = {}
     // 转换成键值对
     for (const item of Object.entries(values)) {
@@ -115,6 +114,8 @@ export default function useFormValues({ defaultValueRef, getSchema, formModel, g
         if (formModel[schema.field] === undefined) {
           formModel[schema.field] = defaultValue
         }
+      } else {
+        formModel[schema.field] = undefined
       }
     })
 

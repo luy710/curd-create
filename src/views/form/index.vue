@@ -2,7 +2,7 @@
   <el-card title="基础示例">
     <BasicForm
       autoFocusFirstItem
-      :labelWidth="200"
+      :labelWidth="90"
       :schemas="schemas"
       :actionColOptions="{ span: 24 }"
       @submit="handleSubmit"
@@ -26,7 +26,7 @@
           allowClear
         />
       </template>
-      <template #localSearch="{ model, field }">
+      <!-- <template #localSearch="{ model, field }">
         <ApiSelect
           :api="optionsListApi"
           showSearch
@@ -49,7 +49,7 @@
           :params="searchParams"
           @search="onSearch"
         />
-      </template>
+      </template> -->
     </BasicForm>
   </el-card>
 </template>
@@ -57,8 +57,8 @@
 import { computed, defineComponent, unref, ref } from 'vue'
 import { BasicForm, FormSchema } from '@/components/Form/index'
 
-// import { optionsListApi } from '/@/api/demo/select'
-// import { treeOptionsListApi } from '/@/api/demo/tree'
+import { optionsListApi } from '@/api/demo/select'
+import { treeOptionsListApi } from '@/api/demo/tree'
 import { ElSelect as Select, ElMessage } from 'element-plus'
 import { cloneDeep, debounce } from 'lodash-es'
 
@@ -154,6 +154,7 @@ const schemas: FormSchema[] = [
       console.log('form:', schema)
       console.log('formModel:', formModel)
       return {
+        type: 'text',
         placeholder: '自定义placeholder',
         onChange: (e: any) => {
           console.log(e)
@@ -176,20 +177,21 @@ const schemas: FormSchema[] = [
       span: 8
     },
     componentProps: {
+      type: 'text',
       onChange: (e: any) => {
         console.log(e)
       }
     },
     suffix: '天'
   },
-  {
-    field: 'field3',
-    component: 'DatePicker',
-    label: '字段3',
-    colProps: {
-      span: 8
-    }
-  },
+  // {
+  //   field: 'field3',
+  //   component: 'DatePicker',
+  //   label: '字段3',
+  //   colProps: {
+  //     span: 8
+  //   }
+  // },
   {
     field: 'field4',
     component: 'Select',
@@ -212,46 +214,46 @@ const schemas: FormSchema[] = [
       ]
     }
   },
-  {
-    field: 'field5',
-    component: 'CheckboxGroup',
-    label: '字段5',
-    colProps: {
-      span: 8
-    },
-    componentProps: {
-      options: [
-        {
-          label: '选项1',
-          value: '1'
-        },
-        {
-          label: '选项2',
-          value: '2'
-        }
-      ]
-    }
-  },
-  {
-    field: 'field7',
-    component: 'RadioGroup',
-    label: '字段7',
-    colProps: {
-      span: 8
-    },
-    componentProps: {
-      options: [
-        {
-          label: '选项1',
-          value: '1'
-        },
-        {
-          label: '选项2',
-          value: '2'
-        }
-      ]
-    }
-  },
+  // {
+  //   field: 'field5',
+  //   component: 'CheckboxGroup',
+  //   label: '字段5',
+  //   colProps: {
+  //     span: 8
+  //   },
+  //   componentProps: {
+  //     options: [
+  //       {
+  //         label: '选项1',
+  //         value: '1'
+  //       },
+  //       {
+  //         label: '选项2',
+  //         value: '2'
+  //       }
+  //     ]
+  //   }
+  // },
+  // {
+  //   field: 'field7',
+  //   component: 'RadioGroup',
+  //   label: '字段7',
+  //   colProps: {
+  //     span: 8
+  //   },
+  //   componentProps: {
+  //     options: [
+  //       {
+  //         label: '选项1',
+  //         value: '1'
+  //       },
+  //       {
+  //         label: '选项2',
+  //         value: '2'
+  //       }
+  //     ]
+  //   }
+  // },
   {
     field: 'field8',
     component: 'Checkbox',
@@ -269,26 +271,26 @@ const schemas: FormSchema[] = [
       span: 8
     }
   },
-  {
-    field: 'field10',
-    component: 'RadioButtonGroup',
-    label: '字段10',
-    colProps: {
-      span: 8
-    },
-    componentProps: {
-      options: [
-        {
-          label: '选项1',
-          value: '1'
-        },
-        {
-          label: '选项2',
-          value: '2'
-        }
-      ]
-    }
-  },
+  // {
+  //   field: 'field10',
+  //   component: 'RadioButtonGroup',
+  //   label: '字段10',
+  //   colProps: {
+  //     span: 8
+  //   },
+  //   componentProps: {
+  //     options: [
+  //       {
+  //         label: '选项1',
+  //         value: '1'
+  //       },
+  //       {
+  //         label: '选项2',
+  //         value: '2'
+  //       }
+  //     ]
+  //   }
+  // },
   {
     field: 'field11',
     component: 'Cascader',
@@ -341,140 +343,140 @@ const schemas: FormSchema[] = [
       span: 24
     }
   },
-  {
-    field: 'field30',
-    component: 'ApiSelect',
-    label: '懒加载远程下拉',
-    required: true,
-    componentProps: {
-      // more details see /src/components/Form/src/components/ApiSelect.vue
-      api: optionsListApi,
-      params: {
-        id: 1
-      },
-      resultField: 'list',
-      // use name as label
-      labelField: 'name',
-      // use id as value
-      valueField: 'id',
-      // not request untill to select
-      immediate: false,
-      onChange: (e) => {
-        console.log('selected:', e)
-      },
-      // atfer request callback
-      onOptionsChange: (options) => {
-        console.log('get options', options.length, options)
-      }
-    },
-    colProps: {
-      span: 8
-    },
-    defaultValue: '0'
-  },
-  {
-    field: 'field31',
-    component: 'Input',
-    label: '下拉本地搜索',
-    helpMessage: ['ApiSelect组件', '远程数据源本地搜索', '只发起一次请求获取所有选项'],
-    required: true,
-    slot: 'localSearch',
-    colProps: {
-      span: 8
-    },
-    defaultValue: '0'
-  },
-  {
-    field: 'field32',
-    component: 'Input',
-    label: '下拉远程搜索',
-    helpMessage: ['ApiSelect组件', '将关键词发送到接口进行远程搜索'],
-    required: true,
-    slot: 'remoteSearch',
-    colProps: {
-      span: 8
-    },
-    defaultValue: '0'
-  },
-  {
-    field: 'field33',
-    component: 'ApiTreeSelect',
-    label: '远程下拉树',
-    helpMessage: ['ApiTreeSelect组件', '使用接口提供的数据生成选项'],
-    required: true,
-    componentProps: {
-      api: treeOptionsListApi,
-      resultField: 'list'
-    },
-    colProps: {
-      span: 8
-    }
-  },
-  {
-    field: 'field34',
-    component: 'ApiRadioGroup',
-    label: '远程Radio',
-    helpMessage: ['ApiRadioGroup组件', '使用接口提供的数据生成选项'],
-    required: true,
-    componentProps: {
-      api: optionsListApi,
-      params: {
-        count: 2
-      },
-      resultField: 'list',
-      // use name as label
-      labelField: 'name',
-      // use id as value
-      valueField: 'id'
-    },
-    defaultValue: '1',
-    colProps: {
-      span: 8
-    }
-  },
-  {
-    field: 'field35',
-    component: 'ApiRadioGroup',
-    label: '远程Radio',
-    helpMessage: ['ApiRadioGroup组件', '使用接口提供的数据生成选项'],
-    required: true,
-    componentProps: {
-      api: optionsListApi,
-      params: {
-        count: 2
-      },
-      resultField: 'list',
-      // use name as label
-      labelField: 'name',
-      // use id as value
-      valueField: 'id',
-      isBtn: true
-    },
-    colProps: {
-      span: 8
-    }
-  },
-  {
-    field: 'field36',
-    component: 'ApiTree',
-    label: '远程Tree',
-    helpMessage: ['ApiTree组件', '使用接口提供的数据生成选项'],
-    required: true,
-    componentProps: {
-      api: treeOptionsListApi,
-      params: {
-        count: 2
-      },
-      afterFetch: (v) => {
-        //do something
-        return v
-      },
-      resultField: 'list'
-    },
-    colProps: {
-      span: 8
-    }
-  },
+  // {
+  //   field: 'field30',
+  //   component: 'ApiSelect',
+  //   label: '懒加载远程下拉',
+  //   required: true,
+  //   componentProps: {
+  //     // more details see /src/components/Form/src/components/ApiSelect.vue
+  //     api: optionsListApi,
+  //     params: {
+  //       id: 1
+  //     },
+  //     resultField: 'list',
+  //     // use name as label
+  //     labelField: 'name',
+  //     // use id as value
+  //     valueField: 'id',
+  //     // not request untill to select
+  //     immediate: false,
+  //     onChange: (e) => {
+  //       console.log('selected:', e)
+  //     },
+  //     // atfer request callback
+  //     onOptionsChange: (options) => {
+  //       console.log('get options', options.length, options)
+  //     }
+  //   },
+  //   colProps: {
+  //     span: 8
+  //   },
+  //   defaultValue: '0'
+  // },
+  // {
+  //   field: 'field31',
+  //   component: 'Input',
+  //   label: '下拉本地搜索',
+  //   helpMessage: ['ApiSelect组件', '远程数据源本地搜索', '只发起一次请求获取所有选项'],
+  //   required: true,
+  //   slot: 'localSearch',
+  //   colProps: {
+  //     span: 8
+  //   },
+  //   defaultValue: '0'
+  // },
+  // {
+  //   field: 'field32',
+  //   component: 'Input',
+  //   label: '下拉远程搜索',
+  //   helpMessage: ['ApiSelect组件', '将关键词发送到接口进行远程搜索'],
+  //   required: true,
+  //   slot: 'remoteSearch',
+  //   colProps: {
+  //     span: 8
+  //   },
+  //   defaultValue: '0'
+  // },
+  // {
+  //   field: 'field33',
+  //   component: 'ApiTreeSelect',
+  //   label: '远程下拉树',
+  //   helpMessage: ['ApiTreeSelect组件', '使用接口提供的数据生成选项'],
+  //   required: true,
+  //   componentProps: {
+  //     api: treeOptionsListApi,
+  //     resultField: 'list'
+  //   },
+  //   colProps: {
+  //     span: 8
+  //   }
+  // },
+  // {
+  //   field: 'field34',
+  //   component: 'ApiRadioGroup',
+  //   label: '远程Radio',
+  //   helpMessage: ['ApiRadioGroup组件', '使用接口提供的数据生成选项'],
+  //   required: true,
+  //   componentProps: {
+  //     api: optionsListApi,
+  //     params: {
+  //       count: 2
+  //     },
+  //     resultField: 'list',
+  //     // use name as label
+  //     labelField: 'name',
+  //     // use id as value
+  //     valueField: 'id'
+  //   },
+  //   defaultValue: '1',
+  //   colProps: {
+  //     span: 8
+  //   }
+  // },
+  // {
+  //   field: 'field35',
+  //   component: 'ApiRadioGroup',
+  //   label: '远程Radio',
+  //   helpMessage: ['ApiRadioGroup组件', '使用接口提供的数据生成选项'],
+  //   required: true,
+  //   componentProps: {
+  //     api: optionsListApi,
+  //     params: {
+  //       count: 2
+  //     },
+  //     resultField: 'list',
+  //     // use name as label
+  //     labelField: 'name',
+  //     // use id as value
+  //     valueField: 'id',
+  //     isBtn: true
+  //   },
+  //   colProps: {
+  //     span: 8
+  //   }
+  // },
+  // {
+  //   field: 'field36',
+  //   component: 'ApiTree',
+  //   label: '远程Tree',
+  //   helpMessage: ['ApiTree组件', '使用接口提供的数据生成选项'],
+  //   required: true,
+  //   componentProps: {
+  //     api: treeOptionsListApi,
+  //     params: {
+  //       count: 2
+  //     },
+  //     afterFetch: (v) => {
+  //       //do something
+  //       return v
+  //     },
+  //     resultField: 'list'
+  //   },
+  //   colProps: {
+  //     span: 8
+  //   }
+  // },
   {
     field: 'divider-linked',
     component: 'Divider',
@@ -564,16 +566,16 @@ const schemas: FormSchema[] = [
       span: 24
     }
   },
-  {
-    field: '[startTime, endTime]',
-    label: '时间范围',
-    component: 'RangePicker',
-    componentProps: {
-      format: 'YYYY-MM-DD HH:mm:ss',
-      placeholder: ['开始时间', '结束时间'],
-      showTime: { format: 'HH:mm:ss' }
-    }
-  },
+  // {
+  //   field: '[startTime, endTime]',
+  //   label: '时间范围',
+  //   component: 'RangePicker',
+  //   componentProps: {
+  //     format: 'YYYY-MM-DD HH:mm:ss',
+  //     placeholder: ['开始时间', '结束时间'],
+  //     showTime: { format: 'HH:mm:ss' }
+  //   }
+  // },
   {
     field: 'divider-others',
     component: 'Divider',

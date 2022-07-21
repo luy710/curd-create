@@ -7,7 +7,7 @@ import { dateUtil } from '@/components/utils/dateUtil'
 import { dateItemType } from '../helper'
 
 interface UseFormActionContext {
-  emit: EmitType
+  emit: (event: 'submit' | 'reset' | 'advanced-change' | 'register' | 'field-value-change', ...args: any[]) => void
   getProps: ComputedRef<FormProps>
   getSchema: ComputedRef<FormSchema[]>
   formModel: Recordable
@@ -273,7 +273,7 @@ export default function useFormEvents({
   }
 
   // 验证整个表单
-  const validate = async (): Promise<void> => {
+  const validate = async (): Promise<boolean> => {
     return await unref(formElRef).validate()
   }
   // 滚动到某一个表单的验证信息
@@ -295,10 +295,9 @@ export default function useFormEvents({
     const formEl = unref(formElRef)
     if (!formEl) return
     try {
-      const values = await validate()
-
-      const res = handleFormValues(values)
-
+      const isValid = await validate()
+      if (!isValid) return
+      const res = handleFormValues(getFieldsValue())
       emit('submit', res)
     } catch (error: any) {
       throw new Error(error)

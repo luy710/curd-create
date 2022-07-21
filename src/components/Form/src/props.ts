@@ -52,7 +52,10 @@ export const basicProps = {
     type: Array as PropType<FieldMapToTime>,
     default: () => []
   },
-  rowProps: Object as PropType<RowProps>,
+  rowProps: {
+    type: Object as PropType<RowProps>,
+    default: () => ({})
+  },
   // 是否开启紧凑型表单
   compact: {},
   // 表单配置规则
@@ -62,13 +65,15 @@ export const basicProps = {
   },
   mergeDynamicData: {
     type: Object as PropType<Recordable>,
-    default: null
+    default: () => ({})
   },
   baseRowStyle: {
-    type: Object as PropType<CSSProperties>
+    type: Object as PropType<CSSProperties>,
+    default: () => ({})
   },
   baseColProps: {
-    type: Object as PropType<Partial<ColEx>>
+    type: Object as PropType<Partial<ColEx>>,
+    default: () => ({})
   },
   autoSetPlaceHolder: {
     type: Boolean,
@@ -90,7 +95,7 @@ export const basicProps = {
   size: {
     type: String,
     validator: (val: string) => ['default', 'small', 'large'].includes(val),
-    default: ''
+    default: 'default'
   },
   // 禁用表单
   disabled: {
@@ -163,7 +168,8 @@ export const basicProps = {
   labelCol: Object as PropType<Partial<ColEx>>,
 
   tableAction: {
-    type: Object as PropType<TableActionType>
+    type: Object as PropType<TableActionType>,
+    default: () => ({})
   },
 
   wrapperCol: Object as PropType<Partial<ColEx>>

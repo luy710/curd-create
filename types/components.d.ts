@@ -7,6 +7,8 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    ApiCascader: typeof import('../src/components/Form/src/components/ApiSelect.vue')['default']
+    ApiSelect: typeof import('./../src/components/Form/src/components/ApiSelect.vue')['default']
     BasicArrow: typeof import('./../src/components/Basic/src/BasicArrow.vue')['default']
     BasicForm: typeof import('./../src/components/Form/src/BasicForm.vue')['default']
     BasicHelp: typeof import('./../src/components/Basic/src/BasicHelp.vue')['default']
@@ -14,10 +16,14 @@ declare module '@vue/runtime-core' {
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']
     ElCol: typeof import('element-plus/es')['ElCol']
+    ElDivider: typeof import('element-plus/es')['ElDivider']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
+    ElIcon: typeof import('element-plus/es')['ElIcon']
+    ElInput: typeof import('element-plus/es')['ElInput']
     'ElInput.password': typeof import('element-plus/es')['ElInput.password']
     ElRow: typeof import('element-plus/es')['ElRow']
+    ElTooltip: typeof import('element-plus/es')['ElTooltip']
     FormAction: typeof import('./../src/components/Form/src/components/FormAction.vue')['default']
     FormItem: typeof import('./../src/components/Form/src/components/FormItem.vue')['default']
     HelloWorld: typeof import('./../src/components/HelloWorld.vue')['default']

@@ -1,23 +1,21 @@
 <template>
   <el-col v-bind="actionColOpt" v-if="showActionButtonGroup">
-    <div class="" style="width: 100%" :style="{ textAlign: actionColOpt.style.textAlign }">
-      <el-form-item>
-        <slot name="resetBefore"></slot>
-        <el-button class="mr-2" v-if="showResetButton" v-bind="getResetButtonOptions">
-          {{ getResetButtonOptions.text }}
-        </el-button>
-        <slot name="submitBefore"></slot>
-        <el-button class="mr-2" v-if="showSubmitButton" type="primary" v-bind="getSubmitButtonOptions">
-          {{ getSubmitButtonOptions.text }}
-        </el-button>
+    <el-form-item style="width: 100%">
+      <slot name="resetBefore"></slot>
+      <el-button class="mr-2" v-if="showResetButton" v-bind="getResetButtonOptions" @click="reset">
+        {{ getResetButtonOptions.innerText }}
+      </el-button>
+      <slot name="submitBefore"></slot>
+      <el-button class="mr-2" v-if="showSubmitButton" type="primary" v-bind="getSubmitButtonOptions" @click="submit">
+        {{ getSubmitButtonOptions.innerText }}
+      </el-button>
 
-        <slot name="advanceBefore"></slot>
-        <el-button type="link" v-if="showAdvancedButton && !hideAdvanceBtn" size="small" @click="toggleAdvanced">
-          {{ isAdvanced ? '收起' : '展开' }}
-        </el-button>
-        <slot name="advanceAfter"></slot>
-      </el-form-item>
-    </div>
+      <slot name="advanceBefore"></slot>
+      <el-button type="link" v-if="showAdvancedButton && !hideAdvanceBtn" size="small" @click="toggleAdvanced">
+        {{ isAdvanced ? '收起' : '展开' }}
+      </el-button>
+      <slot name="advanceAfter"></slot>
+    </el-form-item>
   </el-col>
 </template>
 
@@ -30,7 +28,7 @@ import type { ButtonProps } from 'element-plus'
 // type x=接口&接口
 // 当接口和type都&时,如果其中一个是基本类型,则&结果为基本类型,都是基本类型&结果为never,都是对象进行属性的添加
 
-type ButtonOptions = Partial<ButtonProps> & { text?: string }
+type ButtonOptions = Partial<ButtonProps> & { innerText?: string }
 
 const props = defineProps({
   showActionButtonGroup: {
@@ -75,7 +73,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['toggle-advanced'])
+const emit = defineEmits(['toggle-advanced', 'reset', 'submit'])
 
 const actionColOpt = computed(() => {
   const { showAdvancedButton, actionSpan: span, actionColOptions } = props
@@ -85,7 +83,6 @@ const actionColOpt = computed(() => {
   const advancedSpanObj = showAdvancedButton ? { span: actionSpan < 6 ? 24 : actionSpan } : {}
 
   const actionColOpt: Partial<ColEx> = {
-    style: { textAlign: 'right' },
     span: showAdvancedButton ? 6 : 4,
     ...advancedSpanObj,
     ...actionColOptions
@@ -95,16 +92,27 @@ const actionColOpt = computed(() => {
 })
 
 const getResetButtonOptions = computed((): ButtonOptions => {
-  return Object.assign({ text: '重置' }, props.resetButtonOptions)
+  return Object.assign({ innerText: '重置' }, props.resetButtonOptions)
 })
 
 const getSubmitButtonOptions = computed((): ButtonOptions => {
-  return Object.assign({ text: '确认' }, props.submitButtonOptions)
+  return Object.assign({ innerText: '确认' }, props.submitButtonOptions)
 })
-
 const toggleAdvanced = () => {
   emit('toggle-advanced')
 }
+
+const reset = () => {
+  emit('reset')
+}
+
+const submit = () => {
+  emit('submit')
+}
 </script>
 
-<style scss scoped></style>
+<style lang="scss" scoped>
+::v-deep(.el-form-item__content) {
+  justify-content: flex-end;
+}
+</style>

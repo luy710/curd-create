@@ -10,7 +10,7 @@ const BASIC_COL_LEN = 24
 
 interface UseAdvanceContext {
   advanceState: AdvanceState
-  emit: EmitType
+  emit: (event: 'submit' | 'reset' | 'advanced-change' | 'register' | 'field-value-change', ...args: any[]) => void
   getProps: ComputedRef<FormProps>
   getSchema: ComputedRef<FormSchema[]>
   formModel: Recordable

@@ -4,6 +4,7 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import { viteMockServe } from 'vite-plugin-mock'
 import { resolve } from 'path'
 
 function pathResolve(dir: string) {
@@ -21,6 +22,17 @@ export default defineConfig({
   plugins: [
     vue(),
     vueJsx(),
+    viteMockServe({
+      ignore: /^\_/,
+      mockPath: 'mock',
+      localEnabled: false,
+      prodEnabled: true,
+      injectCode: `
+        import { setupProdMockServer } from '../mock/_createProductionServer';
+  
+        setupProdMockServer();
+        `
+    }),
     AutoImport({
       imports: ['vue'],
       dts: './types/auto-imports.d.ts',

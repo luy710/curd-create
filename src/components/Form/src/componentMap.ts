@@ -21,12 +21,12 @@ import {
   ElDivider
 } from 'element-plus'
 
-import ApiRadioGroup from './components/ApiRadioGroup.vue'
-import RadioButtonGroup from './components/RadioButtonGroup.vue'
-import ApiSelect from './components/ApiSelect.vue'
-import ApiTree from './components/ApiTree.vue'
-import ApiTreeSelect from './components/ApiTreeSelect.vue'
-import ApiCascader from './components/ApiCascader.vue'
+// import ApiRadioGroup from './components/ApiRadioGroup.vue'
+// import RadioButtonGroup from './components/RadioButtonGroup.vue'
+// import ApiSelect from './components/ApiSelect.vue'
+// import ApiTree from './components/ApiTree.vue'
+// import ApiTreeSelect from './components/ApiTreeSelect.vue'
+// import ApiCascader from './components/ApiCascader.vue'
 // import { BasicUpload } from '/@/components/Upload'
 // import { StrengthMeter } from '/@/components/StrengthMeter'
 // import { IconPicker } from '/@/components/Icon'
@@ -39,17 +39,17 @@ componentMap.set('InputNumber', ElInputNumber)
 componentMap.set('AutoComplete', ElAutocomplete)
 
 componentMap.set('Select', ElSelect)
-componentMap.set('ApiSelect', ApiSelect)
-componentMap.set('ApiTree', ApiTree)
+// componentMap.set('ApiSelect', ApiSelect)
+// componentMap.set('ApiTree', ApiTree)
 componentMap.set('TreeSelect', ElTreeSelect)
-componentMap.set('ApiTreeSelect', ApiTreeSelect)
-componentMap.set('ApiRadioGroup', ApiRadioGroup)
+// componentMap.set('ApiTreeSelect', ApiTreeSelect)
+// componentMap.set('ApiRadioGroup', ApiRadioGroup)
 componentMap.set('Switch', ElSwitch)
-componentMap.set('RadioButtonGroup', RadioButtonGroup)
+// componentMap.set('RadioButtonGroup', RadioButtonGroup)
 componentMap.set('RadioGroup', ElRadio.Group)
 componentMap.set('Checkbox', ElCheckbox)
 componentMap.set('CheckboxGroup', ElCheckbox.Group)
-componentMap.set('ApiCascader', ApiCascader)
+// componentMap.set('ApiCascader', ApiCascader)
 componentMap.set('Cascader', ElCascader)
 componentMap.set('Slider', ElSlider)
 componentMap.set('Rate', ElRate)

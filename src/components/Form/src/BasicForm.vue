@@ -18,7 +18,12 @@
           </template>
         </FormItem>
       </template>
-      <FormAction v-bind="getFormActionBindProps" @toggle-advanced="handleToggleAdvanced">
+      <FormAction
+        v-bind="getFormActionBindProps"
+        @toggle-advanced="handleToggleAdvanced"
+        @reset="resetFields"
+        @submit="handleSubmit"
+      >
         <template #[item]="data" v-for="item in ['resetBefore', 'submitBefore', 'advanceBefore', 'advanceAfter']">
           <slot :name="item" v-bind="data || {}"></slot>
         </template>
@@ -48,7 +53,7 @@ const props = defineProps(basicProps)
 const formModel = reactive<Recordable>({})
 // 表单默认值对象
 const defaultValueRef = ref<Recordable>({})
-const emit = defineEmits(['advanced-change', 'reset', 'submit', 'register', 'field-value-change']) as EmitType
+const emit = defineEmits(['advanced-change', 'reset', 'submit', 'register', 'field-value-change'])
 // 是否已完成默认值初始化
 const isInitedDefaultRef = ref(false)
 // 用于存储 手动新增、修改的props
@@ -89,6 +94,8 @@ const getRow = computed(() => {
     ...rowProps
   }
 })
+
+console.log(getRow.value, '---------')
 // 获取form schema 配置列表
 const getSchema = computed((): FormSchema[] => {
   const schemas: FormSchema[] = unref(schemaRef) || (unref(getProps).schemas as FormSchema[])
@@ -174,7 +181,7 @@ const {
 })
 
 // 声明form 事件
-const formActionType: Partial<FormActionType> = {
+const formActionType: FormActionType = {
   getFieldsValue,
   setFieldsValue,
   resetFields,

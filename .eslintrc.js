@@ -3,7 +3,7 @@ module.exports = {
   env: {
     browser: true,
     node: true,
-    es6: true,
+    es6: true
   },
   parser: 'vue-eslint-parser',
   parserOptions: {
@@ -12,12 +12,9 @@ module.exports = {
     sourceType: 'module',
     jsxPragma: 'React',
     ecmaFeatures: {
-      jsx: true,
-    },
+      jsx: true
+    }
   },
-  extends: [
-    'plugin:vue/vue3-recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended',
-  ],
+  extends: ['plugin:vue/vue3-recommended', 'plugin:@typescript-eslint/recommended', 'plugin:prettier/recommended'],
+  plugins: ['vue', '@typescript-eslint', 'prettier']
 }
