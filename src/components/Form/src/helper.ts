@@ -20,19 +20,23 @@ export function createPlaceholderMessage(component: ComponentType) {
   return ''
 }
 
-const DATE_TYPE = ['DatePicker', 'MonthPicker', 'WeekPicker', 'TimePicker']
+const DATE_TYPE = ['DatePicker', 'TimePicker']
 
 function genType() {
-  return [...DATE_TYPE, 'RangePicker']
+  return [...DATE_TYPE]
 }
 
 // 时间段类型的组件
 export const dateItemType = genType()
 
-export function setComponentRuleType(rule: Rule, component: ComponentType, valueFormat: string) {
-  if (['DatePicker', 'MonthPicker', 'WeekPicker', 'TimePicker'].includes(component)) {
-    rule.type = valueFormat ? 'string' : 'object'
-  } else if (['RangePicker', 'Upload', 'CheckboxGroup', 'TimePicker'].includes(component)) {
+export function setComponentRuleType(rule: Rule, component: ComponentType, valueFormat: string, type?: '') {
+  if (['DatePicker', 'TimePicker'].includes(component)) {
+    if (!type?.includes('range')) {
+      rule.type = valueFormat ? 'string' : 'object'
+    } else {
+      rule.type = 'array'
+    }
+  } else if (['Upload', 'CheckboxGroup'].includes(component)) {
     rule.type = 'array'
   } else if (['InputNumber'].includes(component)) {
     rule.type = 'number'

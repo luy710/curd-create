@@ -12,10 +12,10 @@ class Abstract {
         headers
       })
         .then((res) => {
-          const { code, message, data } = res.data
+          const { code, message, result } = res.data
           resolve({
             code,
-            data,
+            result,
             message
           })
         })

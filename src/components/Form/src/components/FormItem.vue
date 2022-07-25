@@ -194,7 +194,7 @@ export default defineComponent({
           // 日期格式处理
           const valueFormat = unref(getComponentsProps)?.valueFormat
           // 处理其他类型rule 参数 验证类型
-          setComponentRuleType(rule, component, valueFormat)
+          setComponentRuleType(rule, component, valueFormat, unref(getComponentsProps)?.type)
         }
       }
       return rules
@@ -203,10 +203,13 @@ export default defineComponent({
     const renderComponent = () => {
       const { renderComponentContent, component, field, changeEvent = 'change', valueField } = props.schema
       const { autoSetPlaceHolder, size } = props.formProps
-      const isCheck = component && ['Switch', 'Checkbox'].includes(component)
+
       let schemaEvent = changeEvent
       if (component.includes('Input')) {
         schemaEvent = 'input'
+      }
+      if (['DatePicker', 'TimePicker'].includes(component)) {
+        schemaEvent = 'update:modelValue'
       }
       // 预处理事件事件的首字母大写
       const eventKey = `on${upperFirst(schemaEvent)}`
@@ -224,18 +227,17 @@ export default defineComponent({
           if (propsData[eventKey] && isFunction(propsData[eventKey])) {
             propsData[eventKey](...args)
           }
-          const target = e ? e.target : null
-          const value = target ? (isCheck ? target.checked : target.value) : e
-
-          props.setFormModel(field, value)
+          props.setFormModel(field, e)
         }
       }
 
       const Comp = componentMap.get(component) as ReturnType<typeof defineComponent>
 
       const isCreatePlaceholder = !propsData.disabled && autoSetPlaceHolder
-
-      if (isCreatePlaceholder && component !== 'RangePicker' && component) {
+      const { type, isRange } = unref(getComponentsProps)
+      const rangePicker =
+        ('DatePicker' === component && type.includes('range')) || ('TimePicker' === component && isRange)
+      if (isCreatePlaceholder && !rangePicker && component) {
         propsData.placeholder = unref(getComponentsProps)?.placeholder || createPlaceholderMessage(component)
       }
 
@@ -243,7 +245,7 @@ export default defineComponent({
       propsData.formValues = unref(getValues)
 
       const bindValue = {
-        [valueField || (isCheck ? 'checked' : 'modelValue')]: props.formModel[field]
+        [valueField || 'modelValue']: props.formModel[field]
       }
 
       const compAttr = {
@@ -260,6 +262,7 @@ export default defineComponent({
         : {
             default: () => renderComponentContent
           }
+
       return <Comp {...compAttr}>{compSlot}</Comp>
     }
 

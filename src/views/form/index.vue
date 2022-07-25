@@ -1,6 +1,8 @@
 <template>
   <el-card title="基础示例">
     <BasicForm
+      :fieldMapToTime="[['timerpicker', ['startTime', 'endTime'], 'HH:mm:ss']]"
+      :rowProps="{ gutter: 20 }"
       autoFocusFirstItem
       :labelWidth="90"
       :schemas="schemas"
@@ -53,10 +55,10 @@
     </BasicForm>
   </el-card>
 </template>
-<script lang="ts">
+<script lang="tsx">
 import { computed, defineComponent, unref, ref } from 'vue'
 import { BasicForm, FormSchema } from '@/components/Form/index'
-
+import { AlarmClock } from '@element-plus/icons-vue'
 import { optionsListApi } from '@/api/demo/select'
 import { treeOptionsListApi } from '@/api/demo/tree'
 import { ElSelect as Select, ElMessage } from 'element-plus'
@@ -177,21 +179,79 @@ const schemas: FormSchema[] = [
       span: 8
     },
     componentProps: {
-      type: 'text',
+      formatter: (value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+      parser: (value) => value.replace(/\$\s?|(,*)/g, ''),
+      // prefixIcon: 'AlarmClock',
+      // suffixIcon: 'AlarmClock',
       onChange: (e: any) => {
         console.log(e)
       }
     },
     suffix: '天'
   },
-  // {
-  //   field: 'field3',
-  //   component: 'DatePicker',
-  //   label: '字段3',
-  //   colProps: {
-  //     span: 8
-  //   }
-  // },
+  {
+    field: 'field2_2',
+    component: 'Input',
+    label: '密码',
+    defaultValue: '111',
+    colProps: {
+      span: 8
+    },
+    componentProps: {
+      type: 'password',
+      showPassword: true,
+      onChange: (e: any) => {
+        console.log(e)
+      }
+    },
+    suffix: '天'
+  },
+
+  {
+    field: 'field2_3',
+    component: 'Input',
+    label: 'textarea',
+    defaultValue: '111',
+    colProps: {
+      span: 8
+    },
+    componentProps: {
+      maxlength: '30',
+      placeholder: 'Please input',
+      showWordLimit: true,
+      type: 'textarea',
+      onChange: (e: any) => {
+        console.log(e)
+      }
+    }
+  },
+  {
+    field: 'field3',
+    component: 'DatePicker',
+    label: '字段3',
+    colProps: {
+      span: 8
+    },
+    componentProps: {
+      type: 'date',
+      valueFormat: 'YYYY-MM-DD'
+    }
+  },
+  {
+    field: 'timerpicker',
+    component: 'TimePicker',
+    label: 'timerpicker',
+    colProps: {
+      span: 8
+    },
+    componentProps: {
+      arrowControl: false,
+      isRange: true,
+      rangeSeparator: 'To',
+      startPlaceholder: 'Start time',
+      endPlaceholder: 'End time'
+    }
+  },
   {
     field: 'field4',
     component: 'Select',
@@ -199,6 +259,7 @@ const schemas: FormSchema[] = [
     colProps: {
       span: 8
     },
+    subLabel: 'subLabel',
     componentProps: {
       options: [
         {
@@ -214,46 +275,81 @@ const schemas: FormSchema[] = [
       ]
     }
   },
-  // {
-  //   field: 'field5',
-  //   component: 'CheckboxGroup',
-  //   label: '字段5',
-  //   colProps: {
-  //     span: 8
-  //   },
-  //   componentProps: {
-  //     options: [
-  //       {
-  //         label: '选项1',
-  //         value: '1'
-  //       },
-  //       {
-  //         label: '选项2',
-  //         value: '2'
-  //       }
-  //     ]
-  //   }
-  // },
-  // {
-  //   field: 'field7',
-  //   component: 'RadioGroup',
-  //   label: '字段7',
-  //   colProps: {
-  //     span: 8
-  //   },
-  //   componentProps: {
-  //     options: [
-  //       {
-  //         label: '选项1',
-  //         value: '1'
-  //       },
-  //       {
-  //         label: '选项2',
-  //         value: '2'
-  //       }
-  //     ]
-  //   }
-  // },
+  {
+    field: 'timeselect',
+    component: 'TimeSelect',
+    label: 'timeselect',
+    colProps: {
+      span: 8
+    },
+    componentProps: {
+      start: '08:30',
+      step: '00:15',
+      end: '18:30'
+    }
+  },
+  {
+    field: 'colorpicker',
+    component: 'ColorPicker',
+    label: 'colorpicker',
+    colProps: {
+      span: 8
+    },
+    componentProps: {}
+  },
+  {
+    field: 'field5',
+    component: 'CheckboxGroup',
+    label: '字段5',
+    colProps: {
+      span: 8
+    },
+    componentProps: {
+      isBtn: true,
+      options: [
+        {
+          label: '选项1',
+          value: '1'
+        },
+        {
+          label: '选项2',
+          value: '2'
+        },
+        {
+          label: '选项3',
+          value: '3',
+          disabled: true
+        }
+      ]
+    }
+  },
+
+  {
+    field: 'field7',
+    component: 'RadioGroup',
+    label: '字段7',
+    colProps: {
+      span: 8
+    },
+    componentProps: {
+      isBtn: true,
+      options: [
+        {
+          label: '选项1',
+          value: '1'
+        },
+        {
+          label: '选项2',
+          value: '2'
+        },
+        {
+          label: '选项3',
+          value: '3',
+          disabled: true
+        }
+      ]
+    }
+  },
   {
     field: 'field8',
     component: 'Checkbox',
@@ -343,37 +439,37 @@ const schemas: FormSchema[] = [
       span: 24
     }
   },
-  // {
-  //   field: 'field30',
-  //   component: 'ApiSelect',
-  //   label: '懒加载远程下拉',
-  //   required: true,
-  //   componentProps: {
-  //     // more details see /src/components/Form/src/components/ApiSelect.vue
-  //     api: optionsListApi,
-  //     params: {
-  //       id: 1
-  //     },
-  //     resultField: 'list',
-  //     // use name as label
-  //     labelField: 'name',
-  //     // use id as value
-  //     valueField: 'id',
-  //     // not request untill to select
-  //     immediate: false,
-  //     onChange: (e) => {
-  //       console.log('selected:', e)
-  //     },
-  //     // atfer request callback
-  //     onOptionsChange: (options) => {
-  //       console.log('get options', options.length, options)
-  //     }
-  //   },
-  //   colProps: {
-  //     span: 8
-  //   },
-  //   defaultValue: '0'
-  // },
+  {
+    field: 'field30',
+    component: 'Select',
+    label: '懒加载远程下拉',
+    required: true,
+    componentProps: {
+      // more details see /src/components/Form/src/components/ApiSelect.vue
+      api: optionsListApi,
+      params: {
+        id: 1
+      },
+      resultField: 'result.list',
+      // use name as label
+      labelField: 'name',
+      // use id as value
+      valueField: 'id',
+      // not request untill to select
+      immediate: false,
+      onChange: (e) => {
+        console.log('selected:', e)
+      },
+      // atfer request callback
+      onOptionsChange: (options) => {
+        console.log('get options', options.length, options)
+      }
+    },
+    colProps: {
+      span: 8
+    },
+    defaultValue: '0'
+  },
   // {
   //   field: 'field31',
   //   component: 'Input',
@@ -386,18 +482,40 @@ const schemas: FormSchema[] = [
   //   },
   //   defaultValue: '0'
   // },
-  // {
-  //   field: 'field32',
-  //   component: 'Input',
-  //   label: '下拉远程搜索',
-  //   helpMessage: ['ApiSelect组件', '将关键词发送到接口进行远程搜索'],
-  //   required: true,
-  //   slot: 'remoteSearch',
-  //   colProps: {
-  //     span: 8
-  //   },
-  //   defaultValue: '0'
-  // },
+  {
+    field: 'field32',
+    component: 'Select',
+    label: '下拉远程搜索',
+    helpMessage: ['ApiSelect组件', '将关键词发送到接口进行远程搜索'],
+    required: true,
+    componentProps: {
+      // more details see /src/components/Form/src/components/ApiSelect.vue
+      api: optionsListApi,
+      params: {
+        id: 2
+      },
+      resultField: 'result.list',
+      // use name as label
+      labelField: 'name',
+      // use id as value
+      valueField: 'id',
+      filterable: true,
+      remote: true,
+      // not request untill to select
+      immediate: false,
+      onChange: (e) => {
+        console.log('selected:', e)
+      },
+      // atfer request callback
+      onOptionsChange: (options) => {
+        console.log('get options', options.length, options)
+      }
+    },
+    colProps: {
+      span: 8
+    },
+    defaultValue: '0'
+  },
   // {
   //   field: 'field33',
   //   component: 'ApiTreeSelect',
@@ -627,7 +745,7 @@ const schemas: FormSchema[] = [
 
 export default defineComponent({
   // BasicForm, CollapseContainer, ApiSelect,
-  components: { BasicForm, ASelect: Select },
+  components: { BasicForm, ASelect: Select, AlarmClock },
   setup() {
     const check = ref(null)
     const keyword = ref<string>('')

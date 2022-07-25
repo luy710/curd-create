@@ -16,6 +16,7 @@ export default function useAutoFocus({ getSchema, getProps, formElRef, isInitedD
     }
 
     await nextTick()
+
     const schemas = unref(getSchema)
     const formEl = unref(formElRef)
     const el = (formEl as any).$el as HTMLElement

@@ -7,7 +7,7 @@ export interface PendingType {
   data?: any
   cancel: (val: any) => void
 }
-export const baseURL = '/'
+export const baseURL = '/basic-api'
 // axios实例
 const instance = axios.create({
   timeout: 30000,
@@ -33,7 +33,7 @@ instance.interceptors.request.use(
 // 添加相应拦截器
 instance.interceptors.response.use(
   (response: AxiosResponse) => {
-    return response.data
+    return response
   },
   (error) => {
     if (!error || !error.response) {

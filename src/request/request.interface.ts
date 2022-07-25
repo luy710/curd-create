@@ -27,5 +27,5 @@ export interface CustomResponse {
   readonly errorMsg?: string
   readonly errorCode?: number | null
   readonly message?: string
-  data?: any
+  result?: any
 }
