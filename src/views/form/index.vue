@@ -4,55 +4,43 @@
       :fieldMapToTime="[['timerpicker', ['startTime', 'endTime'], 'HH:mm:ss']]"
       :rowProps="{ gutter: 20 }"
       autoFocusFirstItem
-      :labelWidth="90"
+      :labelWidth="150"
       :schemas="schemas"
       :actionColOptions="{ span: 24 }"
       @submit="handleSubmit"
       @reset="handleReset"
     >
       <template #selectA="{ model, field }">
-        <a-select
+        <ApiSelect
           :options="optionsA"
-          mode="multiple"
-          v-model:value="model[field]"
-          @change="valueSelectA = model[field]"
-          allowClear
+          :modelValue="model[field]"
+          :collapseTags="true"
+          :collapseTagsTooltip="true"
+          :multiple="true"
+          @change="(params) => (model[field] = params)"
         />
       </template>
       <template #selectB="{ model, field }">
-        <a-select
+        <ApiSelect
           :options="optionsB"
-          mode="multiple"
-          v-model:value="model[field]"
-          @change="valueSelectB = model[field]"
-          allowClear
+          :modelValue="model[field]"
+          :collapseTags="true"
+          :collapseTagsTooltip="true"
+          :multiple="true"
+          @change="(params) => (model[field] = params)"
         />
       </template>
-      <!-- <template #localSearch="{ model, field }">
-        <ApiSelect
-          :api="optionsListApi"
-          showSearch
-          v-model:value="model[field]"
-          optionFilterProp="label"
-          resultField="list"
-          labelField="name"
-          valueField="id"
-        />
-      </template>
-      <template #remoteSearch="{ model, field }">
-        <ApiSelect
-          :api="optionsListApi"
-          showSearch
-          v-model:value="model[field]"
-          :filterOption="false"
-          resultField="list"
-          labelField="name"
-          valueField="id"
-          :params="searchParams"
-          @search="onSearch"
-        />
-      </template> -->
     </BasicForm>
+    <el-select-v2
+      :modelValue="valuesKeys"
+      :options="options"
+      placeholder="Please select"
+      style="width: 240px"
+      multiple
+      collapse-tags
+      collapse-tags-tooltip
+      @change="changeHandler"
+    />
   </el-card>
 </template>
 <script lang="tsx">
@@ -61,7 +49,8 @@ import { BasicForm, FormSchema } from '@/components/Form/index'
 import { AlarmClock } from '@element-plus/icons-vue'
 import { optionsListApi } from '@/api/demo/select'
 import { treeOptionsListApi } from '@/api/demo/tree'
-import { ElSelect as Select, ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus'
+import ApiSelect from '@/components/Form/src/components/ApiSelect.vue'
 import { cloneDeep, debounce } from 'lodash-es'
 
 const valueSelectA = ref<string[]>([])
@@ -188,6 +177,39 @@ const schemas: FormSchema[] = [
       }
     },
     suffix: '天'
+  },
+  {
+    field: 'multifield4',
+    component: 'Select',
+    label: '多选',
+    colProps: {
+      span: 8
+    },
+    componentProps: {
+      multiple: false,
+      filterable: true,
+      collapseTags: true,
+      collapseTagsTooltip: true,
+      options: [
+        {
+          label: '选项1',
+          value: '1',
+          key: '1'
+        },
+        {
+          label: '选项2',
+          value: '2',
+          key: '2'
+        }
+      ]
+    }
+    // rules: [
+    //   {
+    //     required: true,
+    //     message: '请输入aa',
+    //     type: 'array'
+    //   }
+    // ]
   },
   {
     field: 'field2_2',
@@ -367,26 +389,6 @@ const schemas: FormSchema[] = [
       span: 8
     }
   },
-  // {
-  //   field: 'field10',
-  //   component: 'RadioButtonGroup',
-  //   label: '字段10',
-  //   colProps: {
-  //     span: 8
-  //   },
-  //   componentProps: {
-  //     options: [
-  //       {
-  //         label: '选项1',
-  //         value: '1'
-  //       },
-  //       {
-  //         label: '选项2',
-  //         value: '2'
-  //       }
-  //     ]
-  //   }
-  // },
   {
     field: 'field11',
     component: 'Cascader',
@@ -516,64 +518,31 @@ const schemas: FormSchema[] = [
     },
     defaultValue: '0'
   },
-  // {
-  //   field: 'field33',
-  //   component: 'ApiTreeSelect',
-  //   label: '远程下拉树',
-  //   helpMessage: ['ApiTreeSelect组件', '使用接口提供的数据生成选项'],
-  //   required: true,
-  //   componentProps: {
-  //     api: treeOptionsListApi,
-  //     resultField: 'list'
-  //   },
-  //   colProps: {
-  //     span: 8
-  //   }
-  // },
-  // {
-  //   field: 'field34',
-  //   component: 'ApiRadioGroup',
-  //   label: '远程Radio',
-  //   helpMessage: ['ApiRadioGroup组件', '使用接口提供的数据生成选项'],
-  //   required: true,
-  //   componentProps: {
-  //     api: optionsListApi,
-  //     params: {
-  //       count: 2
-  //     },
-  //     resultField: 'list',
-  //     // use name as label
-  //     labelField: 'name',
-  //     // use id as value
-  //     valueField: 'id'
-  //   },
-  //   defaultValue: '1',
-  //   colProps: {
-  //     span: 8
-  //   }
-  // },
-  // {
-  //   field: 'field35',
-  //   component: 'ApiRadioGroup',
-  //   label: '远程Radio',
-  //   helpMessage: ['ApiRadioGroup组件', '使用接口提供的数据生成选项'],
-  //   required: true,
-  //   componentProps: {
-  //     api: optionsListApi,
-  //     params: {
-  //       count: 2
-  //     },
-  //     resultField: 'list',
-  //     // use name as label
-  //     labelField: 'name',
-  //     // use id as value
-  //     valueField: 'id',
-  //     isBtn: true
-  //   },
-  //   colProps: {
-  //     span: 8
-  //   }
-  // },
+  {
+    field: 'field33',
+    component: 'Select',
+    label: '多选分组',
+    helpMessage: ['ApiSelect组件', '使用接口提供的数据生成选项'],
+    required: true,
+    defaultValue: [],
+    componentProps: {
+      api: treeOptionsListApi,
+      groupField: 'children',
+      labelField: 'title',
+      isGroup: true,
+      collapseTags: true,
+      collapseTagsTooltip: true,
+      validateTrigger: 'blur',
+      afterFetch: (params: Recordable) => {
+        return params.result
+      },
+      multiple: true,
+      resultField: 'list'
+    },
+    colProps: {
+      span: 8
+    }
+  },
   // {
   //   field: 'field36',
   //   component: 'ApiTree',
@@ -684,16 +653,32 @@ const schemas: FormSchema[] = [
       span: 24
     }
   },
-  // {
-  //   field: '[startTime, endTime]',
-  //   label: '时间范围',
-  //   component: 'RangePicker',
-  //   componentProps: {
-  //     format: 'YYYY-MM-DD HH:mm:ss',
-  //     placeholder: ['开始时间', '结束时间'],
-  //     showTime: { format: 'HH:mm:ss' }
-  //   }
-  // },
+  {
+    field: '[dateStartTime, dateEndTime]',
+    label: '日期时间范围',
+    component: 'DatePicker',
+    componentProps: {
+      type: 'datetimerange',
+      format: 'YYYY-MM-DD HH:mm:ss',
+      valueFormat: 'YYYY-MM-DD HH:mm:ss'
+    },
+    colProps: {
+      span: 12
+    }
+  },
+  {
+    field: '[startTime, endTime]',
+    label: '时间范围',
+    component: 'TimePicker',
+    componentProps: {
+      isRange: true,
+      format: 'HH:mm:ss',
+      valueFormat: 'HH:mm:ss'
+    },
+    colProps: {
+      span: 12
+    }
+  },
   {
     field: 'divider-others',
     component: 'Divider',
@@ -715,6 +700,7 @@ const schemas: FormSchema[] = [
     field: 'field21',
     component: 'Slider',
     label: '字段21',
+    defaultValue: [3, 50],
     componentProps: {
       min: 0,
       max: 100,
@@ -738,14 +724,15 @@ const schemas: FormSchema[] = [
     },
     componentProps: {
       disabled: false,
-      allowHalf: true
+      allowHalf: true,
+      max: 10
     }
   }
 ]
 
 export default defineComponent({
   // BasicForm, CollapseContainer, ApiSelect,
-  components: { BasicForm, ASelect: Select, AlarmClock },
+  components: { BasicForm, ApiSelect, AlarmClock },
   setup() {
     const check = ref(null)
     const keyword = ref<string>('')
@@ -756,13 +743,61 @@ export default defineComponent({
     function onSearch(value: string) {
       keyword.value = value
     }
+    const valuesKeys = ref<any[]>([])
+    watch(
+      () => valuesKeys.value,
+      (value) => console.log(value, '111-----------')
+    )
     return {
       schemas,
+      valuesKeys,
       optionsListApi,
       optionsA,
       optionsB,
       valueSelectA,
       valueSelectB,
+      changeHandler: (params: any[]) => {
+        valuesKeys.value = params
+        console.log(params, '1111111', valuesKeys.value)
+        // valuesKeys.value = params
+      },
+      options: [
+        {
+          label: 'Popular cities',
+          options: [
+            {
+              value: 'Shanghai',
+              label: 'Shanghai'
+            },
+            {
+              value: 'Beijing',
+              label: 'Beijing'
+            }
+          ]
+        },
+        {
+          label: 'City name',
+          options: [
+            {
+              value: 'Chengdu',
+              label: 'Chengdu'
+            },
+            {
+              value: 'Shenzhen',
+              label: 'Shenzhen'
+            },
+            {
+              value: 'Guangzhou',
+              label: 'Guangzhou'
+            },
+            {
+              value: 'Dalian',
+              label: 'Dalian'
+            }
+          ]
+        }
+      ],
+
       onSearch: debounce(onSearch, 300),
       searchParams,
       handleReset: () => {

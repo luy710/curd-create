@@ -4,5 +4,10 @@
 - [✅] useFormItem测试通过
 - [✅] useFormEvent测试通过
 - [✅] input（search/password/textarea）测试通过
-- [✅] date-picker/date-time-picker/time-picker 未测试通过，存在bug已提issue
+- [✅] date-picker/date-time-picker/time-picker 测试通过
 - [✅] time-select测试通过
+- [✅] rate测试通过
+- [✅] 时间段解构赋值测试通过
+- [✅] 通过ref修改form的配置，测试通过
+- [✅] 动态验证表单，测试通过
+- [✅] select远程获取、远程查询、select组，测试通过

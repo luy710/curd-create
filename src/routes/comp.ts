@@ -28,7 +28,7 @@ const comp = {
           meta: {
             title: 'routes.demo.form.basic'
           }
-        }
+        },
         // {
         //   path: 'useForm',
         //   name: 'UseFormDemo',
@@ -37,14 +37,14 @@ const comp = {
         //     title: 'routes.demo.form.useForm'
         //   }
         // },
-        // {
-        //   path: 'refForm',
-        //   name: 'RefFormDemo',
-        //   component: () => import('@views/form/RefForm.vue'),
-        //   meta: {
-        //     title: 'routes.demo.form.refForm'
-        //   }
-        // },
+        {
+          path: 'refForm',
+          name: 'RefFormDemo',
+          component: () => import('@views/form/RefForm.vue'),
+          meta: {
+            title: 'routes.demo.form.refForm'
+          }
+        },
         // {
         //   path: 'advancedForm',
         //   name: 'AdvancedFormDemo',
@@ -53,14 +53,14 @@ const comp = {
         //     title: 'routes.demo.form.advancedForm'
         //   }
         // },
-        // {
-        //   path: 'ruleForm',
-        //   name: 'RuleFormDemo',
-        //   component: () => import('@views/form/RuleForm.vue'),
-        //   meta: {
-        //     title: 'routes.demo.form.ruleForm'
-        //   }
-        // },
+        {
+          path: 'ruleForm',
+          name: 'RuleFormDemo',
+          component: () => import('@views/form/RuleForm.vue'),
+          meta: {
+            title: 'routes.demo.form.ruleForm'
+          }
+        }
         // {
         //   path: 'dynamicForm',
         //   name: 'DynamicFormDemo',

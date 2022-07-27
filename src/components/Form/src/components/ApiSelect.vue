@@ -1,12 +1,14 @@
 <template>
-  <el-select-v2
-    v-model="state"
-    :loading="loading"
-    v-bind="getProps"
-    :options="getOptions"
-    @visible-change="handleFetch"
-  >
-  </el-select-v2>
+  <el-select v-model="state" :loading="loading" v-bind="getProps" :options="getOptions" @visible-change="handleFetch">
+    <template v-if="!isGroup">
+      <el-option v-for="item in getOptions" :key="item.value" :label="item.label" :value="item.value" />
+    </template>
+    <template v-else>
+      <el-option-group v-for="group in getOptions" :key="group.label" :label="group.label">
+        <el-option v-for="item in group.options" :key="item.value" :label="item.label" :value="item.value" />
+      </el-option-group>
+    </template>
+  </el-select>
 </template>
 
 <script lang="ts" setup>
@@ -14,7 +16,9 @@ import { isFunction, isArray } from '@/components/utils/is'
 import { get, omit, pick } from 'lodash-es'
 type OptionsItem = { label: string; value: string; disabled?: boolean }
 const props = defineProps({
-  modelValue: [Array, String, Number, Object],
+  modelValue: [Array, String, Number, Boolean, Object] as PropType<
+    any[] | string | number | boolean | Record<string, any> | any
+  >,
   // value数字转换为字符串
   numberToString: {
     type: Boolean,
@@ -54,20 +58,13 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-  filterable: {
-    type: Boolean,
-    default: false
-  },
-  remote: {
+  isGroup: {
     type: Boolean,
     default: false
   },
   options: {
-    type: Array as PropType<Recordable<OptionsItem>[]>,
+    type: Array as PropType<Recordable[]>,
     default: () => []
-  },
-  remoteMethod: {
-    type: Function as PropType<(query: string) => void>
   },
   // 调用接口返回数据处理
   afterFetch: { type: Function as PropType<Fn> },
@@ -75,10 +72,11 @@ const props = defineProps({
   beforeFetch: { type: Function as PropType<Fn> }
 })
 
-const emit = defineEmits(['update:modelValue', 'options-change'])
+const emit = defineEmits(['update:modelValue', 'options-change', 'change'])
 
 const state = computed({
   set: (val) => {
+    emit('change', val)
     emit('update:modelValue', val)
   },
   get: () => props.modelValue
@@ -118,6 +116,7 @@ const fetch = async (params?: Recordable) => {
     optionsList.value = []
     // 初次请求不使用beforeFetch，二外参数仅在远程查询搜索的时候导入
     result = await api(params || props.params)
+
     // 处理参数
     if (props.afterFetch && isFunction(props.afterFetch)) {
       result = props.afterFetch(result)
@@ -149,11 +148,11 @@ const remoteMethod = (query: string) => {
 
 const getProps = computed(() => {
   let obj: Recordable = {}
-  if (props.filterable && props.remote && (!props.remoteMethod || !isFunction(props.remoteMethod))) {
+  if (attrs.filterable && attrs.remote && (!attrs.remoteMethod || !isFunction(attrs.remoteMethod))) {
     obj['remoteMethod'] = remoteMethod
   }
 
-  return Object.assign(pick(props, ['remote', 'filterable', 'remoteMethod']), obj, attrs)
+  return Object.assign(obj, attrs)
 })
 
 // 每次显示popover自动重新查询一下数据

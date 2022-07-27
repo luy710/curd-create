@@ -1,4 +1,4 @@
-import defHttp from '@/request/axios'
+import axios from '@/request/axios'
 
 enum Api {
   TREE_OPTIONS_LIST = '/tree/getDemoOptions'
@@ -7,5 +7,4 @@ enum Api {
 /**
  * @description: Get sample options value
  */
-export const treeOptionsListApi = (params?: Recordable) =>
-  defHttp.get<Recordable[]>({ url: Api.TREE_OPTIONS_LIST, params })
+export const treeOptionsListApi = (params?: Recordable) => axios.get({ url: Api.TREE_OPTIONS_LIST, params })

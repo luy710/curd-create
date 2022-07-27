@@ -95,7 +95,6 @@ const getRow = computed(() => {
   }
 })
 
-console.log(getRow.value, '---------')
 // 获取form schema 配置列表
 const getSchema = computed((): FormSchema[] => {
   const schemas: FormSchema[] = unref(schemaRef) || (unref(getProps).schemas as FormSchema[])
@@ -219,6 +218,25 @@ const handleEnterPress = (e: KeyboardEvent) => {
     }
   }
 }
+
+// 导出内部事件
+defineExpose({
+  getBindValue,
+  handleToggleAdvanced,
+  handleEnterPress,
+  formModel,
+  defaultValueRef,
+  advanceState,
+  getRow,
+  getProps,
+  formElRef,
+  getSchema,
+  formActionType: formActionType as any,
+  setFormModel,
+  getFormClass,
+  getFormActionBindProps,
+  ...formActionType
+})
 
 // 根据model 设置form表单的值
 watch(

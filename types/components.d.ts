@@ -8,6 +8,7 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     ApiSelect: typeof import('./../src/components/Form/src/components/ApiSelect.vue')['default']
+    ApiTree: typeof import('./../src/components/Form/src/components/ApiTree.vue')['default']
     BasicArrow: typeof import('./../src/components/Basic/src/BasicArrow.vue')['default']
     BasicForm: typeof import('./../src/components/Form/src/BasicForm.vue')['default']
     BasicHelp: typeof import('./../src/components/Basic/src/BasicHelp.vue')['default']
@@ -27,6 +28,7 @@ declare module '@vue/runtime-core' {
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElIcon: typeof import('element-plus/es')['ElIcon']
     ElOption: typeof import('element-plus/es')['ElOption']
+    ElOptionGroup: typeof import('element-plus/es')['ElOptionGroup']
     ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
     ElRow: typeof import('element-plus/es')['ElRow']
     ElSelect: typeof import('element-plus/es')['ElSelect']
@@ -39,5 +41,8 @@ declare module '@vue/runtime-core' {
     RadioGroup: typeof import('./../src/components/Form/src/components/RadioGroup.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+  }
+  export interface ComponentCustomProperties {
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }

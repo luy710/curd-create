@@ -208,7 +208,7 @@ export default defineComponent({
       if (component.includes('Input')) {
         schemaEvent = 'input'
       }
-      if (['DatePicker', 'TimePicker'].includes(component)) {
+      if (['DatePicker', 'TimePicker', 'Slider'].includes(component)) {
         schemaEvent = 'update:modelValue'
       }
       // 预处理事件事件的首字母大写
@@ -236,7 +236,7 @@ export default defineComponent({
       const isCreatePlaceholder = !propsData.disabled && autoSetPlaceHolder
       const { type, isRange } = unref(getComponentsProps)
       const rangePicker =
-        ('DatePicker' === component && type.includes('range')) || ('TimePicker' === component && isRange)
+        ('DatePicker' === component && type && type.includes('range')) || ('TimePicker' === component && isRange)
       if (isCreatePlaceholder && !rangePicker && component) {
         propsData.placeholder = unref(getComponentsProps)?.placeholder || createPlaceholderMessage(component)
       }

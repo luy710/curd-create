@@ -3,11 +3,11 @@
     <el-form-item style="width: 100%">
       <slot name="resetBefore"></slot>
       <el-button class="mr-2" v-if="showResetButton" v-bind="getResetButtonOptions" @click="reset">
-        {{ getResetButtonOptions.innerText }}
+        {{ getResetButtonOptions.innerTxt }}
       </el-button>
       <slot name="submitBefore"></slot>
       <el-button class="mr-2" v-if="showSubmitButton" type="primary" v-bind="getSubmitButtonOptions" @click="submit">
-        {{ getSubmitButtonOptions.innerText }}
+        {{ getSubmitButtonOptions.innerTxt }}
       </el-button>
 
       <slot name="advanceBefore"></slot>
@@ -21,14 +21,11 @@
 
 <script lang="ts" setup>
 import type { ColEx } from '../types/index'
-import type { ButtonProps } from 'element-plus'
-
+import type { ButtonOptions } from '../types/form'
 // type xxx=x&{sex:string}
 // 可以实现接口和接口的交叉,但是只能赋值给type类型
 // type x=接口&接口
 // 当接口和type都&时,如果其中一个是基本类型,则&结果为基本类型,都是基本类型&结果为never,都是对象进行属性的添加
-
-type ButtonOptions = Partial<ButtonProps> & { innerText?: string }
 
 const props = defineProps({
   showActionButtonGroup: {
@@ -92,12 +89,13 @@ const actionColOpt = computed(() => {
 })
 
 const getResetButtonOptions = computed((): ButtonOptions => {
-  return Object.assign({ innerText: '重置' }, props.resetButtonOptions)
+  return Object.assign({ innerTxt: '重置' }, props.resetButtonOptions)
 })
 
 const getSubmitButtonOptions = computed((): ButtonOptions => {
-  return Object.assign({ innerText: '确认' }, props.submitButtonOptions)
+  return Object.assign({ innerTxt: '确认' }, props.submitButtonOptions)
 })
+
 const toggleAdvanced = () => {
   emit('toggle-advanced')
 }

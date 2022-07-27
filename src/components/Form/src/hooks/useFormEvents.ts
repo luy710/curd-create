@@ -269,7 +269,7 @@ export default function useFormEvents({
 
   // 验证某个字段
   const validateField = async (props?: FormItemProp): Promise<any> => {
-    return await unref(formElRef).validateField(props)
+    return await unref(formElRef)?.validateField(props)
   }
 
   // 验证整个表单

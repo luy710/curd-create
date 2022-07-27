@@ -1,14 +1,6 @@
-<script setup lang="ts">
-import ElDatePicker from 'element-plus/lib/components/date-picker/src/date-picker'
-console.log(ElDatePicker)
-const value1 = ref()
-const change = (value) => {
-  value1.value = value
-}
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <!-- <ElDatePicker :modelValue="value1" @update:model-value="change" /> -->
   <RouterView />
 </template>
 

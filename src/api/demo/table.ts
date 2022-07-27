@@ -1,5 +1,5 @@
-import defHttp from '@/request/axios'
-import { DemoParams, DemoListGetResultModel } from './model/tableModel'
+import axios from '@/request/axios'
+import { DemoParams } from './model/tableModel'
 
 enum Api {
   DEMO_LIST = '/table/getDemoList'
@@ -10,7 +10,7 @@ enum Api {
  */
 
 export const demoListApi = (params: DemoParams) =>
-  defHttp.get<DemoListGetResultModel>({
+  axios.get({
     url: Api.DEMO_LIST,
     params,
     headers: {

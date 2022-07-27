@@ -1,6 +1,6 @@
-import { FieldMapToTime, FormSchema } from './types/form'
+import { FieldMapToTime, FormSchema, ButtonOptions } from './types/form'
 import { ColEx } from './types'
-import type { ButtonProps, RowProps } from 'element-plus'
+import type { RowProps } from 'element-plus'
 import { TableActionType } from '@/components/Table/src/types/table'
 import type { CSSProperties } from 'vue'
 
@@ -151,7 +151,7 @@ export const basicProps = {
     default: false
   },
   // 重置按钮配置
-  resetButtonOptions: Object as PropType<Partial<ButtonProps>>,
+  resetButtonOptions: Object as PropType<Partial<ButtonOptions>>,
 
   // 显示确认按钮
   showSubmitButton: {
@@ -159,7 +159,7 @@ export const basicProps = {
     default: true
   },
   // 确认按钮配置
-  submitButtonOptions: Object as PropType<Partial<ButtonProps>>,
+  submitButtonOptions: Object as PropType<Partial<ButtonOptions>>,
 
   // 自定义重置函数
   resetFunc: Function as PropType<() => Promise<void>>,

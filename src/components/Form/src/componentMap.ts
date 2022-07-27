@@ -19,15 +19,14 @@ import {
   ElTreeSelect,
   ElSlider,
   ElRate,
-  ElDivider
+  ElDivider,
+  ElTreeV2,
+  ElTransfer
 } from 'element-plus'
 
 import RadioGroup from './components/RadioGroup.vue'
 import ApiSelect from './components/ApiSelect.vue'
 import CheckboxGroup from './components/CheckboxGroup.vue'
-// import ApiTree from './components/ApiTree.vue'
-// import ApiTreeSelect from './components/ApiTreeSelect.vue'
-// import ApiCascader from './components/ApiCascader.vue'
 // import { BasicUpload } from '/@/components/Upload'
 // import { StrengthMeter } from '/@/components/StrengthMeter'
 // import { IconPicker } from '/@/components/Icon'
@@ -43,20 +42,16 @@ componentMap.set('Checkbox', ElCheckbox)
 componentMap.set('CheckboxGroup', CheckboxGroup)
 componentMap.set('Radio', ElRadio)
 componentMap.set('RadioGroup', RadioGroup)
-
-// componentMap.set('ApiTree', ApiTree)
+componentMap.set('Tree', ElTreeV2)
 componentMap.set('TreeSelect', ElTreeSelect)
-// componentMap.set('ApiTreeSelect', ApiTreeSelect)
 componentMap.set('Switch', ElSwitch)
-
-// componentMap.set('ApiCascader', ApiCascader)
 componentMap.set('Cascader', ElCascader)
 componentMap.set('Slider', ElSlider)
 componentMap.set('Rate', ElRate)
-
 componentMap.set('DatePicker', ElDatePicker)
 componentMap.set('TimePicker', ElTimePicker)
 componentMap.set('TimeSelect', ElTimeSelect)
+componentMap.set('Transfer', ElTransfer)
 // componentMap.set('StrengthMeter', StrengthMeter)
 // componentMap.set('IconPicker', IconPicker)
 // componentMap.set('InputCountDown', CountdownInput)

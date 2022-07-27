@@ -1,4 +1,4 @@
-import defHttp from '@/request/axios'
+import axios from '@/request/axios'
 
 enum Api {
   // The address does not exist
@@ -9,4 +9,4 @@ enum Api {
  * @description: Trigger ajax error
  */
 
-export const fireErrorApi = () => defHttp.get({ url: Api.Error })
+export const fireErrorApi = () => axios.get({ url: Api.Error })

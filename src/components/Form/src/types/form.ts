@@ -3,6 +3,7 @@ import type { ColEx, ComponentType } from './index'
 import type { ButtonProps, RowProps, FormItemRule, FormItemProp } from 'element-plus'
 import { TableActionType } from '@/components/Table/src/types/table'
 
+export type ButtonOptions = Partial<ButtonProps> & { innerTxt?: string }
 export type FieldMapToTime = [string, [string, string], string?][]
 export type Rule = FormItemRule & {
   trigger?: 'blur' | 'change' | ['change', 'blur']
@@ -14,7 +15,8 @@ export interface RenderCallbackParams {
   model: Recordable
   field: string
 }
-
+export type RegisterFn = (formInstance: FormActionType) => void
+export type UseFormReturnType = [RegisterFn, FormActionType]
 export type NamePath = string | number | string | number[]
 
 export interface FormActionType {
@@ -100,9 +102,9 @@ export interface FormProps {
   // 是否显示操作按钮(重置/提交)
   showActionButtonGroup?: boolean
   // R重置按钮配置见
-  resetButtonOptions?: Partial<ButtonProps>
+  resetButtonOptions?: Partial<ButtonOptions>
   // 确认按钮配置
-  submitButtonOptions?: Partial<ButtonProps>
+  submitButtonOptions?: Partial<ButtonOptions>
   // 操作按钮外层 Col 组件配置，如果开启 showAdvancedButton，则不用设置，
   actionColOptions?: Partial<ColEx>
   // 显示重置按钮

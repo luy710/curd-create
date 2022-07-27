@@ -1,6 +1,3 @@
-/**
- * Independent time operation tool to facilitate subsequent switch to dayjs
- */
 import dayjs from 'dayjs'
 
 const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss'
