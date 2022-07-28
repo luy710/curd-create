@@ -11,7 +11,7 @@
       </el-button>
 
       <slot name="advanceBefore"></slot>
-      <el-button type="text" v-if="showAdvancedButton && !hideAdvanceBtn" size="small" @click="toggleAdvanced">
+      <el-button v-if="showAdvancedButton && !hideAdvanceBtn" type="primary" link size="small" @click="toggleAdvanced">
         {{ isAdvanced ? '收起' : '展开' }}
       </el-button>
       <slot name="advanceAfter"></slot>

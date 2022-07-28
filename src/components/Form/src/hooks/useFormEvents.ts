@@ -273,8 +273,16 @@ export default function useFormEvents({
   }
 
   // 验证整个表单
-  const validate = async (): Promise<boolean> => {
-    return await unref(formElRef).validate()
+  const validate = async (): Promise<Recordable> => {
+    return new Promise((resolve, reject) => {
+      unref(formElRef)
+        .validate()
+        .then(() => {
+          const res = handleFormValues(getFieldsValue())
+          resolve(res)
+        })
+        .catch((error) => reject(error))
+    })
   }
   // 滚动到某一个表单的验证信息
   const scrollToField = (props: FormItemProp) => {
@@ -295,9 +303,7 @@ export default function useFormEvents({
     const formEl = unref(formElRef)
     if (!formEl) return
     try {
-      const isValid = await validate()
-      if (!isValid) return
-      const res = handleFormValues(getFieldsValue())
+      const res = await validate()
       emit('submit', res)
     } catch (error: any) {
       throw new Error(error)

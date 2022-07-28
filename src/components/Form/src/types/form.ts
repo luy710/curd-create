@@ -35,7 +35,7 @@ export interface FormActionType {
     first?: boolean | undefined
   ) => Promise<void>
   validateField: (props?: FormItemProp, callback?: (isValid: boolean, invalidFields?: any) => void) => Promise<any>
-  validate: (callback?: (isValid: boolean, invalidFields?: any) => void) => Promise<any>
+  validate: (callback?: (isValid: boolean, invalidFields?: any) => void) => Promise<Recordable>
   scrollToField: (prop: FormItemProp) => void
 }
 

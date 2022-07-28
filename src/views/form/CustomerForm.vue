@@ -1,21 +1,16 @@
 <template>
-  <PageWrapper title="自定义组件示例">
-    <CollapseContainer title="自定义表单">
-      <BasicForm @register="register" @submit="handleSubmit">
-        <template #f3="{ model, field }">
-          <a-input v-model:value="model[field]" placeholder="自定义slot" />
-        </template>
-      </BasicForm>
-    </CollapseContainer>
-  </PageWrapper>
+  <el-card title="自定义表单">
+    <BasicForm @register="register" @submit="handleSubmit">
+      <template #f3="{ model, field }">
+        <el-input v-model="model[field]" placeholder="自定义slot" />
+      </template>
+    </BasicForm>
+  </el-card>
 </template>
 <script lang="ts">
 import { defineComponent, h } from 'vue'
-import { BasicForm, FormSchema, useForm } from '/@/components/Form/index'
-import { CollapseContainer } from '/@/components/Container/index'
-import { useMessage } from '/@/hooks/web/useMessage'
-import { Input } from 'element-plus'
-import { PageWrapper } from '/@/components/Page'
+import { BasicForm, FormSchema, useForm } from '@/components/Form/index'
+import { ElInput, ElMessage } from 'element-plus'
 
 const schemas: FormSchema[] = [
   {
@@ -27,11 +22,11 @@ const schemas: FormSchema[] = [
     },
     rules: [{ required: true }],
     render: ({ model, field }) => {
-      return h(Input, {
+      return h(ElInput, {
         placeholder: '请输入',
-        value: model[field],
-        onChange: (e: ChangeEvent) => {
-          model[field] = e.target.value
+        modelValue: model[field],
+        onInput: (value: any) => {
+          model[field] = value
         }
       })
     }
@@ -62,9 +57,8 @@ const schemas: FormSchema[] = [
   }
 ]
 export default defineComponent({
-  components: { BasicForm, CollapseContainer, PageWrapper, [Input.name]: Input },
+  components: { BasicForm },
   setup() {
-    const { createMessage } = useMessage()
     const [register, { setProps }] = useForm({
       labelWidth: 120,
       schemas,
@@ -76,7 +70,7 @@ export default defineComponent({
       register,
       schemas,
       handleSubmit: (values: any) => {
-        createMessage.success('click search,values:' + JSON.stringify(values))
+        ElMessage.success('click search,values:' + JSON.stringify(values))
       },
       setProps
     }

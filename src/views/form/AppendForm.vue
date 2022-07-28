@@ -1,25 +1,20 @@
 <template>
-  <PageWrapper title="表单增删示例">
-    <CollapseContainer title="表单增删">
-      <BasicForm @register="register" @submit="handleSubmit">
-        <template #add="{ field }">
-          <Button v-if="Number(field) === 0" @click="add">+</Button>
-          <Button v-if="field > 0" @click="del(field)">-</Button>
-        </template>
-      </BasicForm>
-    </CollapseContainer>
-  </PageWrapper>
+  <el-card title="表单增删">
+    <BasicForm @register="register" @submit="handleSubmit">
+      <template #add="data">
+        <el-button v-if="Number(data.field) === 0" @click="add">+ </el-button>
+        <el-button v-if="data.field > 0" @click="del(data.field)">-</el-button>
+      </template>
+    </BasicForm>
+  </el-card>
 </template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { BasicForm, useForm } from '/@/components/Form/index'
-import { CollapseContainer } from '/@/components/Container/index'
+import { BasicForm, useForm } from '@/components/Form/index'
 import { ElInput as Input } from 'element-plus'
-import { PageWrapper } from '/@/components/Page'
-import { Button } from '/@/components/Button'
 
 export default defineComponent({
-  components: { BasicForm, CollapseContainer, PageWrapper, [Input.name]: Input, Button },
+  components: { BasicForm },
   setup() {
     const [register, { appendSchemaByField, removeSchemaByFiled, validate }] = useForm({
       schemas: [
@@ -44,7 +39,7 @@ export default defineComponent({
         {
           field: '0',
           component: 'Input',
-          label: ' ',
+          label: '',
           colProps: {
             span: 8
           },
@@ -107,7 +102,7 @@ export default defineComponent({
       n.value++
     }
 
-    function del(field) {
+    function del(field: string) {
       removeSchemaByFiled([`field${field}a`, `field${field}b`, `${field}`])
       n.value--
     }

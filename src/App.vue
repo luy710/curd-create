@@ -11,4 +11,10 @@
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
 }
+.mr-2 {
+  margin-right: 0.5rem;
+}
+.mb-5 {
+  margin-bottom: 0.5rem;
+}
 </style>

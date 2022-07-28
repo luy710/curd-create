@@ -97,6 +97,22 @@ const schemas: FormSchema[] = [
           key: '2'
         }
       ]
+    },
+    dynamicRules: ({ values }) => {
+      return values.field2 === 'all'
+        ? [
+            {
+              required: true,
+              trigger: 'change',
+              validator: (_, value, callback) => {
+                if (!value || value.length < 2) {
+                  callback('请全选')
+                }
+                callback()
+              }
+            }
+          ]
+        : []
     }
     // rules: [
     //   {

@@ -1,7 +1,7 @@
-const LAYOUT = () => import('@/layout/blank.vue')
+const LAYOUT = () => import('@/layout/index.vue')
 const comp = {
   path: '/comp',
-  name: 'Comp',
+  name: '组件',
   component: LAYOUT,
   redirect: '/comp/basic',
   meta: {
@@ -13,7 +13,7 @@ const comp = {
   children: [
     {
       path: 'form',
-      name: 'FormDemo',
+      name: '表单',
       redirect: '/comp/form/basic',
       component: null,
       meta: {
@@ -22,7 +22,7 @@ const comp = {
       },
       children: [
         {
-          path: 'basic',
+          path: '/comp/form/basic',
           name: 'FormBasicDemo',
           component: () => import('@views/form/index.vue'),
           meta: {
@@ -30,7 +30,7 @@ const comp = {
           }
         },
         {
-          path: 'useForm',
+          path: '/comp/form/useForm',
           name: 'UseFormDemo',
           component: () => import('@views/form/UseForm.vue'),
           meta: {
@@ -38,7 +38,7 @@ const comp = {
           }
         },
         {
-          path: 'refForm',
+          path: '/comp/form/refForm',
           name: 'RefFormDemo',
           component: () => import('@views/form/RefForm.vue'),
           meta: {
@@ -46,7 +46,7 @@ const comp = {
           }
         },
         {
-          path: 'advancedForm',
+          path: '/comp/form/advancedForm',
           name: 'AdvancedFormDemo',
           component: () => import('@views/form/AdvancedForm.vue'),
           meta: {
@@ -54,39 +54,39 @@ const comp = {
           }
         },
         {
-          path: 'ruleForm',
+          path: '/comp/form/ruleForm',
           name: 'RuleFormDemo',
           component: () => import('@views/form/RuleForm.vue'),
           meta: {
             title: 'routes.demo.form.ruleForm'
           }
         },
-        // {
-        //   path: 'dynamicForm',
-        //   name: 'DynamicFormDemo',
-        //   component: () => import('@views/form/DynamicForm.vue'),
-        //   meta: {
-        //     title: 'routes.demo.form.dynamicForm'
-        //   }
-        // },
-        // {
-        //   path: 'customerForm',
-        //   name: 'CustomerFormDemo',
-        //   component: () => import('@views/form/CustomerForm.vue'),
-        //   meta: {
-        //     title: 'routes.demo.form.customerForm'
-        //   }
-        // },
-        // {
-        //   path: 'appendForm',
-        //   name: 'appendFormDemo',
-        //   component: () => import('@views/form/AppendForm.vue'),
-        //   meta: {
-        //     title: 'routes.demo.form.appendForm'
-        //   }
-        // },
         {
-          path: 'tabsForm',
+          path: '/comp/form/dynamicForm',
+          name: 'DynamicFormDemo',
+          component: () => import('@views/form/DynamicForm.vue'),
+          meta: {
+            title: 'routes.demo.form.dynamicForm'
+          }
+        },
+        {
+          path: '/comp/form/customerForm',
+          name: 'CustomerFormDemo',
+          component: () => import('@views/form/CustomerForm.vue'),
+          meta: {
+            title: 'routes.demo.form.customerForm'
+          }
+        },
+        {
+          path: '/comp/form/appendForm',
+          name: 'appendFormDemo',
+          component: () => import('@views/form/AppendForm.vue'),
+          meta: {
+            title: 'routes.demo.form.appendForm'
+          }
+        },
+        {
+          path: '/comp/form/tabsForm',
           name: 'tabsFormDemo',
           component: () => import('@views/form/TabsForm.vue'),
           meta: {

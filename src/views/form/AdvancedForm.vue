@@ -1,11 +1,11 @@
 <template>
   <el-card title="可折叠表单示例">
-    <el-collapse>
-      <el-collapse-item title="基础收缩示例">
+    <el-collapse v-model="collName">
+      <el-collapse-item title="基础收缩示例" name="1">
         <BasicForm @register="register" />
       </el-collapse-item>
 
-      <el-collapse-item title="超过3行自动收起，折叠时保留2行" class="mt-4">
+      <el-collapse-item title="超过3行自动收起，折叠时保留2行" name="2">
         <BasicForm @register="register1" />
       </el-collapse-item>
     </el-collapse>
@@ -171,7 +171,7 @@ export default defineComponent({
         }
       })
     }
-    const [register1] = useForm({
+    const [register1, { submit }] = useForm({
       labelWidth: 120,
       schemas: [
         ...getSchamas(),
@@ -186,7 +186,9 @@ export default defineComponent({
       showAdvancedButton: true,
       alwaysShowLines: 2
     })
+
     return {
+      collName: ref('1'),
       register,
       register1
     }

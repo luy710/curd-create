@@ -1,5 +1,5 @@
 <script lang="tsx">
-import { FormSchema, FormProps, FormActionType, Rule } from '../types/form'
+import { FormSchema, FormProps, FormActionType, Rule, RenderCallbackParams } from '../types/form'
 import { TableActionType } from '@/components/Table/src/types/table'
 import { BasicHelp } from '@/components/Basic'
 import { isFunction, isBoolean, isNull } from '@/components/utils/is'
@@ -40,7 +40,8 @@ export default defineComponent({
   },
   setup(props, { slots }) {
     const Slots = slots
-    const getValues = computed(() => {
+    // 将作为slot 绑定的data传给 作用于插槽
+    const getValues = computed<RenderCallbackParams>(() => {
       const { allDefaultValues, formModel, schema } = props
       const { mergeDynamicData } = props.formProps
 

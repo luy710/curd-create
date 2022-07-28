@@ -18,6 +18,7 @@ interface UseAdvanceContext {
 }
 
 export default function ({ advanceState, emit, getProps, getSchema, formModel, defaultValueRef }: UseAdvanceContext) {
+  const vm = getCurrentInstance()
   const realWidth = ref(window.innerWidth)
   const screenRef = ref('XS')
 
@@ -102,16 +103,16 @@ export default function ({ advanceState, emit, getProps, getSchema, formModel, d
         advanceState.isAdvanced = true
       } else if (
         itemColSum > BASIC_COL_LEN * 2 &&
-        itemColSum < BASIC_COL_LEN * (unref(getProps).autoAdvancedLine || 3)
+        itemColSum <= BASIC_COL_LEN * (unref(getProps).autoAdvancedLine || 3)
       ) {
         advanceState.hideAdvanceBtn = false
       } else if (!advanceState.isLoad) {
         advanceState.isLoad = true
         advanceState.isAdvanced = !advanceState.isAdvanced
       }
+
       return { isAdvanced: advanceState.isAdvanced, itemColSum }
     }
-
     if (itemColSum > BASIC_COL_LEN * (unref(getProps).alwaysShowLines || 1)) {
       return { isAdvanced: advanceState.isAdvanced, itemColSum }
     } else {
@@ -155,6 +156,8 @@ export default function ({ advanceState, emit, getProps, getSchema, formModel, d
         schema.isAdvanced = isAdvanced
       }
     }
+
+    vm?.proxy?.$forceUpdate()
     advanceState.actionSpan = (realItemColSum % BASIC_COL_LEN) + unref(getEmptySpan)
 
     getAdvanced(unref(getProps).actionColOptions || { span: BASIC_COL_LEN }, itemColSum, true)
