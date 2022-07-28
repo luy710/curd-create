@@ -29,14 +29,14 @@ const comp = {
             title: 'routes.demo.form.basic'
           }
         },
-        // {
-        //   path: 'useForm',
-        //   name: 'UseFormDemo',
-        //   component: () => import('@views/form/UseForm.vue'),
-        //   meta: {
-        //     title: 'routes.demo.form.useForm'
-        //   }
-        // },
+        {
+          path: 'useForm',
+          name: 'UseFormDemo',
+          component: () => import('@views/form/UseForm.vue'),
+          meta: {
+            title: 'routes.demo.form.useForm'
+          }
+        },
         {
           path: 'refForm',
           name: 'RefFormDemo',
@@ -45,14 +45,14 @@ const comp = {
             title: 'routes.demo.form.refForm'
           }
         },
-        // {
-        //   path: 'advancedForm',
-        //   name: 'AdvancedFormDemo',
-        //   component: () => import('@views/form/AdvancedForm.vue'),
-        //   meta: {
-        //     title: 'routes.demo.form.advancedForm'
-        //   }
-        // },
+        {
+          path: 'advancedForm',
+          name: 'AdvancedFormDemo',
+          component: () => import('@views/form/AdvancedForm.vue'),
+          meta: {
+            title: 'routes.demo.form.advancedForm'
+          }
+        },
         {
           path: 'ruleForm',
           name: 'RuleFormDemo',
@@ -60,7 +60,7 @@ const comp = {
           meta: {
             title: 'routes.demo.form.ruleForm'
           }
-        }
+        },
         // {
         //   path: 'dynamicForm',
         //   name: 'DynamicFormDemo',
@@ -85,14 +85,14 @@ const comp = {
         //     title: 'routes.demo.form.appendForm'
         //   }
         // },
-        // {
-        //   path: 'tabsForm',
-        //   name: 'tabsFormDemo',
-        //   component: () => import('@views/form/TabsForm.vue'),
-        //   meta: {
-        //     title: 'routes.demo.form.tabsForm'
-        //   }
-        // }
+        {
+          path: 'tabsForm',
+          name: 'tabsFormDemo',
+          component: () => import('@views/form/TabsForm.vue'),
+          meta: {
+            title: 'routes.demo.form.tabsForm'
+          }
+        }
       ]
     }
     // {

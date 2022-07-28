@@ -1,33 +1,29 @@
 <template>
-  <PageWrapper title="标签页+多级field表单" v-loading="loading">
+  <el-card title="标签页+多级field表单" v-loading="loading">
     <div class="mb-4">
-      <a-button @click="handleReset" class="mr-2"> 重置表单 </a-button>
-      <a-button @click="handleSetValues" class="mr-2"> 设置默认值 </a-button>
-      <a-button @click="handleSubmit" class="mr-2" type="primary"> 提交表单 </a-button>
+      <el-button @click="handleReset" class="mr-2"> 重置表单 </el-button>
+      <el-button @click="handleSetValues" class="mr-2"> 设置默认值 </el-button>
+      <el-button @click="handleSubmit" class="mr-2" type="primary"> 提交表单 </el-button>
     </div>
-    <CollapseContainer title="标签页+多级field表单">
-      <Tabs v-model:activeKey="activeKey">
-        <TabPane v-for="item in tabsFormSchema" :key="item.key" v-bind="omit(item, ['Form', 'key'])">
+    <el-card title="标签页+多级field表单">
+      <el-tabs v-model:activeKey="activeKey">
+        <el-tab-pane v-for="item in tabsFormSchema" :key="item.key" v-bind="omit(item, ['Form', 'key'])">
           <BasicForm @register="item.Form[0]" />
-        </TabPane>
-      </Tabs>
-    </CollapseContainer>
-  </PageWrapper>
+        </el-tab-pane>
+      </el-tabs>
+    </el-card>
+  </el-card>
 </template>
 
 <script lang="ts">
 import { ref, defineComponent } from 'vue'
-import { Tabs } from 'element-plus'
-import { PageWrapper } from '/@/components/Page'
-import { CollapseContainer } from '/@/components/Container'
-import { useMessage } from '/@/hooks/web/useMessage'
-import { omit } from 'lodash-es'
-import { deepMerge } from '/@/utils'
-import { BasicForm, FormSchema, useForm, FormProps, UseFormReturnType } from '/@/components/Form'
+import { omit, merge as deepMerge } from 'lodash-es'
+import { BasicForm, FormSchema, useForm, FormProps, UseFormReturnType } from '@/components/Form'
+import { ElMessage } from 'element-plus'
 
 export default defineComponent({
   name: 'TabsFormDemo',
-  components: { Tabs, TabPane: Tabs.TabPane, PageWrapper, CollapseContainer, BasicForm },
+  components: { BasicForm },
   setup() {
     type TabsFormType = {
       key: string
@@ -36,7 +32,6 @@ export default defineComponent({
       Form: UseFormReturnType
     }
 
-    const { createMessage } = useMessage()
     const activeKey = ref('tabs2')
     const loading = ref(false)
     const tabsFormSchema: TabsFormType[] = []
@@ -99,7 +94,7 @@ export default defineComponent({
         }
 
         console.log('submit values: ', values)
-        createMessage.success('提交成功！请打开控制台查看')
+        ElMessage.success('提交成功！请打开控制台查看')
       } catch (e) {
         // 验证失败或出错，切换到对应标签页
         activeKey.value = lastKey
