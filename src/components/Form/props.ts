@@ -1,7 +1,7 @@
 import { FieldMapToTime, FormSchema, ButtonOptions } from './types/form'
 import { ColEx } from './types'
 import type { RowProps } from 'element-plus'
-import { TableActionType } from '@/components/Table/src/types/table'
+import { TableActionType } from '@/components/Table/types/table'
 import type { CSSProperties } from 'vue'
 
 export const basicProps = {

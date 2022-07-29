@@ -7,6 +7,7 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import { viteMockServe } from 'vite-plugin-mock'
 import { resolve } from 'path'
 import visualizer from 'rollup-plugin-visualizer'
+import dts from 'vite-plugin-dts'
 
 function pathResolve(dir: string) {
   return resolve(process.cwd(), '.', dir)
@@ -48,6 +49,11 @@ export default defineConfig({
     Components({
       dts: './types/components.d.ts',
       resolvers: [ElementPlusResolver()]
+    }),
+    dts({
+      cleanVueFileName: true,
+      insertTypesEntry: true,
+      exclude: ['./types/auto-imports.d.ts', './types/components.d.ts', './types/module.d.ts']
     })
   ],
   build: {
@@ -57,16 +63,16 @@ export default defineConfig({
       output: {
         globals: {
           vue: 'Vue',
-          'element-plus': 'ElementPlus',
+          'element-plus': 'element-plus',
           dayjs: 'dayjs',
-          'lodash-es': 'lodashEs'
+          'lodash-es': 'lodash-es'
         }
       }
     },
     lib: {
       entry: pathResolve('./src/components/index.ts'),
       name: 'lib',
-      formats: ['es', 'cjs', 'umd', 'iife'],
+      // formats: ['es', 'cjs', 'umd', 'iife'],
       fileName: (format) => `lib.${format}.js`
     }
   }

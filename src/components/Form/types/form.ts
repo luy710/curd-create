@@ -1,7 +1,7 @@
 import type { CSSProperties, VNode } from 'vue'
 import type { ColEx, ComponentType } from './index'
 import type { ButtonProps, RowProps, FormItemRule, FormItemProp } from 'element-plus'
-import { TableActionType } from '@/components/Table/src/types/table'
+import { TableActionType } from '@/components/Table/types/table'
 
 export type ButtonOptions = Partial<ButtonProps> & { innerTxt?: string }
 export type FieldMapToTime = [string, [string, string], string?][]

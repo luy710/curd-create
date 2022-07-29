@@ -1,0 +1,10 @@
+export type ComponentType =
+  | 'Input'
+  | 'InputNumber'
+  | 'Select'
+  | 'AutoComplete'
+  // | 'ApiTreeSelect'
+  | 'Checkbox'
+  | 'Switch'
+  | 'DatePicker'
+  | 'TimePicker'
