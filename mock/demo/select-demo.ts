@@ -1,7 +1,7 @@
 import { MockMethod } from 'vite-plugin-mock'
 import { resultSuccess } from '../_util'
 
-const demoList = (keyword, count = 20) => {
+const demoList = (keyword = '', count = 20) => {
   const result = {
     list: [] as any[]
   }
@@ -19,7 +19,7 @@ export default [
     url: '/basic-api/select/getDemoOptions',
     timeout: 1000,
     method: 'get',
-    response: ({ query }) => {
+    response: ({ query }: Recordable) => {
       const { keyword, count } = query
       console.log(keyword)
       return resultSuccess(demoList(keyword, count))

@@ -20,7 +20,7 @@
             <template #title>
               <span>{{ sub.name }}</span>
             </template>
-            <el-menu-item v-for="child in sub.children" :index="child.path">
+            <el-menu-item v-for="child in ((sub as Recordable)?.children as Recordable[])" :index="child.path">
               <template #title>
                 <span>{{ child.name }}</span>
               </template>

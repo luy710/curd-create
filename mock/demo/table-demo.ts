@@ -44,7 +44,7 @@ export default [
     url: '/basic-api/table/getDemoList',
     timeout: 100,
     method: 'get',
-    response: ({ query }) => {
+    response: ({ query }: Recordable) => {
       const { page = 1, pageSize = 20 } = query
       return resultPageSuccess(page, pageSize, demoList)
     }

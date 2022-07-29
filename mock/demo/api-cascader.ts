@@ -314,7 +314,7 @@ export default [
     url: '/basic-api/cascader/getAreaRecord',
     timeout: 1000,
     method: 'post',
-    response: ({ body }) => {
+    response: ({ body }: { body: Recordable }) => {
       const { parentCode } = body || {}
       if (!parentCode) {
         return resultSuccess(areaList.filter((it) => it.code === '430000'))

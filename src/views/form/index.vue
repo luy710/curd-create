@@ -2,7 +2,7 @@
   <el-card title="基础示例">
     <BasicForm
       :fieldMapToTime="[['timerpicker', ['startTime', 'endTime'], 'HH:mm:ss']]"
-      :rowProps="{ gutter: 20 }"
+      :rowProps="{ gutter: 20 } as any"
       autoFocusFirstItem
       :labelWidth="150"
       :schemas="schemas"
@@ -168,8 +168,8 @@ const schemas: FormSchema[] = [
       span: 8
     },
     componentProps: {
-      formatter: (value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-      parser: (value) => value.replace(/\$\s?|(,*)/g, ''),
+      formatter: (value: any) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+      parser: (value: any) => value.replace(/\$\s?|(,*)/g, ''),
       // prefixIcon: 'AlarmClock',
       // suffixIcon: 'AlarmClock',
       onChange: (e: any) => {
@@ -459,11 +459,11 @@ const schemas: FormSchema[] = [
       valueField: 'id',
       // not request untill to select
       immediate: false,
-      onChange: (e) => {
+      onChange: (e: any) => {
         console.log('selected:', e)
       },
       // atfer request callback
-      onOptionsChange: (options) => {
+      onOptionsChange: (options: any[]) => {
         console.log('get options', options.length, options)
       }
     },
@@ -505,11 +505,11 @@ const schemas: FormSchema[] = [
       remote: true,
       // not request untill to select
       immediate: false,
-      onChange: (e) => {
+      onChange: (e: any) => {
         console.log('selected:', e)
       },
       // atfer request callback
-      onOptionsChange: (options) => {
+      onOptionsChange: (options: any[]) => {
         console.log('get options', options.length, options)
       }
     },
@@ -586,7 +586,9 @@ const schemas: FormSchema[] = [
         onChange: (e: any) => {
           // console.log(e)
           let citiesOptions =
-            e == 1 ? citiesOptionsData[provincesOptions[0].id] : citiesOptionsData[provincesOptions[1].id]
+            e == 1
+              ? (citiesOptionsData as Recordable)[provincesOptions[0].id]
+              : (citiesOptionsData as Recordable)[provincesOptions[1].id]
           // console.log(citiesOptions)
           if (e === undefined) {
             citiesOptions = []

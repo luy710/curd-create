@@ -1,7 +1,7 @@
 import { MockMethod } from 'vite-plugin-mock'
 import { resultSuccess } from '../_util'
 
-const demoTreeList = (keyword) => {
+const demoTreeList = (keyword: string) => {
   const result = {
     list: [] as Recordable[]
   }
@@ -29,7 +29,7 @@ export default [
     url: '/basic-api/tree/getDemoOptions',
     timeout: 1000,
     method: 'get',
-    response: ({ query }) => {
+    response: ({ query }: Recordable) => {
       const { keyword } = query
       console.log(keyword)
       return resultSuccess(demoTreeList(keyword))

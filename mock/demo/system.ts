@@ -136,7 +136,7 @@ export default [
     url: '/basic-api/system/getAccountList',
     timeout: 100,
     method: 'get',
-    response: ({ query }) => {
+    response: ({ query }: Recordable) => {
       const { page = 1, pageSize = 20 } = query
       return resultPageSuccess(page, pageSize, accountList)
     }
@@ -145,7 +145,7 @@ export default [
     url: '/basic-api/system/getRoleListByPage',
     timeout: 100,
     method: 'get',
-    response: ({ query }) => {
+    response: ({ query }: Recordable) => {
       const { page = 1, pageSize = 20 } = query
       return resultPageSuccess(page, pageSize, roleList)
     }
@@ -154,7 +154,7 @@ export default [
     url: '/basic-api/system/setRoleStatus',
     timeout: 500,
     method: 'post',
-    response: ({ query }) => {
+    response: ({ query }: Recordable) => {
       const { id, status } = query
       return resultSuccess({ id, status })
     }
@@ -187,7 +187,7 @@ export default [
     url: '/basic-api/system/accountExist',
     timeout: 500,
     method: 'post',
-    response: ({ body }) => {
+    response: ({ body }: Recordable) => {
       const { account } = body || {}
       if (account && account.indexOf('admin') !== -1) {
         return resultError('该字段不能包含admin')

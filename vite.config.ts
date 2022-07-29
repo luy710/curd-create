@@ -6,6 +6,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import { viteMockServe } from 'vite-plugin-mock'
 import { resolve } from 'path'
+import visualizer from 'rollup-plugin-visualizer'
 
 function pathResolve(dir: string) {
   return resolve(process.cwd(), '.', dir)
@@ -23,6 +24,12 @@ export default defineConfig({
   plugins: [
     vue(),
     vueJsx(),
+    visualizer({
+      filename: './node_modules/.cache/visualizer/stats.html',
+      open: true,
+      gzipSize: true,
+      brotliSize: true
+    }),
     viteMockServe({
       ignore: /^\_/,
       mockPath: './mock',
@@ -42,5 +49,25 @@ export default defineConfig({
       dts: './types/components.d.ts',
       resolvers: [ElementPlusResolver()]
     })
-  ]
+  ],
+  build: {
+    cssCodeSplit: false,
+    rollupOptions: {
+      external: ['vue', 'element-plus', 'dayjs', 'lodash-es'],
+      output: {
+        globals: {
+          vue: 'Vue',
+          'element-plus': 'ElementPlus',
+          dayjs: 'dayjs',
+          'lodash-es': 'lodashEs'
+        }
+      }
+    },
+    lib: {
+      entry: pathResolve('./src/components/index.ts'),
+      name: 'lib',
+      formats: ['es', 'cjs', 'umd', 'iife'],
+      fileName: (format) => `lib.${format}.js`
+    }
+  }
 })
