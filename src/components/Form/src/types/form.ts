@@ -62,7 +62,7 @@ export interface FormProps {
   // 当校验失败时，滚动到第一个错误表单项
   scrollToError?: boolean
   // row配置参数
-  rowProps?: RowProps
+  rowProps?: Partial<RowProps>
   // 点击重置表单时 触发一次查询
   submitOnReset?: boolean
   // 表单变化时自动触发查询

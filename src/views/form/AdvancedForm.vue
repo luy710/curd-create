@@ -184,7 +184,10 @@ export default defineComponent({
       },
       compact: true,
       showAdvancedButton: true,
-      alwaysShowLines: 2
+      alwaysShowLines: 2,
+      rowProps: {
+        gutter: 10
+      }
     })
 
     return {

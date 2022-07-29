@@ -89,7 +89,7 @@ const getProps = computed((): FormProps => ({ ...props, ...unref(propsRef) } as 
 const getBindValue = computed<Recordable>(() => ({ ...attrs, ...unref(getProps) }))
 // 获取row的style以及组件配置
 const getRow = computed(() => {
-  const { baseRowStyle, rowProps } = props
+  const { baseRowStyle, rowProps } = getProps.value
   return {
     style: baseRowStyle,
     ...rowProps
