@@ -57,7 +57,7 @@ export const basicProps = {
     default: () => ({})
   },
   // 是否开启紧凑型表单
-  compact: {},
+  compact: false,
   // 表单配置规则
   schemas: {
     type: [Array] as PropType<FormSchema[]>,

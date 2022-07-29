@@ -71,10 +71,11 @@ const getFormClass = computed(() => {
   return [
     prefixCls,
     {
-      [`${prefixCls}--compact`]: props?.compact
+      [`${prefixCls}--compact`]: getProps.value?.compact
     }
   ]
 })
+
 // 行展开收起
 const advanceState = reactive<AdvanceState>({
   isAdvanced: true,
@@ -291,5 +292,12 @@ onMounted(() => {
   emit('register', formActionType)
 })
 </script>
-
-<style scss scoped></style>
+<style lang="scss" scoped>
+.basic-form {
+  &--compact {
+    ::v-deep(.el-form-item) {
+      margin-bottom: 8px !important;
+    }
+  }
+}
+</style>
