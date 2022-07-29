@@ -71,10 +71,11 @@ const getFormClass = computed(() => {
   return [
     prefixCls,
     {
-      [`${prefixCls}--compact`]: props?.compact
+      [`${prefixCls}--compact`]: getProps.value?.compact
     }
   ]
 })
+
 // 行展开收起
 const advanceState = reactive<AdvanceState>({
   isAdvanced: true,
@@ -88,7 +89,7 @@ const getProps = computed((): FormProps => ({ ...props, ...unref(propsRef) } as 
 const getBindValue = computed<Recordable>(() => ({ ...attrs, ...unref(getProps) }))
 // 获取row的style以及组件配置
 const getRow = computed(() => {
-  const { baseRowStyle, rowProps } = props
+  const { baseRowStyle, rowProps } = getProps.value
   return {
     style: baseRowStyle,
     ...rowProps
@@ -291,5 +292,12 @@ onMounted(() => {
   emit('register', formActionType)
 })
 </script>
-
-<style scss scoped></style>
+<style lang="scss" scoped>
+.basic-form {
+  &--compact {
+    ::v-deep(.el-form-item) {
+      margin-bottom: 8px !important;
+    }
+  }
+}
+</style>
