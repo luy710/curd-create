@@ -1,12 +1,12 @@
-import BasicForm from './Form/src/BasicForm.vue'
+import BasicForm from './Form/BasicForm.vue'
 
-export * from './Form/src/types/form'
-export * from './Form/src/types/formItem'
+export * from './Form/types/form'
+export * from './Form/types/formItem'
 
-export { useForm } from './Form/src/hooks/useForm'
+export { useForm } from './Form/hooks/useForm'
 
-export { default as ApiSelect } from './Form/src/components/ApiSelect.vue'
-export { default as RadioGroup } from './Form/src/components/RadioGroup.vue'
-export { default as CheckboxGroup } from './Form/src/components/CheckboxGroup.vue'
+export { default as ApiSelect } from './Form/components/ApiSelect.vue'
+export { default as RadioGroup } from './Form/components/RadioGroup.vue'
+export { default as CheckboxGroup } from './Form/components/CheckboxGroup.vue'
 
 export { BasicForm }

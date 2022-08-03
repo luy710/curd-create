@@ -53,11 +53,14 @@ export const basicProps = {
     default: () => []
   },
   rowProps: {
-    type: Object as PropType<RowProps>,
+    type: Object as PropType<Partial<RowProps>>,
     default: () => ({})
   },
   // 是否开启紧凑型表单
-  compact: false,
+  compact: {
+    type: Boolean,
+    default: false
+  },
   // 表单配置规则
   schemas: {
     type: [Array] as PropType<FormSchema[]>,

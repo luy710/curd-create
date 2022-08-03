@@ -18,7 +18,7 @@
 <script lang="ts">
 import { ref, defineComponent } from 'vue'
 import { omit, merge as deepMerge } from 'lodash-es'
-import { BasicForm, FormSchema, useForm, FormProps, UseFormReturnType } from '@/components/Form'
+import { BasicForm, FormSchema, useForm, FormProps, UseFormReturnType } from '@/components/index'
 import { ElMessage } from 'element-plus'
 
 export default defineComponent({

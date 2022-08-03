@@ -13,7 +13,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { BasicForm, FormSchema, useForm } from '@/components/Form/index'
+import { BasicForm, FormSchema, useForm } from '@/components/index'
 
 const getSchamas = (): FormSchema[] => {
   return [

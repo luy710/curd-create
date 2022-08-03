@@ -19,5 +19,8 @@
       "#/*": ["./types/*"]
     }
   },
+  "vueCompilerOptions": {
+    "target": 3,
+  },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "types/**/*.d.ts", "types/**/*.ts", "mock/**/*.ts",]
 }

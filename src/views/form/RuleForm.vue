@@ -14,7 +14,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { BasicForm, FormSchema, useForm } from '@/components/Form/index'
+import { BasicForm, FormSchema, useForm } from '@/components/index'
 import { isAccountExist } from '@/api/demo/system'
 import { ElMessage } from 'element-plus'
 const schemas: FormSchema[] = [

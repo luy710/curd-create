@@ -1,6 +1,6 @@
 <script lang="tsx">
 import { FormSchema, FormProps, FormActionType, Rule, RenderCallbackParams } from '../types/form'
-import { TableActionType } from '@/components/Table/src/types/table'
+import { TableActionType } from '@/components/Table/types/table'
 import { BasicHelp } from '@/components/Basic'
 import { isFunction, isBoolean, isNull } from '@/components/utils/is'
 import { cloneDeep, upperFirst } from 'lodash-es'

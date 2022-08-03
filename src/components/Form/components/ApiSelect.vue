@@ -13,7 +13,7 @@
 
 <script lang="ts" setup>
 import { isFunction, isArray } from '@/components/utils/is'
-import { get, omit, pick } from 'lodash-es'
+import { get, omit } from 'lodash-es'
 type OptionsItem = { label: string; value: string; disabled?: boolean }
 const props = defineProps({
   modelValue: [Array, String, Number, Boolean, Object] as PropType<

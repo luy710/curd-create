@@ -9,7 +9,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, h } from 'vue'
-import { BasicForm, FormSchema, useForm } from '@/components/Form/index'
+import { BasicForm, FormSchema, useForm } from '@/components/index'
 import { ElInput, ElMessage } from 'element-plus'
 
 const schemas: FormSchema[] = [

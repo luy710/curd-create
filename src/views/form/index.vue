@@ -2,7 +2,7 @@
   <el-card title="基础示例">
     <BasicForm
       :fieldMapToTime="[['timerpicker', ['startTime', 'endTime'], 'HH:mm:ss']]"
-      :rowProps="{ gutter: 20 } as any"
+      :rowProps="{ gutter: 20 }"
       autoFocusFirstItem
       :labelWidth="150"
       :schemas="schemas"
@@ -45,12 +45,12 @@
 </template>
 <script lang="tsx">
 import { computed, defineComponent, unref, ref } from 'vue'
-import { BasicForm, FormSchema } from '@/components/Form/index'
+import { BasicForm, FormSchema } from '@/components/index'
 import { AlarmClock } from '@element-plus/icons-vue'
 import { optionsListApi } from '@/api/demo/select'
 import { treeOptionsListApi } from '@/api/demo/tree'
 import { ElMessage } from 'element-plus'
-import ApiSelect from '@/components/Form/src/components/ApiSelect.vue'
+import ApiSelect from '@/components/Form/components/ApiSelect.vue'
 import { cloneDeep, debounce } from 'lodash-es'
 
 const valueSelectA = ref<string[]>([])
