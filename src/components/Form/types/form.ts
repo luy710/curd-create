@@ -117,6 +117,7 @@ export interface FormProps {
   submitFunc?: () => Promise<void>
   // 时间格式转换函数
   transformDateFunc?: (date: any) => string
+  tableAction?: Partial<TableActionType>
 }
 
 export interface FormSchema {

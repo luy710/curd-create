@@ -2,7 +2,7 @@ import type { PaginationProps } from 'element-plus'
 import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults'
 import type { TreeNode } from 'element-plus/es/components/table/src/table/defaults'
 import type { CSSProperties, VNode, VNodeChild } from 'vue'
-import type { FormProps } from '@/components/Form/types/form'
+import type { FormProps, HelpComponentProps } from '@/components/Form/types/form'
 export declare type SortOrder = 'ascending' | 'descending'
 import { ComponentType } from './componentType'
 export interface FetchParams {
@@ -15,6 +15,7 @@ export interface FetchParams {
 export interface GetColumnsParams {
   ignoreIndex?: boolean
   ignoreAction?: boolean
+  ignoreSelection?: boolean
   sort?: boolean
 }
 
@@ -86,12 +87,20 @@ export type CellFormat =
   | ((text: string, record: Recordable, index: number) => string | number)
   | Map<string | number, any>
 
-export interface BasicColumn extends TableColumnCtx<Recordable> {
+export interface BasicColumn extends Partial<TableColumnCtx<Recordable>> {
   customTitle?: VNode
-  slot?: string
-  cellSlot?: string
+  flag?: 'DEFAULT' | 'ACTION'
+  // 是否是多级表头
+  isMulti?: boolean
+  slots?: {
+    cellSlot?: string
+    headerSlot?: string
+  }
   defaultHidden?: boolean
+  // 提示信息
   helpMessage?: string | string[]
+  // 提示信息组件的props
+  helpComponentProps?: Partial<HelpComponentProps>
   format?: CellFormat
   // Editable
   edit?: boolean
@@ -240,7 +249,7 @@ export interface BasicTableProps {
   // 加载子节点数据的函数，lazy 为 true 时生效，函数第二个参数包含了节点的层级信息
   load?: (row: Recordable, treeNode: TreeNode, resolve: (data: Recordable[]) => void) => void
   // 	渲染嵌套数据的配置选项
-  treeProps?: Recordable
+  treeProps?: { hasChildren: string; children: string }
   // 	设置表格单元、行和列的布局方式
   tableLayout?: string
   // 总是显示滚动条
@@ -286,7 +295,7 @@ export interface BasicTableProps {
   // 使用搜索表单
   useSearchForm?: boolean
   // 表单配置
-  formConfig?: Partial<FormProps>
+  formConfig?: FormProps
   // 表单列信息 BasicColumn[]
   columns: BasicColumn[]
   // 是否显示序号列
@@ -301,6 +310,7 @@ export interface BasicTableProps {
   canResize?: boolean
   // 分页配置
   pagination?: PaginationProps | boolean
+  clearSelectOnPageChange?: boolean
   // 表格 loading 状态
   loading?: boolean
   // 单元格编辑状态提交回调，返回false将阻止单元格提交数据到table。该回调在行编辑模式下无效。
