@@ -119,7 +119,7 @@ export interface BasicColumn extends TableColumnCtx<Recordable> {
     index: number
   }) => VNodeChild | JSX.Element
   // 动态 Disabled
-  editDynamicDisabled?: boolean | ((record: Recordable) => boolean)
+  editDynamicDisabled?: boolean | ((record: Recordable) => boolean),
 }
 
 export interface BasicTableProps {
@@ -350,3 +350,9 @@ export interface BasicTableProps {
   // 当用户对某一行展开或者关闭的时候会触发该事件（展开行时，回调的第二个参数为 expandedRows；树形表格时第二参数为 expanded）
   onExpandChange?: (row: Recordable, expanded: Recordable[] | boolean) => void
 }
+
+export type ColumnChangeParam = {
+  dataIndex: string;
+  fixed: boolean | 'left' | 'right' | undefined;
+  visible: boolean;
+};
