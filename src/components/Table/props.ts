@@ -331,6 +331,11 @@ export const baseProps = {
     type: [Object, Boolean] as PropType<PaginationProps | boolean>,
     default: null
   },
+  // 分页的时候自动清除已选的table column
+  clearSelectOnPageChange: {
+    type: Boolean,
+    default: true
+  },
   // 表格 loading 状态
   loading: {
     type: Boolean,

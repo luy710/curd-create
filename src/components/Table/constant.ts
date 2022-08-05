@@ -13,7 +13,7 @@ const table = {
     totalField: 'total'
   },
   // Number of pages that can be selected
-  pageSizeOptions: ['10', '50', '80', '100'],
+  pageSizeOptions: [10, 50, 80, 100],
   // Default display quantity on one page
   defaultPageSize: 10,
   // Default Size
@@ -40,7 +40,7 @@ const table = {
 
 const { pageSizeOptions, defaultPageSize, fetchSetting, defaultSize, defaultSortFn, defaultFilterFn } = table
 
-export const ROW_KEY = 'key'
+export const ROW_KEY = 'column-key'
 
 // Optional display number per page;
 export const PAGE_SIZE_OPTIONS = pageSizeOptions
