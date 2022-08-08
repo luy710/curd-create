@@ -40,6 +40,8 @@ import { useLoading } from './hooks/useLoading'
 import { useTableForm } from './hooks/useTableForm'
 import { usePagination } from './hooks/usePagination'
 import { useDataSource } from './hooks/useDataSource'
+import { createTableContext } from './hooks/useTableContext';
+
 import { useColumns } from './hooks/useColumns'
 import { useTableScroll } from './hooks/useTableScroll'
 
@@ -215,6 +217,7 @@ const tableAction: TableActionType = {
     return unref(getBindValues).size as SizeType
   }
 }
+createTableContext({ ...tableAction, wrapRef, getBindValues })
 
 // 导出内部事件方法
 defineExpose(tableAction)

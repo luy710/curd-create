@@ -77,6 +77,7 @@ import { isNullAndUnDef } from '@/components/utils/is'
 import { cloneDeep, omit } from 'lodash-es'
 import Sortablejs from 'sortablejs'
 import type Sortable from 'sortablejs'
+import { CheckboxValueType } from 'element-plus/lib/components'
 
 interface State {
   checkAll: boolean
@@ -114,10 +115,10 @@ export default defineComponent({
     const defaultRowSelection = omit(table.getRowSelection(), 'selectedRowKeys')
     let inited = false
 
-    const cachePlainOptions = ref<Options[]>([])
+    const cachePlainOptions = ref<Options[] | any>([])
     const plainOptions = ref<Options[] | any>([])
 
-    const plainSortOptions = ref<Options[]>([])
+    const plainSortOptions = ref<Options[] | any>([])
 
     const columnListRef = ref<ComponentRef>(null)
 
@@ -152,11 +153,11 @@ export default defineComponent({
     })
 
     function getColumns() {
-      const ret: Options[] = []
+      const ret: Array<Recordable> = []
       table.getColumns({ ignoreIndex: true, ignoreAction: true }).forEach((item) => {
         ret.push({
-          label: (item.title as string) || (item.customTitle as string),
-          value: (item.dataIndex || item.title) as string,
+          label: (item.label as string) || (item.customTitle as unknown as string),
+          value: (item.prop || item.label) as string,
           ...item
         })
       })
@@ -172,7 +173,7 @@ export default defineComponent({
           if (item.defaultHidden) {
             return ''
           }
-          return item.dataIndex || item.title
+          return item.prop || item.label
         })
         .filter(Boolean) as string[]
 
@@ -186,8 +187,8 @@ export default defineComponent({
         //   Reflect.has(item, 'fixed')
         // ) as BasicColumn[];
 
-        unref(plainOptions).forEach((item: Event) => {
-          const findItem = columns.find((col: BasicColumn) => col.dataIndex === item.dataIndex)
+        unref(plainOptions).forEach((item: BasicColumn) => {
+          const findItem = columns.find((col: BasicColumn) => col.prop === item.prop)
           if (findItem) {
             item.fixed = findItem.fixed
           }
@@ -198,8 +199,8 @@ export default defineComponent({
     }
 
     // checkAll change
-    function onCheckAllChange(val: boolean) {
-      const checkList = plainOptions.value.map((item) => item.value)
+    function onCheckAllChange(val: CheckboxValueType) {
+      const checkList = plainOptions.value.map((item: any) => item.value)
       if (val) {
         state.checkedList = checkList
         setColumns(checkList)
@@ -220,7 +221,7 @@ export default defineComponent({
     function onChange(checkedList: string[]) {
       const len = plainSortOptions.value.length
       state.checkAll = checkedList.length === len
-      const sortList = unref(plainSortOptions).map((item) => item.value)
+      const sortList = unref(plainSortOptions).map((item: any) => item.value)
       checkedList.sort((prev, next) => {
         return sortList.indexOf(prev) - sortList.indexOf(next)
       })
@@ -283,25 +284,26 @@ export default defineComponent({
     }
 
     // Control whether the serial number column is displayed
-    function handleIndexCheckChange(val: boolean) {
+    function handleIndexCheckChange(val: CheckboxValueType) {
       table.setProps({
-        showIndexColumn: val
+        showIndexColumn: val as boolean
       })
     }
 
     // Control whether the check box is displayed
-    function handleSelectCheckChange(val: boolean) {
-      table.setProps({
-        rowSelection: val ? defaultRowSelection : undefined
-      })
+    // todo
+    function handleSelectCheckChange(val: CheckboxValueType) {
+      // table.setProps({
+      //   rowSelection: val ? defaultRowSelection : undefined
+      // })
     }
 
     function handleColumnFixed(item: BasicColumn, fixed?: 'left' | 'right') {
-      if (!state.checkedList.includes(item.dataIndex as string)) return
+      if (!state.checkedList.includes(item.prop as string)) return
 
       const columns = getColumns() as BasicColumn[]
       const isFixed = item.fixed === fixed ? false : fixed
-      const index = columns.findIndex((col) => col.dataIndex === item.dataIndex)
+      const index = columns.findIndex((col) => col.prop === item.prop)
       if (index !== -1) {
         columns[index].fixed = isFixed
       }
@@ -310,16 +312,16 @@ export default defineComponent({
       if (isFixed && !item.width) {
         item.width = 100
       }
-      table.setCacheColumnsByField?.(item.dataIndex as string, { fixed: isFixed })
+      table.setCacheColumnsByField?.(item.prop as string, { fixed: isFixed })
       setColumns(columns)
     }
 
     function setColumns(columns: BasicColumn[] | string[]) {
       table.setColumns(columns)
-      const data: ColumnChangeParam[] = unref(plainSortOptions).map((col) => {
+      const data: ColumnChangeParam[] = unref(plainSortOptions).map((col: any) => {
         const visible =
           columns.findIndex(
-            (c: BasicColumn | string) => c === col.value || (typeof c !== 'string' && c.dataIndex === col.value)
+            (c: BasicColumn | string) => c === col.value || (typeof c !== 'string' && c.prop === col.value)
           ) !== -1
         return { dataIndex: col.value, fixed: col.fixed, visible }
       })

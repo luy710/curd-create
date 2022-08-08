@@ -1,16 +1,11 @@
 <template>
   <ElTooltip placement="top" content="密度">
-    <ElDropdown
-      placement="bottom"
-      trigger="click"
-      :getPopupContainer="getPopupContainer"
-      @command="handleTitleClick"
-    >
+    <ElDropdown placement="bottom" trigger="click" :getPopupContainer="getPopupContainer" @command="handleTitleClick">
       <el-icon><Box /></el-icon>
       <template #dropdown>
         <el-dropdown-menu>
+          <el-dropdown-item command="large">偏大</el-dropdown-item>
           <el-dropdown-item command="default">默认</el-dropdown-item>
-          <el-dropdown-item command="middle">中等</el-dropdown-item>
           <el-dropdown-item command="small">紧凑</el-dropdown-item>
         </el-dropdown-menu>
       </template>
