@@ -128,7 +128,7 @@ export interface BasicColumn extends Partial<TableColumnCtx<Recordable>> {
     index: number
   }) => VNodeChild | JSX.Element
   // 动态 Disabled
-  editDynamicDisabled?: boolean | ((record: Recordable) => boolean),
+  editDynamicDisabled?: boolean | ((record: Recordable) => boolean)
 }
 
 export interface BasicTableProps {
@@ -362,7 +362,23 @@ export interface BasicTableProps {
 }
 
 export type ColumnChangeParam = {
-  dataIndex: string;
-  fixed: boolean | 'left' | 'right' | undefined;
-  visible: boolean;
-};
+  dataIndex: string
+  fixed: boolean | 'left' | 'right' | undefined
+  visible: boolean
+}
+
+export interface ActionItem {
+  onClick?: Fn
+  label?: string
+  color?: 'success' | 'error' | 'warning'
+  icon?: string
+  // popConfirm?: PopConfirm;
+  popConfirm?: any
+  disabled?: boolean
+  divider?: boolean
+  // 权限编码控制是否显示
+  // auth?: RoleEnum | RoleEnum[] | string | string[];
+  // 业务控制是否显示
+  ifShow?: boolean | ((action: ActionItem) => boolean)
+  // tooltip?: string | TooltipProps;
+}

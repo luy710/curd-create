@@ -40,7 +40,8 @@ import { defineComponent, PropType, computed, toRaw, unref } from 'vue'
 import { MoreFilled } from '@element-plus/icons-vue'
 import { ElDivider, ElTooltip, ElPopconfirm, ElDropdown } from 'element-plus'
 
-import { ActionItem, TableActionType } from '@/components/Table'
+import { ActionItem, TableActionType } from '@/components/Table/types/table'
+
 import { useTableContext } from '../hooks/useTableContext'
 import { isBoolean, isFunction, isString } from '@/components/utils/is'
 import { ACTION_COLUMN_FLAG } from '../constant'
