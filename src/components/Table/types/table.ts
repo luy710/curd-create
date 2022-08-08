@@ -359,6 +359,8 @@ export interface BasicTableProps {
   onHeaderDragend?: (newWidth: number, oldWidth: number, column: Recordable, event: MouseEvent) => void
   // 当用户对某一行展开或者关闭的时候会触发该事件（展开行时，回调的第二个参数为 expandedRows；树形表格时第二参数为 expanded）
   onExpandChange?: (row: Recordable, expanded: Recordable[] | boolean) => void
+  // 显示多选框列
+  showCheckColumn?: boolean
 }
 
 export type ColumnChangeParam = {
@@ -381,4 +383,8 @@ export interface ActionItem {
   // 业务控制是否显示
   ifShow?: boolean | ((action: ActionItem) => boolean)
   // tooltip?: string | TooltipProps;
+}
+
+export interface InnerHandlers {
+  onColumnsChange: (data: ColumnChangeParam[]) => void
 }

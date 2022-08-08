@@ -19,7 +19,7 @@ import type { TableSetting, ColumnChangeParam } from '../types/table'
 import type { PropType } from 'vue'
 import { defineComponent } from 'vue'
 import { ElDivider } from 'element-plus'
-import TableSettingComponent from './settings/index'
+import TableSettingComponent from './settings/index.vue'
 import TableTitle from './TableTitle.vue'
 
 export default defineComponent({

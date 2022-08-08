@@ -16,6 +16,8 @@
     </BasicForm>
 
     <el-table ref="tableRef" v-bind="getBindValues" v-show="getEmptyDataIsShowTable">
+      <el-table-column v-if="innerPropsRef?.showCheckColumn" type="selection" width="55" />
+
       <!-- table 内部 slots -->
       <template #[item]="data" v-for="item in Object.keys(tableSlots)" :key="item">
         <slot :name="item" v-bind="data || {}"></slot>
@@ -35,12 +37,13 @@ import { omit, pick } from 'lodash-es'
 
 import InnerTableColumn from './components/InnerColumn.vue'
 
-import { BasicTableProps } from './types/table'
+import { BasicTableProps, ColumnChangeParam, InnerHandlers } from './types/table'
 import { useLoading } from './hooks/useLoading'
 import { useTableForm } from './hooks/useTableForm'
 import { usePagination } from './hooks/usePagination'
 import { useDataSource } from './hooks/useDataSource'
-import { createTableContext } from './hooks/useTableContext';
+import { useTableHeader } from './hooks/useTableHeader'
+import { createTableContext } from './hooks/useTableContext'
 
 import { useColumns } from './hooks/useColumns'
 import { useTableScroll } from './hooks/useTableScroll'
@@ -148,6 +151,16 @@ const { getFormProps, replaceFormSlotKey, getFormSlotKeys, handleSearchInfoChang
   getLoading
 )
 
+const handlers: InnerHandlers = {
+  onColumnsChange: (data: ColumnChangeParam[]) => {
+    emit('columns-change', data)
+    // support useTable
+    // unref(getProps)?.onColumnsChange?.(data)
+  }
+}
+
+const { getHeaderProps } = useTableHeader(getProps, slots, handlers)
+console.log('slots: ', slots)
 const getBindValues = computed(() => {
   const dataSource = unref(getDataSourceRef)
   let propsData: Recordable = {
@@ -155,6 +168,7 @@ const getBindValues = computed(() => {
     ...unref(getProps),
     scroll: unref(getScrollRef),
     loading: unref(getLoading),
+    ...unref(getHeaderProps),
     tableLayout: 'fixed',
     rowKey: unref(getRowKey),
     columns: toRaw(unref(getViewColumns)),
@@ -217,6 +231,7 @@ const tableAction: TableActionType = {
     return unref(getBindValues).size as SizeType
   }
 }
+
 createTableContext({ ...tableAction, wrapRef, getBindValues })
 
 // 导出内部事件方法

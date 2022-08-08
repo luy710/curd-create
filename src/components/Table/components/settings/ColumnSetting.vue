@@ -77,7 +77,7 @@ import { isNullAndUnDef } from '@/components/utils/is'
 import { cloneDeep, omit } from 'lodash-es'
 import Sortablejs from 'sortablejs'
 import type Sortable from 'sortablejs'
-import { CheckboxValueType } from 'element-plus/lib/components'
+import { CheckboxValueType } from 'element-plus'
 
 interface State {
   checkAll: boolean
@@ -149,7 +149,7 @@ export default defineComponent({
     watchEffect(() => {
       const values = unref(getValues)
       checkIndex.value = !!values.showIndexColumn
-      // checkSelect.value = !!values.rowSelection
+      checkSelect.value = !!values.showCheckColumn
     })
 
     function getColumns() {
@@ -291,11 +291,10 @@ export default defineComponent({
     }
 
     // Control whether the check box is displayed
-    // todo
     function handleSelectCheckChange(val: CheckboxValueType) {
-      // table.setProps({
-      //   rowSelection: val ? defaultRowSelection : undefined
-      // })
+      table.setProps({
+        showCheckColumn: val as boolean
+      })
     }
 
     function handleColumnFixed(item: BasicColumn, fixed?: 'left' | 'right') {
@@ -373,7 +372,7 @@ export default defineComponent({
       width: 100%;
 
       &:hover {
-        color: @primary-color;
+        // color: @primary-color;
       }
     }
   }
@@ -385,11 +384,11 @@ export default defineComponent({
 
     &.active,
     &:hover {
-      color: @primary-color;
+      // color: @primary-color;
     }
 
     &.disabled {
-      color: @disabled-color;
+      // color: @disabled-color;
       cursor: not-allowed;
     }
   }

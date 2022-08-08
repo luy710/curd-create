@@ -5,7 +5,7 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue'
-import { BasicTitle } from '@/components/Basic/index'
+import BasicTitle from '@/components/Basic/src/BasicTitle.vue'
 import { isFunction } from '@/components/utils/is'
 
 export default defineComponent({

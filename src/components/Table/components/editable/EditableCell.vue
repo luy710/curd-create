@@ -499,7 +499,7 @@ export default defineComponent({
       transform: scale(1.2);
 
       svg {
-        color: @primary-color;
+        // color: @primary-color;
       }
     }
   }
