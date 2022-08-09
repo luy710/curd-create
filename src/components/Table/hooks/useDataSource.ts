@@ -37,12 +37,35 @@ export function useDataSource(
     tableData.value = unref(dataSourceRef)
   })
 
+  // 手动进行分页
+  const pickPageData = () => {
+    if (!isBoolean(getPaginationInfo)) {
+      const { currentPage, pageSize } = unref(getPaginationInfo) as PaginationProps
+      const data = unref(propsRef).data
+      const p = currentPage || 1
+      const s = pageSize || 10
+
+      dataSourceRef.value = data?.slice(s * (p - 1), s * p - 1) || []
+
+      setPagination({
+        total: data?.length
+      })
+    }
+  }
+
   // 如果外部data变化且没有api 则DataSource需要重新赋值
   watch(
     () => unref(propsRef).data,
     () => {
       const { data, api } = unref(propsRef)
-      !api && data && (dataSourceRef.value = data)
+
+      if (!api && data) {
+        if (!isBoolean(getPaginationInfo.value)) {
+          pickPageData()
+        } else {
+          dataSourceRef.value = data
+        }
+      }
     },
     {
       immediate: true

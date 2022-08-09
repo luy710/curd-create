@@ -44,8 +44,6 @@ export default defineComponent({
         ></ElTableColumn>
       )
     }
-
-    console.log(renderItem(props.column))
     return () => renderItem(props.column)
   }
 })

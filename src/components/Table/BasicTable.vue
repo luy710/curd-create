@@ -15,7 +15,9 @@
       </template>
     </BasicForm>
 
-    <el-table ref="tableRef" v-bind="getBindValues" v-show="getEmptyDataIsShowTable">
+    <!-- <div class="basic-table-inner-header"></div> -->
+
+    <el-table ref="tableRef" v-loading="getLoading" v-bind="getBindValues" v-show="getEmptyDataIsShowTable">
       <!-- table 内部 slots -->
       <template #[item]="data" v-for="item in Object.keys(tableSlots)" :key="item">
         <slot :name="item" v-bind="data || {}"></slot>
@@ -25,6 +27,11 @@
         <InnerTableColumn :column="column" :slots="slots" />
       </template>
     </el-table>
+    <TablePagination
+      v-if="!!getPaginationInfo"
+      v-bind="isBoolean(getPaginationInfo) ? {} : getPaginationInfo"
+      @change="(pagination) => handleTableChange(pagination, {}, '')"
+    />
   </div>
 </template>
 
@@ -32,8 +39,10 @@
 import { BasicForm, useForm } from '@/components/index'
 import { baseProps } from './props'
 import { omit, pick } from 'lodash-es'
+import { isBoolean } from '@/components/utils/is'
 
 import InnerTableColumn from './components/InnerColumn.vue'
+import TablePagination from './components/Pagination.vue'
 
 import { BasicTableProps } from './types/table'
 import { useLoading } from './hooks/useLoading'
@@ -41,7 +50,7 @@ import { useTableForm } from './hooks/useTableForm'
 import { usePagination } from './hooks/usePagination'
 import { useDataSource } from './hooks/useDataSource'
 import { useColumns } from './hooks/useColumns'
-import { useTableScroll } from './hooks/useTableScroll'
+import { useTableHeight } from './hooks/useTableHeight'
 
 import { SizeType, TableActionType } from './types/table'
 
@@ -50,18 +59,29 @@ const emit = defineEmits([
   'fetch-success',
   'fetch-error',
   'register',
-  'row-click',
-  'row-dbClick',
-  'row-contextmenu',
-  'row-mouseenter',
-  'row-mouseleave',
   'edit-end',
   'edit-cancel',
   'edit-row-end',
   'edit-change',
-  'expanded-rows-change',
-  'change',
-  'columns-change'
+  'columns-change',
+  'select',
+  'selectAll',
+  'selectionChange',
+  'cellMouseEnter',
+  'cellMouseLeave',
+  'cellClick',
+  'cellDblclick',
+  'cellContextmenu',
+  'rowClick',
+  'rowContextmenu',
+  'rowDblclick',
+  'headerClick',
+  'headerContextmenu',
+  // 'sortChange',
+  // 'filterChange',
+  'currentChange',
+  'headerDragend',
+  'expandChange'
 ])
 // 基础props
 const props = defineProps(baseProps)
@@ -75,7 +95,6 @@ const formRef = ref()
 const tableRef = ref()
 // 插槽
 const slots = useSlots()
-
 // table内的slot
 const tableSlots = computed(() => {
   return pick(slots, ['append', 'empty'])
@@ -99,7 +118,7 @@ const { getPaginationInfo, getPagination, setPagination, setShowPagination, getS
   usePagination(getProps)
 
 const {
-  handleTableChange: onTableChange,
+  handleTableChange,
   getDataSourceRef,
   getDataSource,
   getRawDataSource,
@@ -129,14 +148,7 @@ const {
 const { getViewColumns, getColumns, setCacheColumnsByField, setColumns, getColumnsRef, getCacheColumns } =
   useColumns(getProps)
 
-const { getScrollRef, redoHeight } = useTableScroll(
-  getProps,
-  tableRef,
-  getColumnsRef,
-  getDataSourceRef,
-  wrapRef,
-  formRef
-)
+const { getTableHeightRef, redoHeight } = useTableHeight(getProps, tableRef, wrapRef, formRef)
 
 // 处理表单 table 参数
 const { getFormProps, replaceFormSlotKey, getFormSlotKeys, handleSearchInfoChange } = useTableForm(
@@ -146,18 +158,20 @@ const { getFormProps, replaceFormSlotKey, getFormSlotKeys, handleSearchInfoChang
   getLoading
 )
 
+const tableChange = () => {}
+
 const getBindValues = computed(() => {
   const dataSource = unref(getDataSourceRef)
   let propsData: Recordable = {
     ...attrs,
     ...unref(getProps),
-    scroll: unref(getScrollRef),
+    height: unref(getTableHeightRef),
     loading: unref(getLoading),
     tableLayout: 'fixed',
     rowKey: unref(getRowKey),
     columns: toRaw(unref(getViewColumns)),
     pagination: toRaw(unref(getPaginationInfo)),
-    dataSource
+    data: dataSource
   }
 
   propsData = omit(propsData, ['class', 'onChange'])
@@ -189,7 +203,6 @@ const getEmptyDataIsShowTable = computed(() => {
 function setProps(props: Partial<BasicTableProps>) {
   innerPropsRef.value = { ...unref(innerPropsRef), ...props }
 }
-
 const tableAction: TableActionType = {
   reload,
   setPagination,
@@ -211,15 +224,52 @@ const tableAction: TableActionType = {
   setShowPagination,
   getShowPagination,
   setCacheColumnsByField,
+  getPagination,
   getSize: () => {
     return unref(getBindValues).size as SizeType
-  }
+  },
+  // 用于多选表格，清空用户的选择
+  clearSelection: () => tableRef.value.clearSelection(),
+  // 返回当前选中的行
+  getSelectionRows: () => tableRef.value.getSelectionRows(),
+  // 用于多选表格，切换某一行的选中状态， 如果使用了第二个参数，则可直接设置这一行选中与否
+  toggleRowSelection: (row: Recordable, selected: boolean) => tableRef.value.toggleRowSelection(row, selected),
+  // 用于多选表格，切换全选和全不选
+  toggleAllSelection: () => tableRef.value.toggleAllSelection(),
+  // 用于可扩展的表格或树表格，如果某行被扩展，则切换。 使用第二个参数，您可以直接设置该行应该被扩展或折叠。
+  toggleRowExpansion: (row: Recordable, expanded: boolean) => tableRef.value.toggleRowExpansion(row, expanded),
+  // 用于单选表格，设定某一行为选中行， 如果调用时不加参数，则会取消目前高亮行的选中状态。
+  setCurrentRow: (row: Recordable) => tableRef.value.setCurrentRow(row),
+  // 用于清空排序条件，数据会恢复成未排序的状态
+  clearSort: () => tableRef.value.clearSort(),
+  // 传入由columnKey 组成的数组以清除指定列的过滤条件。 如果没有参数，清除所有过滤器
+  clearFilter: (columnKeys: string[]) => tableRef.value.clearFilter(columnKeys),
+  // 对 Table 进行重新布局。 当表格可见性变化时，您可能需要调用此方法以获得正确的布局
+  doLayout: () => tableRef.value.doLayout(),
+  // 手动排序表格。 参数 prop 属性指定排序列，order 指定排序顺序。
+  sort: (prop: string, order: string) => tableRef.value.sort(prop, order),
+  // 滚动到一组特定坐标
+  scrollTo: (options: ScrollToOptions | number, yCoord?: number) => tableRef.value.scrollTo(options, yCoord),
+  // 设置垂直滚动位置
+  setScrollTop: (top: number) => tableRef.value.setScrollTop(top),
+  // 设置水平滚动位置
+  setScrollLeft: (left: number) => tableRef.value.setScrollLeft(left)
 }
 
 // 导出内部事件方法
 defineExpose(tableAction)
+
 // 注册表格
 emit('register', tableAction, formActions)
 </script>
 
-<style lang="less" scoped></style>
+<style lang="scss" scoped>
+.basic-table {
+  padding: 8px;
+  box-sizing: border-box;
+  .el-pagination {
+    margin-top: 10px;
+    justify-content: right;
+  }
+}
+</style>

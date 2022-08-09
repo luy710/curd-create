@@ -32,12 +32,14 @@ export function usePagination(refProps: ComputedRef<BasicTableProps>) {
       currentPage: 1,
       pageSize: PAGE_SIZE,
       small: true,
+      total: 0,
       defaultPageSize: PAGE_SIZE,
       pageSizes: PAGE_SIZE_OPTIONS,
       ...(isBoolean(pagination) ? {} : pagination),
       ...unref(configRef),
     };
   });
+
 
   function setPagination(info: Partial<PaginationProps>) {
     const paginationInfo = unref(getPaginationInfo);
