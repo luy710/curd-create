@@ -1,6 +1,6 @@
 <template>
   <ElTooltip placement="top" content="全屏">
-    <el-icon @click="toggle">
+    <el-icon :size="16" style="cursor: pointer" @click="toggle">
       <FullScreen />
     </el-icon>
   </ElTooltip>
@@ -22,6 +22,7 @@ export default defineComponent({
 
   setup() {
     const table = useTableContext()
+    console.log('table: ', table)
 
     const { toggle, isFullscreen } = useFullscreen(table.wrapRef)
 

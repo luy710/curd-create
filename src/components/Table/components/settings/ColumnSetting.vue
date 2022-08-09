@@ -64,7 +64,7 @@
           </ElScrollbar>
         </template>
         <template #reference>
-          <el-icon><Setting /></el-icon>
+          <el-icon :size="16" style="cursor: pointer"><Setting /></el-icon>
         </template>
       </ElPopover>
     </span>

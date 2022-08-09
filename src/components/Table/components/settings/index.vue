@@ -43,7 +43,7 @@
           redo: true,
           size: true,
           setting: true,
-          fullScreen: false,
+          fullScreen: true,
           ...props.setting,
         };
       });
@@ -65,7 +65,6 @@
     & > * {
       margin-right: 12px;
     }
-
     svg {
       width: 1.3em;
       height: 1.3em;

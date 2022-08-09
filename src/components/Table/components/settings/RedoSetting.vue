@@ -1,6 +1,6 @@
 <template>
   <ElTooltip placement="top" content="刷新">
-    <el-icon @click="redo"><RefreshRight /></el-icon>
+    <el-icon @click="redo" :size="16" style="cursor: pointer"><RefreshRight /></el-icon>
   </ElTooltip>
 </template>
 <script lang="ts">
@@ -21,6 +21,8 @@ export default defineComponent({
     const table = useTableContext()
 
     function redo() {
+      console.log('redo: ')
+
       table.reload()
     }
 

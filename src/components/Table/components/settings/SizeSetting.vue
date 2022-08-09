@@ -1,7 +1,7 @@
 <template>
   <ElTooltip placement="top" content="密度">
     <ElDropdown placement="bottom" trigger="click" :getPopupContainer="getPopupContainer" @command="handleTitleClick">
-      <el-icon><Box /></el-icon>
+      <el-icon :size="16" style="cursor: pointer"><Box /></el-icon>
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item command="large">偏大</el-dropdown-item>
