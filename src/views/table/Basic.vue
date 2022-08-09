@@ -1,5 +1,5 @@
 <template>
-  <BasicTable :columns="columns" :data="data" border>
+  <BasicTable :columns="columns" :data="data" border :title="'test'" :title-help-message="'tests1111'">
     <template #column_1_header="data">
       <span>{{ data.column.prop }} {{ data.$index }} </span>
     </template>

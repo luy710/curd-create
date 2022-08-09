@@ -29,16 +29,16 @@
       </template>
 
       <slot name="more"></slot>
-      <a-button type="link" size="small" v-if="!$slots.more">
+      <ElButton link size="small" v-if="!$slots.more">
         <el-icon class="icon-more"><MoreFilled /></el-icon>
-      </a-button>
+      </ElButton>
     </ElDropdown>
   </div>
 </template>
 <script lang="ts">
 import { defineComponent, PropType, computed, toRaw, unref } from 'vue'
 import { MoreFilled } from '@element-plus/icons-vue'
-import { ElDivider, ElTooltip, ElPopconfirm, ElDropdown } from 'element-plus'
+import { ElDivider, ElTooltip, ElPopconfirm, ElDropdown,ElButton } from 'element-plus'
 
 import { ActionItem, TableActionType } from '@/components/Table/types/table'
 
@@ -55,7 +55,8 @@ export default defineComponent({
     ElTooltip,
     ElPopconfirm,
     ElDropdownItem: ElDropdown.DropdownItem,
-    ElDropdownMenu: ElDropdown.DropdownMenu
+    ElDropdownMenu: ElDropdown.DropdownMenu,
+    ElButton
   },
   props: {
     actions: {

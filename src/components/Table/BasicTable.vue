@@ -14,7 +14,7 @@
         <slot :name="item" v-bind="data || {}"></slot>
       </template>
     </BasicForm>
-
+    <component :is="getHeaderProps.title" ></component>
     <el-table ref="tableRef" v-bind="getBindValues" v-show="getEmptyDataIsShowTable">
       <el-table-column v-if="innerPropsRef?.showCheckColumn" type="selection" width="55" />
 
@@ -160,7 +160,8 @@ const handlers: InnerHandlers = {
 }
 
 const { getHeaderProps } = useTableHeader(getProps, slots, handlers)
-console.log('slots: ', slots)
+console.log('getHeaderProps: ', getHeaderProps)
+
 const getBindValues = computed(() => {
   const dataSource = unref(getDataSourceRef)
   let propsData: Recordable = {
@@ -168,7 +169,6 @@ const getBindValues = computed(() => {
     ...unref(getProps),
     scroll: unref(getScrollRef),
     loading: unref(getLoading),
-    ...unref(getHeaderProps),
     tableLayout: 'fixed',
     rowKey: unref(getRowKey),
     columns: toRaw(unref(getViewColumns)),
@@ -179,6 +179,7 @@ const getBindValues = computed(() => {
   propsData = omit(propsData, ['class', 'onChange'])
   return propsData
 })
+
 const prefixCls = 'basic-table'
 const getWrapperClass = computed(() => {
   const values = unref(getBindValues)

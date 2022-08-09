@@ -1,11 +1,11 @@
 <template>
   <el-card title="表单校验示例">
     <div class="mb-4">
-      <a-button @click="validateForm" class="mr-2"> 手动校验表单 </a-button>
-      <a-button @click="resetValidate" class="mr-2"> 清空校验信息 </a-button>
-      <a-button @click="getFormValues" class="mr-2"> 获取表单值 </a-button>
-      <a-button @click="setFormValues" class="mr-2"> 设置表单值 </a-button>
-      <a-button @click="resetFields" class="mr-2"> 重置 </a-button>
+      <ElButton @click="validateForm" class="mr-2"> 手动校验表单 </ElButton>
+      <ElButton @click="resetValidate" class="mr-2"> 清空校验信息 </ElButton>
+      <ElButton @click="getFormValues" class="mr-2"> 获取表单值 </ElButton>
+      <ElButton @click="setFormValues" class="mr-2"> 设置表单值 </ElButton>
+      <ElButton @click="resetFields" class="mr-2"> 重置 </ElButton>
     </div>
     <el-card title="表单校验">
       <BasicForm @register="register" @submit="handleSubmit" />

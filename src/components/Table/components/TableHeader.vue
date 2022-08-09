@@ -1,9 +1,9 @@
 <template>
-  <div style="width: 100%">
+  <div style="width: 100%" :class="prefixCls">
     <div v-if="$slots.headerTop" style="margin: 5px">
       <slot name="headerTop"></slot>
     </div>
-    <div class="flex items-center">
+    <div class="title-box">
       <slot name="tableTitle" v-if="$slots.tableTitle"></slot>
       <TableTitle :helpMessage="titleHelpMessage" :title="title" v-if="!$slots.tableTitle && title" />
       <div :class="`${prefixCls}__toolbar`">
@@ -56,6 +56,11 @@ export default defineComponent({
 </script>
 <style lang="less">
 .basic-table-header {
+  .title-box{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+  }
   &__toolbar {
     flex: 1;
     display: flex;

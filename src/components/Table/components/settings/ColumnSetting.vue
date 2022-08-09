@@ -1,75 +1,79 @@
 <template>
   <ElTooltip placement="top" content="列设置">
-    <ElPopover
-      placement="bottom-start"
-      trigger="click"
-      @show="handleVisibleChange"
-      :popper-class="`${prefixCls}__cloumn-list`"
-    >
-      <template #reference>
-        <div :class="`${prefixCls}__popover-title`">
-          <ElCheckbox :indeterminate="indeterminate" v-model="checkAll" @change="onCheckAllChange"> 列展示 </ElCheckbox>
-          <ElCheckbox v-model="checkIndex" @change="handleIndexCheckChange"> 序号列 </ElCheckbox>
-          <ElCheckbox v-model="checkSelect" @change="handleSelectCheckChange" :disabled="!defaultRowSelection">
-            勾选列
-          </ElCheckbox>
+    <span>
+      <ElPopover
+        placement="bottom-start"
+        trigger="click"
+        @show="handleVisibleChange"
+        :width="300"
+        :popper-class="`${prefixCls}__cloumn-list`"
+      >
+        <template #default>
+          <div :class="`${prefixCls}__popover-title`">
+            <ElCheckbox :indeterminate="indeterminate" v-model="checkAll" @change="onCheckAllChange">
+              列展示
+            </ElCheckbox>
+            <ElCheckbox v-model="checkIndex" @change="handleIndexCheckChange"> 序号列 </ElCheckbox>
+            <ElCheckbox v-model="checkSelect" @change="handleSelectCheckChange" :disabled="!defaultRowSelection">
+              勾选列
+            </ElCheckbox>
 
-          <a-button size="small" type="link" @click="reset"> 重置 </a-button>
-        </div>
-      </template>
+            <ElButton size="small" link @click="reset"> 重置 </ElButton>
+          </div>
+          <ElScrollbar>
+            <ElCheckboxGroup v-model="checkedList" @change="onChange" ref="columnListRef">
+              <template v-for="item in plainOptions" :key="item.value">
+                <div :class="`${prefixCls}__check-item`" v-if="!('ifShow' in item && !item.ifShow)">
+                  <el-icon class="table-column-drag-icon"><Rank /></el-icon>
+                  <ElCheckbox :label="item.value">
+                    {{ item.label }}
+                  </ElCheckbox>
 
-      <template #content>
-        <ElScrollbar>
-          <ElCheckboxGroup v-model="checkedList" @change="onChange" ref="columnListRef">
-            <template v-for="item in plainOptions" :key="item.value">
-              <div :class="`${prefixCls}__check-item`" v-if="!('ifShow' in item && !item.ifShow)">
-                <el-icon class="table-column-drag-icon"><Rank /></el-icon>
-                <ElCheckbox :label="item.value">
-                  {{ item.label }}
-                </ElCheckbox>
-
-                <ElTooltip placement="bottom-start" :mouseLeaveDelay="0.4" content="固定到左侧">
-                  <el-icon
-                    :class="[
-                      `${prefixCls}__fixed-left`,
-                      {
-                        active: item.fixed === 'left',
-                        disabled: !checkedList.includes(item.value)
-                      }
-                    ]"
-                    @click="handleColumnFixed(item, 'left')"
-                  >
-                    <ArrowLeft />
-                  </el-icon>
-                </ElTooltip>
-                <ElDivider direction="vertical" />
-                <ElTooltip placement="bottom-start" :mouseLeaveDelay="0.4" content="固定到右侧">
-                  <el-icon
-                    :class="[
-                      `${prefixCls}__fixed-right`,
-                      {
-                        active: item.fixed === 'right',
-                        disabled: !checkedList.includes(item.value)
-                      }
-                    ]"
-                    @click="handleColumnFixed(item, 'right')"
-                  >
-                    <ArrowRight />
-                  </el-icon>
-                </ElTooltip>
-              </div>
-            </template>
-          </ElCheckboxGroup>
-        </ElScrollbar>
-      </template>
-      <el-icon><Setting /></el-icon>
-    </ElPopover>
+                  <ElTooltip placement="bottom-start" :mouseLeaveDelay="0.4" content="固定到左侧">
+                    <el-icon
+                      :class="[
+                        `${prefixCls}__fixed-left`,
+                        {
+                          active: item.fixed === 'left',
+                          disabled: !checkedList.includes(item.value)
+                        }
+                      ]"
+                      @click="handleColumnFixed(item, 'left')"
+                    >
+                      <ArrowLeft />
+                    </el-icon>
+                  </ElTooltip>
+                  <ElDivider direction="vertical" />
+                  <ElTooltip placement="bottom-start" :mouseLeaveDelay="0.4" content="固定到右侧">
+                    <el-icon
+                      :class="[
+                        `${prefixCls}__fixed-right`,
+                        {
+                          active: item.fixed === 'right',
+                          disabled: !checkedList.includes(item.value)
+                        }
+                      ]"
+                      @click="handleColumnFixed(item, 'right')"
+                    >
+                      <ArrowRight />
+                    </el-icon>
+                  </ElTooltip>
+                </div>
+              </template>
+            </ElCheckboxGroup>
+          </ElScrollbar>
+        </template>
+        <template #reference>
+          <el-icon><Setting /></el-icon>
+        </template>
+      </ElPopover>
+    </span>
   </ElTooltip>
 </template>
 <script lang="ts">
 import type { BasicColumn, ColumnChangeParam } from '../../types/table'
 import { defineComponent, ref, reactive, toRefs, watchEffect, nextTick, unref, computed } from 'vue'
-import { ElTooltip, ElPopover, ElCheckbox, ElDivider, ElIcon, ElScrollbar } from 'element-plus'
+import { ElTooltip, ElPopover, ElCheckbox, ElDivider, ElIcon, ElScrollbar, ElButton } from 'element-plus'
 
 import { Setting, Rank, ArrowLeft, ArrowRight } from '@element-plus/icons-vue'
 import { useTableContext } from '../../hooks/useTableContext'
@@ -105,14 +109,15 @@ export default defineComponent({
     ElIcon,
     ArrowLeft,
     ArrowRight,
-    ElScrollbar
+    ElScrollbar,
+    ElButton
   },
   emits: ['columns-change'],
 
   setup(_, { emit, attrs }) {
     const table = useTableContext()
 
-    const defaultRowSelection = omit(table.getRowSelection(), 'selectedRowKeys')
+    const defaultRowSelection = omit({}, 'selectedRowKeys')
     let inited = false
 
     const cachePlainOptions = ref<Options[] | any>([])
@@ -356,7 +361,7 @@ export default defineComponent({
 
 .basic-column-setting {
   &__popover-title {
-    position: relative;
+    // position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
