@@ -48,16 +48,11 @@ export interface FetchSetting {
 }
 
 export interface TableActionType {
+  // 刷新列表
   reload: (opt?: FetchParams) => Promise<void>
-  getSelectRows: <T = Recordable>() => T[]
-  clearSelectedRowKeys: () => void
-  expandAll: () => void
-  expandRows: (keys: string[]) => void
-  collapseAll: () => void
-  scrollTo: (pos: string) => void // pos: id | "top" | "bottom"
-  getSelectRowKeys: () => string[]
-  deleteSelectRowByKey: (key: string) => void
+  // 设置分页器配置
   setPagination: (info: Partial<PaginationProps>) => void
+  // 重置原数据
   setTableData: <T = Recordable>(values: T[]) => void
   updateTableDataRecord: (rowKey: string | number, record: Recordable) => Recordable | void
   deleteTableDataRecord: (rowKey: string | number | string[] | number[]) => void
@@ -70,16 +65,41 @@ export interface TableActionType {
   setLoading: (loading: boolean) => void
   setProps: (props: Partial<BasicTableProps>) => void
   redoHeight: () => void
-  setSelectedRowKeys: (rowKeys: string[] | number[]) => void
   getPaginationRef: () => PaginationProps | boolean
   getSize: () => SizeType
-  getRowSelection: () => TableRowSelection<Recordable>
   getCacheColumns: () => BasicColumn[]
   emit?: EmitType
   updateTableData: (index: number, key: string, value: any) => Recordable
   setShowPagination: (show: boolean) => Promise<void>
   getShowPagination: () => boolean
   setCacheColumnsByField?: (dataIndex: string | undefined, value: BasicColumn) => void
+  // 组件内暴露事件
+  // 用于多选表格，清空用户的选择
+  clearSelection: () => void
+  // 返回当前选中的行
+  getSelectionRows: () => Recordable[]
+  // 用于多选表格，切换某一行的选中状态， 如果使用了第二个参数，则可直接设置这一行选中与否
+  toggleRowSelection: (row: Recordable, selected: boolean) => void
+  // 用于多选表格，切换全选和全不选
+  toggleAllSelection: () => void
+  // 用于可扩展的表格或树表格，如果某行被扩展，则切换。 使用第二个参数，您可以直接设置该行应该被扩展或折叠。
+  toggleRowExpansion: (row: Recordable, expanded: boolean) => void
+  // 用于单选表格，设定某一行为选中行， 如果调用时不加参数，则会取消目前高亮行的选中状态。
+  setCurrentRow: (row: Recordable) => void
+  // 用于清空排序条件，数据会恢复成未排序的状态
+  clearSort: () => void
+  // 传入由columnKey 组成的数组以清除指定列的过滤条件。 如果没有参数，清除所有过滤器
+  clearFilter: (columnKeys: string[]) => void
+  // 对 Table 进行重新布局。 当表格可见性变化时，您可能需要调用此方法以获得正确的布局
+  doLayout: () => void
+  // 手动排序表格。 参数 prop 属性指定排序列，order 指定排序顺序。
+  sort: (prop: string, order: string) => void
+  // 滚动到一组特定坐标
+  scrollTo: (options: ScrollToOptions | number, yCoord?: number) => void
+  // 设置垂直滚动位置
+  setScrollTop: (top: number) => void
+  // 设置水平滚动位置
+  setScrollLeft: (left: number) => void
 }
 
 export type CellFormat =
@@ -308,6 +328,8 @@ export interface BasicTableProps {
   ellipsis?: boolean
   // 是否自动计算高度，铺满整屏
   canResize?: boolean
+  // 是否继承父级高度
+  isCanResizeParent?: boolean
   // 分页配置
   pagination?: PaginationProps | boolean
   clearSelectOnPageChange?: boolean

@@ -11,3 +11,9 @@
 <script setup lang="ts">
 import Menus from './menus.vue'
 </script>
+<style lang="scss" scoped>
+.el-main {
+  padding: 10px;
+  box-sizing: border-box;
+}
+</style>

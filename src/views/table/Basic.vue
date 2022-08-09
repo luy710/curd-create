@@ -1,5 +1,5 @@
 <template>
-  <BasicTable :columns="columns" :data="data" border :title="'test'" :title-help-message="'tests1111'">
+  <BasicTable :columns="columns" :data="data" border>
     <template #column_1_header="data">
       <span>{{ data.column.prop }} {{ data.$index }} </span>
     </template>
@@ -9,122 +9,61 @@
     <template #empty>没数据</template>
   </BasicTable>
 </template>
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
+import { BasicTable } from '@/components/index'
+import { getBasicColumns, getBasicData } from './tableData'
 
-<script lang="tsx" setup>
-import { BasicColumn } from '@/components/Table/types/table'
-import BasicTable from '@/components/Table/BasicTable.vue'
-
-const columns = [
-  {
-    label: '日期',
-    prop: 'date',
-    width: 150,
-    columnKey: 'date',
-    slots: {
-      headerSlot: `date_header`,
-      cellSlot: `date_cell`
+export default defineComponent({
+  components: { BasicTable },
+  setup() {
+    const canResize = ref(true)
+    const loading = ref(false)
+    const striped = ref(true)
+    const border = ref(true)
+    const pagination = ref<any>({ pageSize: 20, currentPage: 1 })
+    function toggleCanResize() {
+      canResize.value = !canResize.value
     }
-  },
-  {
-    label: 'Delivery Info',
-    prop: 'aaa',
-    isMulti: true,
-    columns: [
-      {
-        prop: 'name',
-        label: '名称',
-        width: 120
-      },
-      {
-        label: '地址信息',
-        isMulti: true,
-        columns: [
-          {
-            prop: 'state',
-            label: '状态'
-          },
-          {
-            prop: 'city',
-            label: '城市'
-          },
-          {
-            prop: 'address',
-            label: '地址'
-          }
-        ]
-      }
-    ]
-  }
-] as BasicColumn[]
+    function toggleStriped() {
+      striped.value = !striped.value
+    }
+    function toggleLoading() {
+      loading.value = true
+      setTimeout(() => {
+        loading.value = false
+        pagination.value = { pageSize: 20 }
+      }, 1000)
+    }
+    function toggleBorder() {
+      border.value = !border.value
+    }
+    const filterchange = (params: any) => {
+      console.log(params, 'filter')
+    }
+    const sortchange = (params: any) => {
+      console.log(params, 'sort')
+    }
 
-const data = [
-  {
-    date: '2016-05-03',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036'
-  },
-  {
-    date: '2016-05-02',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036'
-  },
-  {
-    date: '2016-05-04',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036'
-  },
-  {
-    date: '2016-05-01',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036'
-  },
-  {
-    date: '2016-05-08',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036'
-  },
-  {
-    date: '2016-05-06',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036'
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036'
+    function handleColumnChange(data: Recordable[]) {
+      console.log('ColumnChanged', data)
+    }
+    return {
+      columns: getBasicColumns(),
+      data: getBasicData(),
+      canResize,
+      loading,
+      striped,
+      border,
+      toggleStriped,
+      toggleCanResize,
+      toggleLoading,
+      toggleBorder,
+      pagination,
+      handleColumnChange,
+      filterchange,
+      sortchange
+    }
   }
-]
-console.log(data, '22222', columns)
-
-// <el-table-column prop="date" label="Date" width="150" />
-//     <el-table-column label="Delivery Info">
-//       <el-table-column prop="name" label="Name" width="120" />
-//       <el-table-column label="Address Info">
-//         <el-table-column prop="state" label="State" width="120" />
-//         <el-table-column prop="city" label="City" width="120" />
-//         <el-table-column prop="address" label="Address" />
-//         <el-table-column prop="zip" label="Zip" width="120" />
-//       </el-table-column>
-//     </el-table-column>
+})
 </script>
