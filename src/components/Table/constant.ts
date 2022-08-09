@@ -65,3 +65,4 @@ export const DEFAULT_ALIGN = 'center'
 export const INDEX_COLUMN_FLAG = 'INDEX'
 
 export const ACTION_COLUMN_FLAG = 'ACTION'
+

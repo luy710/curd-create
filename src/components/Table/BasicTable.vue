@@ -49,6 +49,8 @@ import { useLoading } from './hooks/useLoading'
 import { useTableForm } from './hooks/useTableForm'
 import { usePagination } from './hooks/usePagination'
 import { useDataSource } from './hooks/useDataSource'
+import { createTableContext } from './hooks/useTableContext';
+
 import { useColumns } from './hooks/useColumns'
 import { useTableHeight } from './hooks/useTableHeight'
 
@@ -255,6 +257,7 @@ const tableAction: TableActionType = {
   // 设置水平滚动位置
   setScrollLeft: (left: number) => tableRef.value.setScrollLeft(left)
 }
+createTableContext({ ...tableAction, wrapRef, getBindValues })
 
 // 导出内部事件方法
 defineExpose(tableAction)
