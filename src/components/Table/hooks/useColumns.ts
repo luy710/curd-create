@@ -27,7 +27,7 @@ function handleIndexColumn(propsRef: ComputedRef<BasicTableProps>, columns: Part
 
   columns.unshift({
     type: 'index',
-    width: 50,
+    width: 60,
     label: '序号',
     align: 'center',
     fixed: 'left',

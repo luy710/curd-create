@@ -1,5 +1,5 @@
 <template>
-  <ElTooltip placement="top" content="全屏">
+  <ElTooltip content="全屏">
     <el-icon :size="16" style="cursor: pointer" @click="toggle">
       <FullScreen />
     </el-icon>

@@ -1,6 +1,6 @@
 <template>
-  <ElTooltip placement="top" content="列设置">
-    <span>
+  <ElTooltip content="列设置">
+    <span style="display: inline-flex;">
       <ElPopover
         placement="bottom-start"
         trigger="click"

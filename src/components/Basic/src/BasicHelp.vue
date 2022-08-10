@@ -1,6 +1,6 @@
 <script lang="tsx">
 import type { CSSProperties, PropType } from 'vue'
-import { WarningFilled } from '@element-plus/icons-vue'
+import { Warning } from '@element-plus/icons-vue'
 import { isString, isArray } from '@/components/utils/is'
 
 export default defineComponent({
@@ -71,8 +71,8 @@ export default defineComponent({
           {slots?.default ? (
             slots?.default()
           ) : (
-            <el-icon>
-              <WarningFilled />
+            <el-icon color="#2c3e50">
+              <Warning />
             </el-icon>
           )}
         </span>
@@ -83,9 +83,13 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.m-basic-help__wrap {
-  p {
-    margin: 0;
+.m-basic-help {
+  margin-left: 3px;
+  line-height: 1;
+  &__wrap {
+    p {
+      margin: 0;
+    }
   }
 }
 </style>
