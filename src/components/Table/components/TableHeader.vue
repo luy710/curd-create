@@ -54,10 +54,11 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="less">
+<style lang="scss">
 .basic-table-header {
-  .title-box{
-    display:flex;
+  margin-bottom: 10px;
+  .title-box {
+    display: flex;
     justify-content: center;
     align-items: center;
   }

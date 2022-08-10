@@ -20,6 +20,7 @@ interface SearchState {
   sortInfo: Recordable
   filterInfo: Record<string, string[]>
 }
+
 export function useDataSource(
   propsRef: ComputedRef<BasicTableProps>,
   { getPaginationInfo, setPagination, setLoading, getFieldsValue, clearSelectedRowKeys, tableData }: ActionType,
@@ -44,12 +45,7 @@ export function useDataSource(
       const data = unref(propsRef).data
       const p = currentPage || 1
       const s = pageSize || 10
-
       dataSourceRef.value = data?.slice(s * (p - 1), s * p - 1) || []
-
-      setPagination({
-        total: data?.length
-      })
     }
   }
 
@@ -60,8 +56,11 @@ export function useDataSource(
       const { data, api } = unref(propsRef)
 
       if (!api && data) {
-        if (!isBoolean(getPaginationInfo.value)) {
+        if (!isBoolean(getPaginationInfo)) {
           pickPageData()
+          setPagination({
+            total: data?.length
+          })
         } else {
           dataSourceRef.value = data
         }
@@ -71,6 +70,11 @@ export function useDataSource(
       immediate: true
     }
   )
+
+  const resetPage = () => {
+    const { data, api } = unref(propsRef)
+    if (!api && data) pickPageData()
+  }
 
   // 处理 排序 过滤 分页数据 需要整改
   function handleTableChange(
@@ -97,6 +101,16 @@ export function useDataSource(
       params.filterInfo = filterInfo
     }
     fetch(params)
+  }
+
+  // 分页数据变化设置
+  const handlePaginationChange = (pagination: PaginationProps) => {
+    const { clearSelectOnPageChange } = unref(propsRef)
+    if (clearSelectOnPageChange) {
+      clearSelectedRowKeys()
+    }
+    setPagination(pagination)
+    resetPage()
   }
 
   // 设置每一条数据的唯一值，默认是column-key
@@ -187,6 +201,7 @@ export function useDataSource(
       })
       if (index >= 0) {
         dataSourceRef.value.splice(index, 1)
+        resetPage()
       }
       // 删除源数据
       index = unref(propsRef).data?.findIndex((row) => {
@@ -211,6 +226,7 @@ export function useDataSource(
   function insertTableDataRecord(record: Recordable, index: number): Recordable | undefined {
     index = index ?? dataSourceRef.value?.length
     unref(dataSourceRef).splice(index, 0, record)
+    resetPage()
     return unref(dataSourceRef)
   }
 
@@ -330,6 +346,7 @@ export function useDataSource(
 
   function setTableData<T = Recordable>(values: T[]) {
     dataSourceRef.value = values
+    resetPage()
   }
 
   function getDataSource<T = Recordable>() {
@@ -364,6 +381,7 @@ export function useDataSource(
     deleteTableDataRecord,
     insertTableDataRecord,
     findTableDataRecord,
-    handleTableChange
+    handleTableChange,
+    handlePaginationChange
   }
 }

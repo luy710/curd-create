@@ -446,7 +446,7 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="less">
+<style lang="scss">
 @prefix-cls: 'editable-cell';
 
 .edit-cell-align-left {

@@ -46,7 +46,6 @@ export function useTableHeight(
 
   // No need to repeat queries
   let paginationEl: HTMLElement | null
-  let footerEl: HTMLElement | null
   let bodyEl: HTMLElement | null
 
   async function calcTableHeight() {
@@ -106,7 +105,6 @@ export function useTableHeight(
 
       const headerCellHeight = (tableEl.querySelector('.ant-table-title') as HTMLElement)?.offsetHeight ?? 0
 
-      console.log(wrapHeight - formHeight - headerCellHeight - tablePadding - paginationMargin)
       bottomIncludeBody = wrapHeight - formHeight - headerCellHeight - tablePadding - paginationMargin
     } else {
       // Table height from bottom

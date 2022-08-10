@@ -16,7 +16,7 @@
     </BasicForm>
 
     <component :is="getHeaderProps.title"></component>
-    
+
     <el-table ref="tableRef" v-bind="getBindValues" v-show="getEmptyDataIsShowTable">
       <el-table-column v-if="innerPropsRef?.showCheckColumn" type="selection" width="55" />
 
@@ -32,7 +32,7 @@
     <TablePagination
       v-if="!!getPaginationInfo"
       v-bind="isBoolean(getPaginationInfo) ? {} : getPaginationInfo"
-      @change="(pagination) => handleTableChange(pagination, {}, '')"
+      @change="(pagination) => handlePaginationChange(pagination)"
     />
   </div>
 </template>
@@ -123,6 +123,7 @@ const { getPaginationInfo, getPagination, setPagination, setShowPagination, getS
   usePagination(getProps)
 
 const {
+  handlePaginationChange,
   handleTableChange,
   getDataSourceRef,
   getDataSource,
