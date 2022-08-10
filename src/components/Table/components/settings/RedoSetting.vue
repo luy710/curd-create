@@ -1,5 +1,5 @@
 <template>
-  <ElTooltip placement="top" content="刷新">
+  <ElTooltip content="刷新">
     <el-icon @click="redo" :size="16" style="cursor: pointer"><RefreshRight /></el-icon>
   </ElTooltip>
 </template>

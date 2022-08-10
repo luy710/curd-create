@@ -1,5 +1,5 @@
 <template>
-  <ElTooltip placement="top" content="密度">
+  <ElTooltip content="密度">
     <ElDropdown placement="bottom" trigger="click" :getPopupContainer="getPopupContainer" @command="handleTitleClick">
       <el-icon :size="16" style="cursor: pointer"><Box /></el-icon>
       <template #dropdown>
