@@ -1,5 +1,5 @@
 <template>
-  <div ref="wrapRef" :class="['custom-wrapper', getWrapperClass]">
+  <div ref="wrapRef" :class="getWrapperClass">
     <BasicForm
       v-if="getBindValues.useSearchForm"
       ref="formRef"
@@ -31,7 +31,7 @@
     >
       <el-table-column v-if="getProps?.showCheckColumn" type="selection" width="55" />
       <el-table-column v-if="getProps?.showIndexColumn" type="index" fixed="left" label="#" width="50" />
-      
+
       <!-- table 内部 slots -->
       <template #[item]="data" v-for="item in Object.keys(tableSlots)" :key="item">
         <slot :name="item" v-bind="data || {}"></slot>
@@ -127,6 +127,7 @@ const {
   handlePaginationChange,
   handleFilterChange,
   handleClearFilters,
+  handleClearSort,
   handleSortChange,
   getDataSourceRef,
   getDataSource,
@@ -216,7 +217,7 @@ const filterChange = (filter: Recordable) => {
   handleFilterChange(filter)
   onFilterChange && isFunction(onFilterChange) && onFilterChange.call(undefined, filter as Recordable)
 }
-const sortChange = (sort: SorterResult | boolean) => {
+const sortChange = (sort: SorterResult) => {
   const { onSortChange } = unref(getProps)
   handleSortChange(sort)
   onSortChange && isFunction(onSortChange) && onSortChange.call(undefined, sort as SorterResult)
@@ -261,7 +262,7 @@ const tableAction: TableActionType = {
   // 用于清空排序条件，数据会恢复成未排序的状态
   clearSort: () => {
     tableRef.value.clearSort()
-    sortChange(false)
+    handleClearSort()
   },
   // 传入由columnKey 组成的数组以清除指定列的过滤条件。 如果没有参数，清除所有过滤器
   clearFilter: (columnKeys: string[]) => {
@@ -277,7 +278,11 @@ const tableAction: TableActionType = {
   // 设置垂直滚动位置
   setScrollTop: (top: number) => tableRef.value.setScrollTop(top),
   // 设置水平滚动位置
-  setScrollLeft: (left: number) => tableRef.value.setScrollLeft(left)
+  setScrollLeft: (left: number) => tableRef.value.setScrollLeft(left),
+  // 清除所有的sort信息并重新请求
+  handleClearSort: () => handleClearSort(),
+  // 清除所有的过滤信息
+  handleClearFilters: (columnKeys?: string[]) => handleClearFilters(columnKeys)
 }
 createTableContext({ ...tableAction, wrapRef, getBindValues })
 // 导出内部事件方法
@@ -289,6 +294,11 @@ emit('register', tableAction, formActions)
 .basic-table {
   padding: 8px;
   box-sizing: border-box;
+  max-width: 100%;
+  height: 100%;
+  .basic-form {
+    margin-bottom: 10px;
+  }
   .el-pagination {
     margin-top: 10px;
     justify-content: right;

@@ -141,9 +141,15 @@ export function useTable(tableProps?: Props): [
     // 用于单选表格，设定某一行为选中行， 如果调用时不加参数，则会取消目前高亮行的选中状态。
     setCurrentRow: (row: Recordable) => getTableInstance().setCurrentRow(row),
     // 用于清空排序条件，数据会恢复成未排序的状态
-    clearSort: () => getTableInstance().clearSort(),
+    clearSort: () => {
+      getTableInstance().clearSort()
+      getTableInstance().handleClearSort()
+    },
     // 传入由columnKey 组成的数组以清除指定列的过滤条件。 如果没有参数，清除所有过滤器
-    clearFilter: (columnKeys: string[]) => getTableInstance().clearFilter(columnKeys),
+    clearFilter: (columnKeys: string[]) => {
+      getTableInstance().clearFilter(columnKeys)
+      getTableInstance().handleClearFilters(columnKeys)
+    },
     // 对 Table 进行重新布局。 当表格可见性变化时，您可能需要调用此方法以获得正确的布局
     doLayout: () => getTableInstance().doLayout(),
     // 手动排序表格。 参数 prop 属性指定排序列，order 指定排序顺序。
@@ -153,7 +159,11 @@ export function useTable(tableProps?: Props): [
     // 设置垂直滚动位置
     setScrollTop: (top: number) => getTableInstance().setScrollTop(top),
     // 设置水平滚动位置
-    setScrollLeft: (left: number) => getTableInstance().setScrollLeft(left)
+    setScrollLeft: (left: number) => getTableInstance().setScrollLeft(left),
+    // 清除所有的sort信息并重新请求
+    handleClearSort: () => getTableInstance().handleClearSort(),
+    // 清除所有的过滤信息
+    handleClearFilters: (columnKeys?: string[]) => getTableInstance().handleClearFilters(columnKeys)
   }
 
   return [register, methods]

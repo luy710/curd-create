@@ -63,7 +63,8 @@ export function useTableHeight(
     const { maxHeight, useSearchForm, isCanResizeParent } = unref(propsRef)
     const pagination = unref(getPaginationInfo)
     if (!unref(getCanResize)) return
-
+    const wrapEl = unref(wrapRef)
+    if (!wrapEl) return
     const table = unref(tableElRef)
     if (!table) return
 
@@ -83,9 +84,9 @@ export function useTableHeight(
     // BasicTable的padding高度
     let paddingHeight = 16
     // 分页器所占高度
-    let paginationHeight = 4
+    let paginationHeight = 2
     if (!isBoolean(pagination)) {
-      paginationEl = unref(wrapRef)?.querySelector('.el-pagination') as HTMLElement
+      paginationEl = wrapEl.querySelector('.el-pagination') as HTMLElement
       if (paginationEl) {
         const offsetHeight = paginationEl.offsetHeight
         // 本身高度
@@ -98,25 +99,23 @@ export function useTableHeight(
     let bottomIncludeBody = 0
     // 如果是继承父级高度
     if (unref(wrapRef) && isCanResizeParent) {
-      const tablePadding = 12
-      const formMargin = 16
-      let paginationMargin = 10
+      const formMargin = 10
+      let headerMargin = 10
       const wrapHeight = unref(wrapRef)?.offsetHeight ?? 0
 
       let formHeight = unref(formRef)?.$el.offsetHeight ?? 0
       if (formHeight) {
         formHeight += formMargin
       }
-      if (isBoolean(pagination) && !pagination) {
-        paginationMargin = 0
-      }
       if (isBoolean(useSearchForm) && !useSearchForm) {
         paddingHeight = 0
       }
 
-      const headerCellHeight = (tableEl.querySelector('.ant-table-title') as HTMLElement)?.offsetHeight ?? 0
-
-      bottomIncludeBody = wrapHeight - formHeight - headerCellHeight - tablePadding - paginationMargin
+      const headerCellHeight = (wrapEl.querySelector('.basic-table-header') as HTMLElement)?.offsetHeight ?? 0
+      if (!headerCellHeight) {
+        headerMargin = 0
+      }
+      bottomIncludeBody = wrapHeight - formHeight - headerCellHeight - paginationHeight - headerMargin
     } else {
       // Table height from bottom
       bottomIncludeBody = getViewportOffset(headEl).bottomIncludeBody

@@ -145,7 +145,7 @@ const comp = {
           meta: {
             title: 'routes.demo.table.customerCell'
           }
-        }
+        },
         //     {
         //       path: 'formTable',
         //       name: 'FormTableDemo',
@@ -234,14 +234,14 @@ const comp = {
         //         title: 'routes.demo.table.authColumn'
         //       }
         //     },
-        //     {
-        //       path: 'resizeParentHeightTable',
-        //       name: 'ResizeParentHeightTable',
-        //       component: () => import('@views/table/ResizeParentHeightTable.vue'),
-        //       meta: {
-        //         title: 'routes.demo.table.resizeParentHeightTable'
-        //       }
-        //     }
+        {
+          path: 'resizeParentHeightTable',
+          name: 'ResizeParentHeightTable',
+          component: () => import('@views/table/ResizeParentHeightTable.vue'),
+          meta: {
+            title: 'routes.demo.table.resizeParentHeightTable'
+          }
+        }
       ]
     }
   ]

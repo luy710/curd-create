@@ -119,19 +119,22 @@ export function useDataSource(
     fetch(searchState)
   }
 
-  const handleSortChange = (sort: SorterResult | boolean) => {
+  const handleSortChange = (sort: SorterResult) => {
     const { sortFn, sortFetchImmediate } = unref(propsRef)
-    if (!isBoolean(sort)) {
-      if (isFunction(sortFn)) {
-        const sortInfo = sortFn(sort)
-        searchState.sortInfo = sortInfo
-      } else {
-        searchState.sortInfo = sort
-      }
-      emit('sortChange', searchState.sortInfo)
+    if (isFunction(sortFn)) {
+      const sortInfo = sortFn(sort)
+      searchState.sortInfo = sortInfo
     } else {
-      searchState.sortInfo = {}
+      searchState.sortInfo = sort
     }
+    emit('sortChange', searchState.sortInfo)
+    if (!sortFetchImmediate) return
+    fetch(searchState)
+  }
+
+  const handleClearSort = () => {
+    const { sortFetchImmediate } = unref(propsRef)
+    searchState.sortInfo = {}
     if (!sortFetchImmediate) return
     fetch(searchState)
   }
@@ -417,6 +420,7 @@ export function useDataSource(
     handleFilterChange,
     handleSortChange,
     handlePaginationChange,
-    handleClearFilters
+    handleClearFilters,
+    handleClearSort
   }
 }
