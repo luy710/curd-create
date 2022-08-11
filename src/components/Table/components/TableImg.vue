@@ -10,6 +10,7 @@
             }"
             :src="srcPrefix + img"
             :preview-src-list="imgList"
+            v-bind="$attrs"
           />
         </template>
       </div>
@@ -20,6 +21,7 @@
         :style="{ marginLeft: index === 0 ? 0 : margin }"
         :src="srcPrefix + img"
         :preview-src-list="imgList"
+        v-bind="$attrs"
       />
     </template>
   </div>

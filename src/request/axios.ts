@@ -14,11 +14,7 @@ class Abstract {
         .then((res) => {
           const { code, message, result } = res.data
           if (code == 0) {
-            resolve({
-              code,
-              result,
-              message
-            })
+            resolve(result)
           } else {
             reject({
               code,

@@ -113,7 +113,7 @@ const comp = {
           meta: {
             title: 'routes.demo.table.basic'
           }
-        }
+        },
         //     {
         //       path: 'treeTable',
         //       name: 'TreeTableDemo',
@@ -138,14 +138,14 @@ const comp = {
         //         title: 'routes.demo.table.fixedColumn'
         //       }
         //     },
-        //     {
-        //       path: 'customerCell',
-        //       name: 'CustomerCellDemo',
-        //       component: () => import('@views/table/CustomerCell.vue'),
-        //       meta: {
-        //         title: 'routes.demo.table.customerCell'
-        //       }
-        //     },
+        {
+          path: 'customerCell',
+          name: 'CustomerCellDemo',
+          component: () => import('@views/table/CustomerCell.vue'),
+          meta: {
+            title: 'routes.demo.table.customerCell'
+          }
+        }
         //     {
         //       path: 'formTable',
         //       name: 'FormTableDemo',
