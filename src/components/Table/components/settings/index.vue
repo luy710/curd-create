@@ -62,6 +62,7 @@ export default defineComponent({
 </script>
 <style lang="scss">
 .table-settings {
+  display: flex;
   & > * {
     margin-right: 12px;
   }
