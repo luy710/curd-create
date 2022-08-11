@@ -71,6 +71,23 @@ export function useDataSource(
     }
   )
 
+  // 如果分页数据发生变化 需要重新请求数据库或者手动分页
+  watch(
+    () => [
+      unref(getPaginationInfo as Partial<PaginationProps>).currentPage,
+      unref(getPaginationInfo as Partial<PaginationProps>).pageSize
+    ],
+    () => {
+      const { api } = unref(propsRef)
+
+      if (!api) {
+        pickPageData()
+      } else {
+        fetch(searchState)
+      }
+    }
+  )
+
   const resetPage = () => {
     const { data, api } = unref(propsRef)
     if (!api && data) pickPageData()

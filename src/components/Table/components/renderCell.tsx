@@ -1,13 +1,10 @@
 import type { Slots } from 'vue'
 import { BasicColumn } from '../types/table'
 import { BasicHelp } from '@/components/Basic'
-import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults'
 export interface CI {
   column: BasicColumn
   $index: number
 }
-
-
 export interface CellRenderParams extends CI {
   row: Recordable
 }
@@ -20,7 +17,7 @@ export const renderHeader = ({ column, $index }: CI, propsSlots: Slots) => {
     }
   }
   return (
-    <span>
+    <span class="custom-cell-title">
       {label} {helpMessage && <BasicHelp text={helpMessage} {...helpComponentProps} />}
     </span>
   )
