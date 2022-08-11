@@ -1,7 +1,17 @@
 <template>
-  <BasicTable :columns="columns" :data="data" border title="标题测试" title-help-message="标题帮助测试">
-    <template #column_1_header="data">
-      <span>{{ data.column.prop }} {{ data.$index }} </span>
+  <BasicTable
+    ref="tableRef"
+    :columns="columns"
+    :data="data"
+    :canResize="canResize"
+    border
+    title="标题测试"
+    title-help-message="标题帮助测试"
+    @sortChange="sortchange"
+    @filterChange="filterchange"
+  >
+    <template #toolbar>
+      <el-button @click="clearFilter">清除filter</el-button>
     </template>
     <template #column_1_cell="data">
       <el-tag>{{ data.row.id }} {{ data.$index }} </el-tag>
@@ -17,6 +27,7 @@ import { getBasicColumns, getBasicData } from './tableData'
 export default defineComponent({
   components: { BasicTable },
   setup() {
+    const tableRef = ref()
     const canResize = ref(true)
     const loading = ref(false)
     const striped = ref(true)
@@ -39,6 +50,7 @@ export default defineComponent({
       border.value = !border.value
     }
     const filterchange = (params: any) => {
+      console.log(tableRef.value.getCacheColumns())
       console.log(params, 'filter')
     }
     const sortchange = (params: any) => {
@@ -48,13 +60,18 @@ export default defineComponent({
     function handleColumnChange(data: Recordable[]) {
       console.log('ColumnChanged', data)
     }
+    const clearFilter = () => {
+      tableRef.value.clearFilter('no')
+    }
     return {
+      tableRef,
       columns: getBasicColumns(),
       data: getBasicData(),
       canResize,
       loading,
       striped,
       border,
+      clearFilter,
       toggleStriped,
       toggleCanResize,
       toggleLoading,

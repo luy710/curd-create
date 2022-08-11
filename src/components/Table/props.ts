@@ -210,12 +210,20 @@ export const baseProps = {
     type: Boolean,
     default: false
   },
-  // 排序方法
+  sortFetchImmediate: {
+    type: Boolean,
+    default: true
+  },
+  // 排序参数处理方法
   sortFn: {
     type: Function as PropType<(sortInfo: SorterResult) => any>,
     default: DEFAULT_SORT_FN
   },
-  // 过滤方法
+  filterFetchImmediate: {
+    type: Boolean,
+    default: true
+  },
+  // 过滤参数处理方法
   filterFn: {
     type: Function as PropType<(data: Partial<Recordable<string[]>>) => any>,
     default: DEFAULT_FILTER_FN

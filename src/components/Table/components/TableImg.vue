@@ -15,7 +15,12 @@
       </div>
     </ElBadge>
     <template v-for="(img, index) in imgList" :key="img" v-else>
-      <ElImage :width="size" :style="{ marginLeft: index === 0 ? 0 : margin }" :src="srcPrefix + img" :preview-src-list="imgList" />
+      <ElImage
+        :width="size"
+        :style="{ marginLeft: index === 0 ? 0 : margin }"
+        :src="srcPrefix + img"
+        :preview-src-list="imgList"
+      />
     </template>
   </div>
 </template>
@@ -69,7 +74,7 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="less">
+<style lang="scss">
 .basic-table-img {
   .ant-image {
     margin-right: 4px;

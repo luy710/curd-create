@@ -89,6 +89,9 @@ export function useColumns(propsRef: ComputedRef<BasicTableProps>) {
         return isIfShow(column)
       })
       .map((column) => {
+        if (!column['columnKey']) {
+          column['columnKey'] = column.prop
+        }
         return reactive(column)
       })
   })

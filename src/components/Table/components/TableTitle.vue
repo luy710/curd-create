@@ -41,7 +41,7 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="less">
+<style lang="scss">
 .basic-table-title {
   display: flex;
   justify-content: space-between;

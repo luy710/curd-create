@@ -38,7 +38,7 @@
 <script lang="ts">
 import { defineComponent, PropType, computed, toRaw, unref } from 'vue'
 import { MoreFilled } from '@element-plus/icons-vue'
-import { ElDivider, ElTooltip, ElPopconfirm, ElDropdown,ElButton } from 'element-plus'
+import { ElDivider, ElTooltip, ElPopconfirm, ElDropdown, ElButton } from 'element-plus'
 
 import { ActionItem, TableActionType } from '@/components/Table/types/table'
 
@@ -166,7 +166,7 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="less">
+<style lang="scss">
 @prefix-cls: ~'@{namespace}-basic-table-action';
 
 .@{prefix-cls} {

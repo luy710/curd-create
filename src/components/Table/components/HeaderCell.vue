@@ -35,7 +35,7 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="less">
+<style lang="scss">
 .basic-table-header-cell {
   &__help {
     margin-left: 8px;

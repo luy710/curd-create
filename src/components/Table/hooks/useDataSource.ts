@@ -4,7 +4,7 @@ import { ref, unref, ComputedRef, computed, onMounted, watch, reactive, Ref, wat
 import { useTimeoutFn } from '@/components/utils/useTimeout'
 import { buildUUID } from '@/components/utils/uuid'
 import { isFunction, isBoolean } from '@/components/utils/is'
-import { get, cloneDeep, merge } from 'lodash-es'
+import { get, cloneDeep, merge, omit } from 'lodash-es'
 import { FETCH_SETTING, ROW_KEY, PAGE_SIZE } from '../constant'
 
 interface ActionType {
@@ -20,6 +20,7 @@ interface SearchState {
   sortInfo: Recordable
   filterInfo: Record<string, string[]>
 }
+
 export function useDataSource(
   propsRef: ComputedRef<BasicTableProps>,
   { getPaginationInfo, setPagination, setLoading, getFieldsValue, clearSelectedRowKeys, tableData }: ActionType,
@@ -44,12 +45,7 @@ export function useDataSource(
       const data = unref(propsRef).data
       const p = currentPage || 1
       const s = pageSize || 10
-
       dataSourceRef.value = data?.slice(s * (p - 1), s * p - 1) || []
-
-      setPagination({
-        total: data?.length
-      })
     }
   }
 
@@ -60,8 +56,11 @@ export function useDataSource(
       const { data, api } = unref(propsRef)
 
       if (!api && data) {
-        if (!isBoolean(getPaginationInfo.value)) {
+        if (!isBoolean(getPaginationInfo)) {
           pickPageData()
+          setPagination({
+            total: data?.length
+          })
         } else {
           dataSourceRef.value = data
         }
@@ -72,31 +71,62 @@ export function useDataSource(
     }
   )
 
-  // 处理 排序 过滤 分页数据 需要整改
-  function handleTableChange(
-    pagination: PaginationProps,
-    filters: Partial<Recordable<string[]>>,
-    sorter: SorterResult
-  ) {
-    const { clearSelectOnPageChange, sortFn, filterFn } = unref(propsRef)
+  const resetPage = () => {
+    const { data, api } = unref(propsRef)
+    if (!api && data) pickPageData()
+  }
+
+  // 过滤
+  const handleFilterChange = (filter: Recordable) => {
+    const { filterFn, filterFetchImmediate } = unref(propsRef)
+    if (isFunction(filterFn)) {
+      const filterInfo = filterFn(filter)
+      searchState.filterInfo = Object.assign(searchState.filterInfo, filterInfo)
+    } else {
+      searchState.filterInfo = Object.assign(searchState.filterInfo, filter)
+    }
+    emit('filterChange', searchState.filterInfo)
+    if (!filterFetchImmediate) return
+    fetch(searchState)
+  }
+
+  const handleClearFilters = (columnKeys?: string[]) => {
+    const { filterFetchImmediate } = unref(propsRef)
+    if (!columnKeys) {
+      searchState.filterInfo = {}
+    } else {
+      searchState.filterInfo = omit(searchState.filterInfo, columnKeys)
+    }
+    emit('filterChange', searchState.filterInfo)
+    if (!filterFetchImmediate) return
+    fetch(searchState)
+  }
+
+  const handleSortChange = (sort: SorterResult | boolean) => {
+    const { sortFn, sortFetchImmediate } = unref(propsRef)
+    if (!isBoolean(sort)) {
+      if (isFunction(sortFn)) {
+        const sortInfo = sortFn(sort)
+        searchState.sortInfo = sortInfo
+      } else {
+        searchState.sortInfo = sort
+      }
+      emit('sortChange', searchState.sortInfo)
+    } else {
+      searchState.sortInfo = {}
+    }
+    if (!sortFetchImmediate) return
+    fetch(searchState)
+  }
+
+  // 分页数据变化设置
+  const handlePaginationChange = (pagination: PaginationProps) => {
+    const { clearSelectOnPageChange } = unref(propsRef)
     if (clearSelectOnPageChange) {
       clearSelectedRowKeys()
     }
     setPagination(pagination)
-
-    const params: Recordable = {}
-    if (sorter && isFunction(sortFn)) {
-      const sortInfo = sortFn(sorter)
-      searchState.sortInfo = sortInfo
-      params.sortInfo = sortInfo
-    }
-
-    if (filters && isFunction(filterFn)) {
-      const filterInfo = filterFn(filters)
-      searchState.filterInfo = filterInfo
-      params.filterInfo = filterInfo
-    }
-    fetch(params)
+    resetPage()
   }
 
   // 设置每一条数据的唯一值，默认是column-key
@@ -187,6 +217,7 @@ export function useDataSource(
       })
       if (index >= 0) {
         dataSourceRef.value.splice(index, 1)
+        resetPage()
       }
       // 删除源数据
       index = unref(propsRef).data?.findIndex((row) => {
@@ -211,6 +242,7 @@ export function useDataSource(
   function insertTableDataRecord(record: Recordable, index: number): Recordable | undefined {
     index = index ?? dataSourceRef.value?.length
     unref(dataSourceRef).splice(index, 0, record)
+    resetPage()
     return unref(dataSourceRef)
   }
 
@@ -330,6 +362,7 @@ export function useDataSource(
 
   function setTableData<T = Recordable>(values: T[]) {
     dataSourceRef.value = values
+    resetPage()
   }
 
   function getDataSource<T = Recordable>() {
@@ -364,6 +397,9 @@ export function useDataSource(
     deleteTableDataRecord,
     insertTableDataRecord,
     findTableDataRecord,
-    handleTableChange
+    handleFilterChange,
+    handleSortChange,
+    handlePaginationChange,
+    handleClearFilters
   }
 }
