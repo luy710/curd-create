@@ -15,7 +15,11 @@
       </template>
     </BasicForm>
 
-    <component :is="getHeaderProps.title"></component>
+    <component :is="getHeaderProps.title">
+      <template #[item] v-for="item in getHeaderSlots">
+        <slot :name="item"></slot>
+      </template>
+    </component>
 
     <el-table
       ref="tableRef"
@@ -27,7 +31,7 @@
     >
       <el-table-column v-if="getProps?.showCheckColumn" type="selection" width="55" />
       <el-table-column v-if="getProps?.showIndexColumn" type="index" fixed="left" label="#" width="50" />
-
+      
       <!-- table 内部 slots -->
       <template #[item]="data" v-for="item in Object.keys(tableSlots)" :key="item">
         <slot :name="item" v-bind="data || {}"></slot>
@@ -40,20 +44,17 @@
     <TablePagination
       v-if="!!getPaginationInfo"
       v-bind="isBoolean(getPaginationInfo) ? {} : getPaginationInfo"
-      @change="(pagination) => handleTableChange(pagination, {}, '')"
+      @change="(pagination) => handlePaginationChange(pagination)"
     />
   </div>
 </template>
-
 <script lang="ts" setup>
 import { BasicForm, useForm } from '@/components/index'
 import { baseProps } from './props'
 import { omit, pick } from 'lodash-es'
-import { isBoolean } from '@/components/utils/is'
-
+import { isBoolean, isFunction } from '@/components/utils/is'
 import InnerTableColumn from './components/InnerColumn.vue'
 import TablePagination from './components/Pagination.vue'
-
 import { BasicTableProps, ColumnChangeParam, InnerHandlers } from './types/table'
 import { useLoading } from './hooks/useLoading'
 import { useTableForm } from './hooks/useTableForm'
@@ -61,12 +62,9 @@ import { usePagination } from './hooks/usePagination'
 import { useDataSource } from './hooks/useDataSource'
 import { useTableHeader } from './hooks/useTableHeader'
 import { createTableContext } from './hooks/useTableContext'
-
 import { useColumns } from './hooks/useColumns'
 import { useTableHeight } from './hooks/useTableHeight'
-
-import { SizeType, TableActionType } from './types/table'
-
+import { SizeType, TableActionType, SorterResult } from './types/table'
 // 定义emit事件
 const emit = defineEmits([
   'fetch-success',
@@ -77,24 +75,24 @@ const emit = defineEmits([
   'edit-row-end',
   'edit-change',
   'columns-change',
-  'select',
-  'selectAll',
-  'selectionChange',
-  'cellMouseEnter',
-  'cellMouseLeave',
-  'cellClick',
-  'cellDblclick',
-  'cellContextmenu',
-  'rowClick',
-  'rowContextmenu',
-  'rowDblclick',
-  'headerClick',
-  'headerContextmenu',
-  // 'sortChange',
-  // 'filterChange',
-  'currentChange',
-  'headerDragend',
-  'expandChange'
+  // 'select',
+  // 'selectAll',
+  // 'selectionChange',
+  // 'cellMouseEnter',
+  // 'cellMouseLeave',
+  // 'cellClick',
+  // 'cellDblclick',
+  // 'cellContextmenu',
+  // 'rowClick',
+  // 'rowContextmenu',
+  // 'rowDblclick',
+  // 'headerClick',
+  // 'headerContextmenu',
+  'sortChange',
+  'filterChange'
+  // 'currentChange',
+  // 'headerDragend',
+  // 'expandChange'
 ])
 // 基础props
 const props = defineProps(baseProps)
@@ -112,26 +110,24 @@ const slots = useSlots()
 const tableSlots = computed(() => {
   return pick(slots, ['append', 'empty'])
 })
-
 // 表格数据
 const tableData = ref<Recordable[]>([])
-
 // 获取所有的props
 const getProps = computed(() => {
   return { ...props, ...unref(innerPropsRef) } as BasicTableProps
 })
 // 注册loading
 const { getLoading, setLoading } = useLoading(getProps)
-
 // 注册form表单
 const [registerForm, formActions] = useForm()
-
 // 注册分页器
 const { getPaginationInfo, getPagination, setPagination, setShowPagination, getShowPagination } =
   usePagination(getProps)
-
 const {
-  handleTableChange,
+  handlePaginationChange,
+  handleFilterChange,
+  handleClearFilters,
+  handleSortChange,
   getDataSourceRef,
   getDataSource,
   getRawDataSource,
@@ -157,12 +153,9 @@ const {
   },
   emit as EmitType
 )
-
 const { getViewColumns, getColumns, setCacheColumnsByField, setColumns, getColumnsRef, getCacheColumns } =
   useColumns(getProps)
-
 const { getTableHeightRef, redoHeight } = useTableHeight(getProps, tableRef, wrapRef, formRef, getPaginationInfo)
-
 // 处理表单 table 参数
 const { getFormProps, replaceFormSlotKey, getFormSlotKeys, handleSearchInfoChange } = useTableForm(
   getProps,
@@ -170,7 +163,6 @@ const { getFormProps, replaceFormSlotKey, getFormSlotKeys, handleSearchInfoChang
   fetch,
   getLoading
 )
-
 const getBindValues = computed(() => {
   const dataSource = unref(getDataSourceRef)
   let propsData: Recordable = {
@@ -184,11 +176,9 @@ const getBindValues = computed(() => {
     pagination: toRaw(unref(getPaginationInfo)),
     data: dataSource
   }
-
   propsData = omit(propsData, ['class', 'onChange'])
   return propsData
 })
-
 const prefixCls = 'basic-table'
 const getWrapperClass = computed(() => {
   const values = unref(getBindValues)
@@ -201,7 +191,6 @@ const getWrapperClass = computed(() => {
     }
   ]
 })
-
 // 空数据 显示效果xian
 const getEmptyDataIsShowTable = computed(() => {
   const { emptyDataIsShowTable, useSearchForm } = unref(getProps)
@@ -210,7 +199,6 @@ const getEmptyDataIsShowTable = computed(() => {
   }
   return !!unref(getDataSourceRef).length
 })
-
 const handlers: InnerHandlers = {
   onColumnsChange: (data: ColumnChangeParam[]) => {
     emit('columns-change', data)
@@ -218,13 +206,20 @@ const handlers: InnerHandlers = {
     // unref(getProps)?.onColumnsChange?.(data)
   }
 }
-
-const { getHeaderProps } = useTableHeader(getProps, slots, handlers)
-console.log('getHeaderProps: ', getHeaderProps)
-
+const { getHeaderProps, getHeaderSlots } = useTableHeader(getProps, slots, handlers)
 // 动态设置props
 function setProps(props: Partial<BasicTableProps>) {
   innerPropsRef.value = { ...unref(innerPropsRef), ...props }
+}
+const filterChange = (filter: Recordable) => {
+  const { onFilterChange } = unref(getProps)
+  handleFilterChange(filter)
+  onFilterChange && isFunction(onFilterChange) && onFilterChange.call(undefined, filter as Recordable)
+}
+const sortChange = (sort: SorterResult | boolean) => {
+  const { onSortChange } = unref(getProps)
+  handleSortChange(sort)
+  onSortChange && isFunction(onSortChange) && onSortChange.call(undefined, sort as SorterResult)
 }
 const tableAction: TableActionType = {
   reload,
@@ -264,9 +259,15 @@ const tableAction: TableActionType = {
   // 用于单选表格，设定某一行为选中行， 如果调用时不加参数，则会取消目前高亮行的选中状态。
   setCurrentRow: (row: Recordable) => tableRef.value.setCurrentRow(row),
   // 用于清空排序条件，数据会恢复成未排序的状态
-  clearSort: () => tableRef.value.clearSort(),
+  clearSort: () => {
+    tableRef.value.clearSort()
+    sortChange(false)
+  },
   // 传入由columnKey 组成的数组以清除指定列的过滤条件。 如果没有参数，清除所有过滤器
-  clearFilter: (columnKeys: string[]) => tableRef.value.clearFilter(columnKeys),
+  clearFilter: (columnKeys: string[]) => {
+    tableRef.value.clearFilter(columnKeys)
+    handleClearFilters(columnKeys)
+  },
   // 对 Table 进行重新布局。 当表格可见性变化时，您可能需要调用此方法以获得正确的布局
   doLayout: () => tableRef.value.doLayout(),
   // 手动排序表格。 参数 prop 属性指定排序列，order 指定排序顺序。
@@ -278,16 +279,12 @@ const tableAction: TableActionType = {
   // 设置水平滚动位置
   setScrollLeft: (left: number) => tableRef.value.setScrollLeft(left)
 }
-
 createTableContext({ ...tableAction, wrapRef, getBindValues })
-
 // 导出内部事件方法
 defineExpose(tableAction)
-
 // 注册表格
 emit('register', tableAction, formActions)
 </script>
-
 <style lang="scss" scoped>
 .basic-table {
   padding: 8px;
