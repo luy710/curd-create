@@ -29,8 +29,9 @@
       @filter-change="filterChange"
       @sort-change="sortChange"
     >
-      <el-table-column v-if="innerPropsRef?.showCheckColumn" type="selection" width="55" />
-
+      <el-table-column v-if="getProps?.showCheckColumn" type="selection" width="55" />
+      <el-table-column v-if="getProps?.showIndexColumn" type="index" fixed="left" label="#" width="50" />
+      
       <!-- table 内部 slots -->
       <template #[item]="data" v-for="item in Object.keys(tableSlots)" :key="item">
         <slot :name="item" v-bind="data || {}"></slot>
@@ -47,16 +48,13 @@
     />
   </div>
 </template>
-
 <script lang="ts" setup>
 import { BasicForm, useForm } from '@/components/index'
 import { baseProps } from './props'
 import { omit, pick } from 'lodash-es'
 import { isBoolean, isFunction } from '@/components/utils/is'
-
 import InnerTableColumn from './components/InnerColumn.vue'
 import TablePagination from './components/Pagination.vue'
-
 import { BasicTableProps, ColumnChangeParam, InnerHandlers } from './types/table'
 import { useLoading } from './hooks/useLoading'
 import { useTableForm } from './hooks/useTableForm'
@@ -64,12 +62,9 @@ import { usePagination } from './hooks/usePagination'
 import { useDataSource } from './hooks/useDataSource'
 import { useTableHeader } from './hooks/useTableHeader'
 import { createTableContext } from './hooks/useTableContext'
-
 import { useColumns } from './hooks/useColumns'
 import { useTableHeight } from './hooks/useTableHeight'
-
 import { SizeType, TableActionType, SorterResult } from './types/table'
-
 // 定义emit事件
 const emit = defineEmits([
   'fetch-success',
@@ -115,24 +110,19 @@ const slots = useSlots()
 const tableSlots = computed(() => {
   return pick(slots, ['append', 'empty'])
 })
-
 // 表格数据
 const tableData = ref<Recordable[]>([])
-
 // 获取所有的props
 const getProps = computed(() => {
   return { ...props, ...unref(innerPropsRef) } as BasicTableProps
 })
 // 注册loading
 const { getLoading, setLoading } = useLoading(getProps)
-
 // 注册form表单
 const [registerForm, formActions] = useForm()
-
 // 注册分页器
 const { getPaginationInfo, getPagination, setPagination, setShowPagination, getShowPagination } =
   usePagination(getProps)
-
 const {
   handlePaginationChange,
   handleFilterChange,
@@ -163,12 +153,9 @@ const {
   },
   emit as EmitType
 )
-
 const { getViewColumns, getColumns, setCacheColumnsByField, setColumns, getColumnsRef, getCacheColumns } =
   useColumns(getProps)
-
 const { getTableHeightRef, redoHeight } = useTableHeight(getProps, tableRef, wrapRef, formRef, getPaginationInfo)
-
 // 处理表单 table 参数
 const { getFormProps, replaceFormSlotKey, getFormSlotKeys, handleSearchInfoChange } = useTableForm(
   getProps,
@@ -176,7 +163,6 @@ const { getFormProps, replaceFormSlotKey, getFormSlotKeys, handleSearchInfoChang
   fetch,
   getLoading
 )
-
 const getBindValues = computed(() => {
   const dataSource = unref(getDataSourceRef)
   let propsData: Recordable = {
@@ -190,11 +176,9 @@ const getBindValues = computed(() => {
     pagination: toRaw(unref(getPaginationInfo)),
     data: dataSource
   }
-
   propsData = omit(propsData, ['class', 'onChange'])
   return propsData
 })
-
 const prefixCls = 'basic-table'
 const getWrapperClass = computed(() => {
   const values = unref(getBindValues)
@@ -207,7 +191,6 @@ const getWrapperClass = computed(() => {
     }
   ]
 })
-
 // 空数据 显示效果xian
 const getEmptyDataIsShowTable = computed(() => {
   const { emptyDataIsShowTable, useSearchForm } = unref(getProps)
@@ -216,7 +199,6 @@ const getEmptyDataIsShowTable = computed(() => {
   }
   return !!unref(getDataSourceRef).length
 })
-
 const handlers: InnerHandlers = {
   onColumnsChange: (data: ColumnChangeParam[]) => {
     emit('columns-change', data)
@@ -224,26 +206,21 @@ const handlers: InnerHandlers = {
     // unref(getProps)?.onColumnsChange?.(data)
   }
 }
-
 const { getHeaderProps, getHeaderSlots } = useTableHeader(getProps, slots, handlers)
-
 // 动态设置props
 function setProps(props: Partial<BasicTableProps>) {
   innerPropsRef.value = { ...unref(innerPropsRef), ...props }
 }
-
 const filterChange = (filter: Recordable) => {
   const { onFilterChange } = unref(getProps)
   handleFilterChange(filter)
   onFilterChange && isFunction(onFilterChange) && onFilterChange.call(undefined, filter as Recordable)
 }
-
 const sortChange = (sort: SorterResult | boolean) => {
   const { onSortChange } = unref(getProps)
   handleSortChange(sort)
   onSortChange && isFunction(onSortChange) && onSortChange.call(undefined, sort as SorterResult)
 }
-
 const tableAction: TableActionType = {
   reload,
   setPagination,
@@ -302,16 +279,12 @@ const tableAction: TableActionType = {
   // 设置水平滚动位置
   setScrollLeft: (left: number) => tableRef.value.setScrollLeft(left)
 }
-
 createTableContext({ ...tableAction, wrapRef, getBindValues })
-
 // 导出内部事件方法
 defineExpose(tableAction)
-
 // 注册表格
 emit('register', tableAction, formActions)
 </script>
-
 <style lang="scss" scoped>
 .basic-table {
   padding: 8px;

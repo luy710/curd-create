@@ -58,7 +58,7 @@ export function useColumns(propsRef: ComputedRef<BasicTableProps>) {
   const getColumnsRef = computed(() => {
     const columns = cloneDeep(unref(columnsRef))
 
-    handleIndexColumn(propsRef, columns)
+    // handleIndexColumn(propsRef, columns)
     handleActionColumn(propsRef, columns)
     if (!columns) {
       return []
