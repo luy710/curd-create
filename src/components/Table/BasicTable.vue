@@ -16,9 +16,10 @@
     </BasicForm>
 
     <component :is="getHeaderProps.title"></component>
-    
+
     <el-table ref="tableRef" v-bind="getBindValues" v-show="getEmptyDataIsShowTable">
-      <el-table-column v-if="innerPropsRef?.showCheckColumn" type="selection" width="55" />
+      <el-table-column v-if="getProps?.showCheckColumn" type="selection" width="55" />
+      <el-table-column v-if="getProps?.showIndexColumn" type="index" fixed="left" label="#" width="50" />
 
       <!-- table 内部 slots -->
       <template #[item]="data" v-for="item in Object.keys(tableSlots)" :key="item">

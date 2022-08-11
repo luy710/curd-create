@@ -1,6 +1,6 @@
 <template>
   <ElTooltip content="列设置">
-    <span style="display: inline-flex;">
+    <span style="display: inline-flex">
       <ElPopover
         placement="bottom-start"
         trigger="click"
@@ -14,7 +14,12 @@
               列展示
             </ElCheckbox>
             <ElCheckbox v-model="checkIndex" @change="handleIndexCheckChange"> 序号列 </ElCheckbox>
-            <ElCheckbox v-model="checkSelect" @change="handleSelectCheckChange" :disabled="!defaultRowSelection">
+            <ElCheckbox
+              v-model="checkSelect"
+              @change="handleSelectCheckChange"
+              :validate-event="false"
+              :disabled="!defaultRowSelection"
+            >
               勾选列
             </ElCheckbox>
 
@@ -218,7 +223,7 @@ export default defineComponent({
     const indeterminate = computed(() => {
       const len = plainOptions.value.length
       let checkedLen = state.checkedList.length
-      unref(checkIndex) && checkedLen--
+      // unref(checkIndex) && checkedLen--
       return checkedLen > 0 && checkedLen < len
     })
 
@@ -258,7 +263,7 @@ export default defineComponent({
           animation: 500,
           delay: 400,
           delayOnTouchOnly: true,
-          handle: '.table-column-drag-icon ',
+          handle: '.table-column-drag-icon',
           onEnd: (evt) => {
             const { oldIndex, newIndex } = evt
             if (isNullAndUnDef(oldIndex) || isNullAndUnDef(newIndex) || oldIndex === newIndex) {
@@ -357,6 +362,7 @@ export default defineComponent({
 .table-column-drag-icon {
   margin: 0 5px;
   cursor: move;
+  font-size: 14px;
 }
 
 .basic-column-setting {
