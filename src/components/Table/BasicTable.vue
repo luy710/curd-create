@@ -17,7 +17,14 @@
 
     <component :is="getHeaderProps.title"></component>
 
-    <el-table ref="tableRef" v-bind="getBindValues" v-show="getEmptyDataIsShowTable">
+    <el-table
+      ref="tableRef"
+      v-loading="getBindValues.loading"
+      v-bind="getBindValues"
+      v-show="getEmptyDataIsShowTable"
+      @filter-change="filterChange"
+      @sort-change="sortChange"
+    >
       <el-table-column v-if="getProps?.showCheckColumn" type="selection" width="55" />
       <el-table-column v-if="getProps?.showIndexColumn" type="index" fixed="left" label="#" width="50" />
 
@@ -154,7 +161,7 @@ const {
 const { getViewColumns, getColumns, setCacheColumnsByField, setColumns, getColumnsRef, getCacheColumns } =
   useColumns(getProps)
 
-const { getTableHeightRef, redoHeight } = useTableHeight(getProps, tableRef, wrapRef, formRef)
+const { getTableHeightRef, redoHeight } = useTableHeight(getProps, tableRef, wrapRef, formRef, getPaginationInfo)
 
 // 处理表单 table 参数
 const { getFormProps, replaceFormSlotKey, getFormSlotKeys, handleSearchInfoChange } = useTableForm(
