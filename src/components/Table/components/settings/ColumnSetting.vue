@@ -33,7 +33,6 @@
                   <ElCheckbox :label="item.value">
                     {{ item.label }}
                   </ElCheckbox>
-
                   <ElTooltip placement="bottom-start" :mouseLeaveDelay="0.4" content="固定到左侧">
                     <el-icon
                       :class="[
@@ -45,7 +44,7 @@
                       ]"
                       @click="handleColumnFixed(item, 'left')"
                     >
-                      <ArrowLeft />
+                      <ArrowLeftBold />
                     </el-icon>
                   </ElTooltip>
                   <ElDivider direction="vertical" />
@@ -60,7 +59,7 @@
                       ]"
                       @click="handleColumnFixed(item, 'right')"
                     >
-                      <ArrowRight />
+                      <ArrowRightBold />
                     </el-icon>
                   </ElTooltip>
                 </div>
@@ -80,7 +79,7 @@ import type { BasicColumn, ColumnChangeParam } from '../../types/table'
 import { defineComponent, ref, reactive, toRefs, watchEffect, nextTick, unref, computed } from 'vue'
 import { ElTooltip, ElPopover, ElCheckbox, ElDivider, ElIcon, ElScrollbar, ElButton } from 'element-plus'
 
-import { Setting, Rank, ArrowLeft, ArrowRight } from '@element-plus/icons-vue'
+import { Setting, Rank, ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue'
 import { useTableContext } from '../../hooks/useTableContext'
 import { isNullAndUnDef } from '@/components/utils/is'
 import { cloneDeep, omit } from 'lodash-es'
@@ -112,8 +111,8 @@ export default defineComponent({
     ElDivider,
     Setting,
     ElIcon,
-    ArrowLeft,
-    ArrowRight,
+    ArrowLeftBold,
+    ArrowRightBold,
     ElScrollbar,
     ElButton
   },
@@ -376,14 +375,15 @@ export default defineComponent({
   &__check-item {
     display: flex;
     align-items: center;
-    min-width: 100%;
-    padding: 4px 16px 8px 0;
+    font-size: 14px;
+    padding: 4px 8px 8px 0;
 
-    .ant-checkbox-wrapper {
+    .el-checkbox {
       width: 100%;
+      margin-right: 10px;
 
       &:hover {
-        // color: @primary-color;
+        color: var(--el-color-primary);
       }
     }
   }
@@ -392,20 +392,17 @@ export default defineComponent({
   &__fixed-right {
     color: rgb(0 0 0 / 45%);
     cursor: pointer;
-
+    font-size: 15px;
+    justify-self: end;
     &.active,
     &:hover {
-      // color: @primary-color;
+      color: var(--el-color-primary);
     }
 
     &.disabled {
-      // color: @disabled-color;
+      color: var(--el-color-info-rgb);
       cursor: not-allowed;
     }
-  }
-
-  &__fixed-right {
-    transform: rotate(180deg);
   }
 
   &__cloumn-list {

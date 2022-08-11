@@ -22,7 +22,6 @@ export default defineComponent({
 
   setup() {
     const table = useTableContext()
-    console.log('table: ', table)
 
     const { toggle, isFullscreen } = useFullscreen(table.wrapRef)
 

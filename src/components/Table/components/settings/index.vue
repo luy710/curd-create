@@ -1,19 +1,15 @@
 <template>
   <div class="table-settings">
-    <RedoSetting v-if="getSetting.redo" :getPopupContainer="getTableContainer" />
-    <SizeSetting v-if="getSetting.size" :getPopupContainer="getTableContainer" />
-    <ColumnSetting
-      v-if="getSetting.setting"
-      @columns-change="handleColumnChange"
-      :getPopupContainer="getTableContainer"
-    />
-    <FullScreenSetting v-if="getSetting.fullScreen" :getPopupContainer="getTableContainer" />
+    <RedoSetting v-if="getSetting.redo" />
+    <SizeSetting v-if="getSetting.size" />
+    <ColumnSetting v-if="getSetting.setting" @columns-change="handleColumnChange" />
+    <FullScreenSetting v-if="getSetting.fullScreen" />
   </div>
 </template>
 <script lang="ts">
 import type { PropType } from 'vue'
 import type { TableSetting, ColumnChangeParam } from '../../types/table'
-import { defineComponent, computed, unref } from 'vue'
+import { defineComponent, computed } from 'vue'
 import ColumnSetting from './ColumnSetting.vue'
 import SizeSetting from './SizeSetting.vue'
 import RedoSetting from './RedoSetting.vue'
@@ -52,16 +48,13 @@ export default defineComponent({
       emit('columns-change', data)
     }
 
-    function getTableContainer() {
-      return table ? unref(table.wrapRef) : document.body
-    }
-
-    return { getSetting, handleColumnChange, getTableContainer }
+    return { getSetting, handleColumnChange }
   }
 })
 </script>
 <style lang="scss">
 .table-settings {
+  display: flex;
   & > * {
     margin-right: 12px;
   }

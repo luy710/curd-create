@@ -20,7 +20,3 @@ export function getDynamicProps<T, U>(props: T): Partial<U> {
 
   return ret as Partial<U>
 }
-
-export function getPopupContainer(node?: HTMLElement): HTMLElement {
-  return (node?.parentNode as HTMLElement) ?? document.body
-}
