@@ -110,7 +110,6 @@ export default defineComponent({
         .map((action) => {
           const { popConfirm } = action
           return {
-            getPopupContainer: () => unref((table as any)?.wrapRef.value) ?? document.body,
             type: 'link',
             size: 'small',
             ...action,
@@ -147,7 +146,6 @@ export default defineComponent({
 
     function getTooltip(data: any): any {
       return {
-        getPopupContainer: () => unref((table as any)?.wrapRef.value) ?? document.body,
         placement: 'bottom',
         ...(isString(data) ? { title: data } : data)
       }
@@ -167,9 +165,7 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
-@prefix-cls: ~'@{namespace}-basic-table-action';
-
-.@{prefix-cls} {
+.basic-table-action {
   display: flex;
   align-items: center;
 

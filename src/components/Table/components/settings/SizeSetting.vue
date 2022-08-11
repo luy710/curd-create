@@ -1,6 +1,6 @@
 <template>
   <ElTooltip content="密度">
-    <ElDropdown placement="bottom" trigger="click" :getPopupContainer="getPopupContainer" @command="handleTitleClick">
+    <ElDropdown placement="bottom" trigger="click" @command="handleTitleClick">
       <el-icon :size="16" style="cursor: pointer"><Box /></el-icon>
       <template #dropdown>
         <el-dropdown-menu>
@@ -18,7 +18,6 @@ import { defineComponent, ref } from 'vue'
 import { ElTooltip, ElDropdown, ElIcon } from 'element-plus'
 import { Box } from '@element-plus/icons-vue'
 import { useTableContext } from '../../hooks/useTableContext'
-import { getPopupContainer } from '@/components/utils'
 
 export default defineComponent({
   name: 'SizeSetting',
@@ -44,8 +43,7 @@ export default defineComponent({
 
     return {
       handleTitleClick,
-      selectedKeysRef,
-      getPopupContainer
+      selectedKeysRef
     }
   }
 })

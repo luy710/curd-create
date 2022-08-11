@@ -88,7 +88,6 @@ export default defineComponent({
       upEditDynamicDisabled(record, column, value)
       return {
         size: 'small',
-        getPopupContainer: () => unref(table?.wrapRef.value) ?? document.body,
         placeholder: createPlaceholderMessage(unref(getComponent)),
         ...apiSelectProps,
         ...compProps,
@@ -447,8 +446,6 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
-@prefix-cls: 'editable-cell';
-
 .edit-cell-align-left {
   text-align: left;
 
@@ -476,12 +473,12 @@ export default defineComponent({
 .edit-cell-rule-popover {
   .ant-popover-inner-content {
     padding: 4px 8px;
-    color: @error-color;
+    color: var(--el-color-error);
     // border: 1px solid @error-color;
     border-radius: 2px;
   }
 }
-.@{prefix-cls} {
+.ditable-cell {
   position: relative;
 
   &__wrapper {
@@ -526,7 +523,7 @@ export default defineComponent({
   }
 
   &:hover {
-    .@{prefix-cls}__normal-icon {
+    .ditable-cell__normal-icon {
       display: inline-block;
     }
   }
