@@ -333,13 +333,13 @@ export const baseProps = {
   // 文本过长是否显示ellipsis
   ellipsis: { type: Boolean, default: true },
   // 是否自动计算高度，铺满整屏
-  canResize: { type: Boolean, default: false },
+  canResize: { type: Boolean, default: true },
   // 是否继承父级高度
   isCanResizeParent: { type: Boolean, default: false },
   // 分页配置
   pagination: {
     type: [Object, Boolean] as PropType<PaginationProps | boolean>,
-    default: null
+    default: false
   },
   // 分页的时候自动清除已选的table column
   clearSelectOnPageChange: {
