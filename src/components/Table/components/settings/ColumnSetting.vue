@@ -33,7 +33,6 @@
                   <ElCheckbox :label="item.value">
                     {{ item.label }}
                   </ElCheckbox>
-
                   <ElTooltip placement="bottom-start" :mouseLeaveDelay="0.4" content="固定到左侧">
                     <el-icon
                       :class="[
@@ -376,14 +375,15 @@ export default defineComponent({
   &__check-item {
     display: flex;
     align-items: center;
-    min-width: 100%;
-    padding: 4px 16px 8px 0;
+    // min-width: 100%;
+    font-size: 14px;
+    padding: 4px 8px 8px 0;
 
-    .ant-checkbox-wrapper {
+    .el-checkbox {
       width: 100%;
 
       &:hover {
-        // color: @primary-color;
+        color: var(--el-color-primary);
       }
     }
   }
@@ -392,20 +392,21 @@ export default defineComponent({
   &__fixed-right {
     color: rgb(0 0 0 / 45%);
     cursor: pointer;
-
+    font-size: 15px;
+    justify-self: end;
     &.active,
     &:hover {
-      // color: @primary-color;
+      color: var(--el-color-primary);
     }
 
     &.disabled {
-      // color: @disabled-color;
+      color: var(--el-color-info-rgb);
       cursor: not-allowed;
     }
   }
 
   &__fixed-right {
-    transform: rotate(180deg);
+    // transform: rotate(180deg);
   }
 
   &__cloumn-list {
