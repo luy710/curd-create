@@ -59,3 +59,10 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss" scoped>
+.custom-cell-title {
+  display: inline-flex;
+  align-items: center;
+}
+</style>

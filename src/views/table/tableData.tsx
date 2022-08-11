@@ -1,4 +1,5 @@
-import { FormProps, FormSchema, BasicColumn } from '@/components/index';
+import { FormProps, FormSchema } from '@/components/index';
+import { BasicColumn } from '@/components/Table/types/table';
 
 export function getBasicColumns(): BasicColumn[] {
   return [
@@ -12,6 +13,7 @@ export function getBasicColumns(): BasicColumn[] {
       label: '姓名',
       prop: 'name',
       width: 150,
+      helpMessage: ['这是id'],
       filters: [
         { text: 'Male', value: 'male' },
         { text: 'Female', value: 'female' },
@@ -26,10 +28,7 @@ export function getBasicColumns(): BasicColumn[] {
       prop: 'no',
       width: 150,
       sortable: true,
-      filters: [
-        { text: 'Male', value: 'male' },
-        { text: 'Female', value: 'female' },
-      ],
+      defaultHidden: true,
     },
     {
       label: '开始时间',
@@ -53,7 +52,6 @@ export function getBasicShortColumns(): BasicColumn[] {
       width: 150,
       prop: 'id',
       sortable: true,
-      sortOrder: 'ascend',
     },
     {
       label: '姓名',
@@ -94,11 +92,10 @@ export function getMultipleHeaderColumns(): BasicColumn[] {
           prop: 'no',
           width: 120,
           filters: [
-            { text: 'Male', value: 'male', children: [] },
-            { text: 'Female', value: 'female', children: [] },
+            { text: 'Male', value: 'male' },
+            { text: 'Female', value: 'female' },
           ],
         },
-
         {
           label: '开始时间',
           prop: 'beginTime',
@@ -109,7 +106,7 @@ export function getMultipleHeaderColumns(): BasicColumn[] {
           prop: 'endTime',
           width: 120,
         },
-      ],
+      ] as BasicColumn[],
     },
   ];
 }
@@ -141,8 +138,8 @@ export function getCustomHeaderColumns(): BasicColumn[] {
       prop: 'no',
       width: 120,
       filters: [
-        { text: 'Male', value: 'male', children: [] },
-        { text: 'Female', value: 'female', children: [] },
+        { text: 'Male', value: 'male', },
+        { text: 'Female', value: 'female', },
       ],
     },
     {
@@ -173,13 +170,13 @@ export function getMergeHeaderColumns(): BasicColumn[] {
       label: 'ID',
       prop: 'id',
       width: 300,
-      customRender: renderContent,
+      
     },
     {
       label: '姓名',
       prop: 'name',
       width: 300,
-      customRender: renderContent,
+      
     },
     {
       label: '地址',
@@ -187,41 +184,28 @@ export function getMergeHeaderColumns(): BasicColumn[] {
       colSpan: 2,
       width: 120,
       sortable: true,
-      customRender: ({ text, index }: { text: any; index: number }) => {
-        const obj: any = {
-          children: text,
-          attrs: {},
-        };
-        if (index === 2) {
-          obj.attrs.rowSpan = 2;
-        }
-        if (index === 3) {
-          obj.attrs.colSpan = 0;
-        }
-        return obj;
-      },
     },
     {
       label: '编号',
       prop: 'no',
       colSpan: 0,
       filters: [
-        { text: 'Male', value: 'male', children: [] },
-        { text: 'Female', value: 'female', children: [] },
+        { text: 'Male', value: 'male', },
+        { text: 'Female', value: 'female', },
       ],
-      customRender: renderContent,
+      
     },
     {
       label: '开始时间',
       prop: 'beginTime',
       width: 200,
-      customRender: renderContent,
+      
     },
     {
       label: '结束时间',
       prop: 'endTime',
       width: 200,
-      customRender: renderContent,
+      
     },
   ];
 }

@@ -23,6 +23,7 @@
 
     <el-table
       ref="tableRef"
+      v-loading="getBindValues.loading"
       v-bind="getBindValues"
       v-show="getEmptyDataIsShowTable"
       @filter-change="filterChange"
@@ -166,7 +167,7 @@ const {
 const { getViewColumns, getColumns, setCacheColumnsByField, setColumns, getColumnsRef, getCacheColumns } =
   useColumns(getProps)
 
-const { getTableHeightRef, redoHeight } = useTableHeight(getProps, tableRef, wrapRef, formRef)
+const { getTableHeightRef, redoHeight } = useTableHeight(getProps, tableRef, wrapRef, formRef, getPaginationInfo)
 
 // 处理表单 table 参数
 const { getFormProps, replaceFormSlotKey, getFormSlotKeys, handleSearchInfoChange } = useTableForm(

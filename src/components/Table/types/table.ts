@@ -106,7 +106,8 @@ export type CellFormat =
   | ((text: string, record: Recordable, index: number) => string | number)
   | Map<string | number, any>
 
-export interface BasicColumn extends Partial<TableColumnCtx<Recordable>> {
+export interface BasicColumn extends Partial<Omit<TableColumnCtx<Recordable>, 'children'>> {
+  children?: BasicColumn[]
   customTitle?: VNode
   flag?: 'DEFAULT' | 'ACTION'
   // 是否是多级表头

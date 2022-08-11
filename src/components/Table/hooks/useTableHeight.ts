@@ -1,16 +1,18 @@
-import type { BasicTableProps, TableRowSelection, BasicColumn } from '../types/table'
+import type { BasicTableProps } from '../types/table'
 import { Ref, ComputedRef, ref, onMounted, onActivated } from 'vue'
 import { computed, unref, nextTick, watch } from 'vue'
-import { isBoolean } from '@/components/utils/is'
+import { isBoolean, isObject } from '@/components/utils/is'
 import { useWindowSizeFn } from '@/components/utils/useWindowSizeFn'
 import { debounce as useDebounceFn } from 'lodash-es'
 import { getViewportOffset } from '@/components/utils/domUtils'
+import { PaginationProps } from 'element-plus'
 
 export function useTableHeight(
   propsRef: ComputedRef<BasicTableProps>,
   tableElRef: Ref<ComponentRef>,
   wrapRef: Ref<HTMLElement | null>,
-  formRef: Ref<ComponentRef>
+  formRef: Ref<ComponentRef>,
+  getPaginationInfo: Ref<boolean | Partial<PaginationProps>>
 ) {
   const tableHeightRef: Ref<Nullable<number | string>> = ref(400)
 
@@ -33,6 +35,15 @@ export function useTableHeight(
       flush: 'post'
     }
   )
+  watch(
+    () => unref(getPaginationInfo),
+    (val, oval) => {
+      // 关闭分页 、 开启分页
+      if ((isBoolean(val) && !val && isObject(oval)) || (isBoolean(oval) && !oval && isObject(val))) {
+        redoHeight()
+      }
+    }
+  )
 
   function redoHeight() {
     nextTick(() => {
@@ -49,8 +60,8 @@ export function useTableHeight(
   let bodyEl: HTMLElement | null
 
   async function calcTableHeight() {
-    const { pagination, maxHeight, useSearchForm, isCanResizeParent } = unref(propsRef)
-
+    const { maxHeight, useSearchForm, isCanResizeParent } = unref(propsRef)
+    const pagination = unref(getPaginationInfo)
     if (!unref(getCanResize)) return
 
     const table = unref(tableElRef)
