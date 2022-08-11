@@ -4,7 +4,7 @@ import { ref, unref, ComputedRef, computed, onMounted, watch, reactive, Ref, wat
 import { useTimeoutFn } from '@/components/utils/useTimeout'
 import { buildUUID } from '@/components/utils/uuid'
 import { isFunction, isBoolean } from '@/components/utils/is'
-import { get, cloneDeep, merge } from 'lodash-es'
+import { get, cloneDeep, merge, omit } from 'lodash-es'
 import { FETCH_SETTING, ROW_KEY, PAGE_SIZE } from '../constant'
 
 interface ActionType {
@@ -76,31 +76,47 @@ export function useDataSource(
     if (!api && data) pickPageData()
   }
 
-  // 处理 排序 过滤 分页数据 需要整改
-  function handleTableChange(
-    pagination: PaginationProps,
-    filters: Partial<Recordable<string[]>>,
-    sorter: SorterResult
-  ) {
-    const { clearSelectOnPageChange, sortFn, filterFn } = unref(propsRef)
-    if (clearSelectOnPageChange) {
-      clearSelectedRowKeys()
+  // 过滤
+  const handleFilterChange = (filter: Recordable) => {
+    const { filterFn, filterFetchImmediate } = unref(propsRef)
+    if (isFunction(filterFn)) {
+      const filterInfo = filterFn(filter)
+      searchState.filterInfo = Object.assign(searchState.filterInfo, filterInfo)
+    } else {
+      searchState.filterInfo = Object.assign(searchState.filterInfo, filter)
     }
-    setPagination(pagination)
+    emit('filterChange', searchState.filterInfo)
+    if (!filterFetchImmediate) return
+    fetch(searchState)
+  }
 
-    const params: Recordable = {}
-    if (sorter && isFunction(sortFn)) {
-      const sortInfo = sortFn(sorter)
-      searchState.sortInfo = sortInfo
-      params.sortInfo = sortInfo
+  const handleClearFilters = (columnKeys?: string[]) => {
+    const { filterFetchImmediate } = unref(propsRef)
+    if (!columnKeys) {
+      searchState.filterInfo = {}
+    } else {
+      searchState.filterInfo = omit(searchState.filterInfo, columnKeys)
     }
+    emit('filterChange', searchState.filterInfo)
+    if (!filterFetchImmediate) return
+    fetch(searchState)
+  }
 
-    if (filters && isFunction(filterFn)) {
-      const filterInfo = filterFn(filters)
-      searchState.filterInfo = filterInfo
-      params.filterInfo = filterInfo
+  const handleSortChange = (sort: SorterResult | boolean) => {
+    const { sortFn, sortFetchImmediate } = unref(propsRef)
+    if (!isBoolean(sort)) {
+      if (isFunction(sortFn)) {
+        const sortInfo = sortFn(sort)
+        searchState.sortInfo = sortInfo
+      } else {
+        searchState.sortInfo = sort
+      }
+      emit('sortChange', searchState.sortInfo)
+    } else {
+      searchState.sortInfo = {}
     }
-    fetch(params)
+    if (!sortFetchImmediate) return
+    fetch(searchState)
   }
 
   // 分页数据变化设置
@@ -381,7 +397,9 @@ export function useDataSource(
     deleteTableDataRecord,
     insertTableDataRecord,
     findTableDataRecord,
-    handleTableChange,
-    handlePaginationChange
+    handleFilterChange,
+    handleSortChange,
+    handlePaginationChange,
+    handleClearFilters
   }
 }

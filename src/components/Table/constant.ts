@@ -20,11 +20,11 @@ const table = {
   defaultSize: 'middle',
   // Custom general sort function
   defaultSortFn: (sortInfo: SorterResult) => {
-    const { field, order } = sortInfo
-    if (field && order) {
+    const { prop, order } = sortInfo
+    if (prop && order) {
       return {
-        // The sort field passed to the backend you
-        field,
+        // The sort prop passed to the backend you
+        prop,
         // Sorting method passed to the background asc/desc
         order
       }
@@ -33,14 +33,14 @@ const table = {
     }
   },
   // Custom general filter function
-  defaultFilterFn: (data: Partial<Recordable<string[]>>) => {
+  defaultFilterFn: (data: Recordable) => {
     return data
   }
 }
 
 const { pageSizeOptions, defaultPageSize, fetchSetting, defaultSize, defaultSortFn, defaultFilterFn } = table
 
-export const ROW_KEY = 'column-key'
+export const ROW_KEY = 'key'
 
 // Optional display number per page;
 export const PAGE_SIZE_OPTIONS = pageSizeOptions
@@ -65,4 +65,3 @@ export const DEFAULT_ALIGN = 'center'
 export const INDEX_COLUMN_FLAG = 'INDEX'
 
 export const ACTION_COLUMN_FLAG = 'ACTION'
-

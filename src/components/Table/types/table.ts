@@ -22,10 +22,9 @@ export interface GetColumnsParams {
 export interface TableRowSelection<T> {}
 export interface BasicTableProps {}
 export interface SorterResult {
-  column: TableColumnCtx<Recordable>
+  column: BasicColumn
   order: SortOrder
-  field: string
-  columnKey: string
+  prop: string
 }
 export type SizeType = 'default' | 'small' | 'large'
 
@@ -276,10 +275,14 @@ export interface BasicTableProps {
   scrollbarAlwaysOn?: boolean
   // 2.2.1	确保主轴的最小尺寸
   flexible?: boolean
-  // 排序方法
+  // 排序发生变化是否需要立即触发接口
+  sortFetchImmediate?: Boolean
+  // 排序参数处理方法
   sortFn?: (sortInfo: SorterResult) => any
-  // 过滤方法
-  filterFn?: (data: Partial<Recordable<string[]>>) => any
+  // 过滤条件发生变化是否需要立即触发接口
+  filterFetchImmediate?: Boolean
+  // 过滤参数处理方法
+  filterFn?: (data: Recordable) => any
   // 点击行选中
   clickToRowSelect?: boolean
   // 是否是树形表格
