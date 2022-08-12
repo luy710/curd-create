@@ -9,6 +9,13 @@ export interface CellRenderParams extends CI {
   row: Recordable
 }
 
+export interface ExpandCellParams {
+  $index: number
+  row: Recordable
+  store: Recordable
+  expanded: boolean
+}
+
 export const renderHeader = ({ column, $index }: CI, propsSlots: Slots) => {
   const { label, helpMessage, helpComponentProps, slots } = column
   if (slots && slots.headerSlot) {
@@ -31,4 +38,10 @@ export const renderCell = ({ row, column, $index }: CellRenderParams, propsSlots
     }
   }
   return <span>{row[prop as string]}</span>
+}
+
+
+export const renderExpandCell = ({row, $index, store, expanded}: ExpandCellParams, propsSlots: Slots, column: BasicColumn) => {
+  const { slots } = column
+  return slots?.cellSlot && (propsSlots[slots?.cellSlot] as Function)({ row, $index, store, expanded })
 }

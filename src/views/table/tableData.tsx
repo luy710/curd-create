@@ -8,6 +8,7 @@ export function getBasicColumns(): BasicColumn[] {
       prop: 'id',
       fixed: 'left',
       width: 200,
+      slots: {cellSlot: 'id'}
     },
     {
       label: '姓名',
@@ -20,15 +21,22 @@ export function getBasicColumns(): BasicColumn[] {
       ],
     },
     {
+      label: '年级',
+      prop: 'age',
+      width: 150,
+      helpMessage: ['这是id'],
+    },
+    {
       label: '地址',
       prop: 'address',
+      minWidth: 240
     },
     {
       label: '编号',
       prop: 'no',
       width: 150,
       sortable: true,
-      defaultHidden: true,
+      defaultHidden: false,
     },
     {
       label: '开始时间',

@@ -26,7 +26,7 @@ const comp = {
           name: 'FormBasicDemo',
           component: () => import('@views/form/index.vue'),
           meta: {
-            title: 'routes.demo.form.basic'
+            title: '基础表单'
           }
         },
         {
@@ -34,7 +34,7 @@ const comp = {
           name: 'UseFormDemo',
           component: () => import('@views/form/UseForm.vue'),
           meta: {
-            title: 'routes.demo.form.useForm'
+            title: 'useForm'
           }
         },
         {
@@ -42,7 +42,7 @@ const comp = {
           name: 'RefFormDemo',
           component: () => import('@views/form/RefForm.vue'),
           meta: {
-            title: 'routes.demo.form.refForm'
+            title: 'refForm'
           }
         },
         {
@@ -50,7 +50,7 @@ const comp = {
           name: 'AdvancedFormDemo',
           component: () => import('@views/form/AdvancedForm.vue'),
           meta: {
-            title: 'routes.demo.form.advancedForm'
+            title: '可收缩表单'
           }
         },
         {
@@ -58,7 +58,7 @@ const comp = {
           name: 'RuleFormDemo',
           component: () => import('@views/form/RuleForm.vue'),
           meta: {
-            title: 'routes.demo.form.ruleForm'
+            title: '表单验证'
           }
         },
         {
@@ -66,7 +66,7 @@ const comp = {
           name: 'DynamicFormDemo',
           component: () => import('@views/form/DynamicForm.vue'),
           meta: {
-            title: 'routes.demo.form.dynamicForm'
+            title: '动态表单'
           }
         },
         {
@@ -74,7 +74,7 @@ const comp = {
           name: 'CustomerFormDemo',
           component: () => import('@views/form/CustomerForm.vue'),
           meta: {
-            title: 'routes.demo.form.customerForm'
+            title: '自定义组件表单'
           }
         },
         {
@@ -82,7 +82,7 @@ const comp = {
           name: 'appendFormDemo',
           component: () => import('@views/form/AppendForm.vue'),
           meta: {
-            title: 'routes.demo.form.appendForm'
+            title: '表单删减'
           }
         },
         {
@@ -90,7 +90,7 @@ const comp = {
           name: 'tabsFormDemo',
           component: () => import('@views/form/TabsForm.vue'),
           meta: {
-            title: 'routes.demo.form.tabsForm'
+            title: '多标签+多级field表单'
           }
         }
       ]
@@ -111,7 +111,7 @@ const comp = {
           name: 'TableBasicDemo',
           component: () => import('@views/table/Basic.vue'),
           meta: {
-            title: 'routes.demo.table.basic'
+            title: '基础表格'
           }
         },
         //     {
@@ -119,23 +119,23 @@ const comp = {
         //       name: 'TreeTableDemo',
         //       component: () => import('@views/table/TreeTable.vue'),
         //       meta: {
-        //         title: 'routes.demo.table.treeTable'
+        //         title: '树形表格'
         //       }
         //     },
-        //     {
-        //       path: 'fetchTable',
-        //       name: 'FetchTableDemo',
-        //       component: () => import('@views/table/FetchTable.vue'),
-        //       meta: {
-        //         title: 'routes.demo.table.fetchTable'
-        //       }
-        //     },
+        {
+          path: 'fetchTable',
+          name: 'FetchTableDemo',
+          component: () => import('@views/table/FetchTable.vue'),
+          meta: {
+            title: '远程加载表格'
+          }
+        },
         //     {
         //       path: 'fixedColumn',
         //       name: 'FixedColumnDemo',
         //       component: () => import('@views/table/FixedColumn.vue'),
         //       meta: {
-        //         title: 'routes.demo.table.fixedColumn'
+        //         title: '固定列'
         //       }
         //     },
         {
@@ -143,7 +143,7 @@ const comp = {
           name: 'CustomerCellDemo',
           component: () => import('@views/table/CustomerCell.vue'),
           meta: {
-            title: 'routes.demo.table.customerCell'
+            title: '自定义列'
           }
         },
         //     {
@@ -151,7 +151,7 @@ const comp = {
         //       name: 'FormTableDemo',
         //       component: () => import('@views/table/FormTable.vue'),
         //       meta: {
-        //         title: 'routes.demo.table.formTable'
+        //         title: '开启搜索区域'
         //       }
         //     },
         //     {
@@ -159,7 +159,7 @@ const comp = {
         //       name: 'UseTableDemo',
         //       component: () => import('@views/table/UseTable.vue'),
         //       meta: {
-        //         title: 'routes.demo.table.useTable'
+        //         title: 'useTable'
         //       }
         //     },
         //     {
@@ -167,7 +167,7 @@ const comp = {
         //       name: 'RefTableDemo',
         //       component: () => import('@views/table/RefTable.vue'),
         //       meta: {
-        //         title: 'routes.demo.table.refTable'
+        //         title: 'refTable'
         //       }
         //     },
         //     {
@@ -175,7 +175,7 @@ const comp = {
         //       name: 'MultipleHeaderDemo',
         //       component: () => import('@views/table/MultipleHeader.vue'),
         //       meta: {
-        //         title: 'routes.demo.table.multipleHeader'
+        //         title: '多级表头'
         //       }
         //     },
         //     {
@@ -183,23 +183,23 @@ const comp = {
         //       name: 'MergeHeaderDemo',
         //       component: () => import('@views/table/MergeHeader.vue'),
         //       meta: {
-        //         title: 'routes.demo.table.mergeHeader'
+        //         title: '合并单元格'
         //       }
         //     },
-        //     {
-        //       path: 'expandTable',
-        //       name: 'ExpandTableDemo',
-        //       component: () => import('@views/table/ExpandTable.vue'),
-        //       meta: {
-        //         title: 'routes.demo.table.expandTable'
-        //       }
-        //     },
+        {
+          path: 'expandTable',
+          name: 'ExpandTableDemo',
+          component: () => import('@views/table/ExpandTable.vue'),
+          meta: {
+            title: '可展开表格'
+          }
+        },
         //     {
         //       path: 'fixedHeight',
         //       name: 'FixedHeightDemo',
         //       component: () => import('@views/table/FixedHeight.vue'),
         //       meta: {
-        //         title: 'routes.demo.table.fixedHeight'
+        //         title: '固定高度、表头自定义表格'
         //       }
         //     },
         //     {
@@ -207,7 +207,7 @@ const comp = {
         //       name: 'FooterTableDemo',
         //       component: () => import('@views/table/FooterTable.vue'),
         //       meta: {
-        //         title: 'routes.demo.table.footerTable'
+        //         title: '表尾合计'
         //       }
         //     },
         //     {
@@ -215,7 +215,7 @@ const comp = {
         //       name: 'EditCellTableDemo',
         //       component: () => import('@views/table/EditCellTable.vue'),
         //       meta: {
-        //         title: 'routes.demo.table.editCellTable'
+        //         title: '可编辑单元格'
         //       }
         //     },
         //     {
@@ -223,7 +223,7 @@ const comp = {
         //       name: 'EditRowTableDemo',
         //       component: () => import('@views/table/EditRowTable.vue'),
         //       meta: {
-        //         title: 'routes.demo.table.editRowTable'
+        //         title: '可编辑行'
         //       }
         //     },
         //     {
@@ -231,7 +231,7 @@ const comp = {
         //       name: 'AuthColumnDemo',
         //       component: () => import('@views/table/AuthColumn.vue'),
         //       meta: {
-        //         title: 'routes.demo.table.authColumn'
+        //         title: '权限列'
         //       }
         //     },
         {
@@ -239,7 +239,7 @@ const comp = {
           name: 'ResizeParentHeightTable',
           component: () => import('@views/table/ResizeParentHeightTable.vue'),
           meta: {
-            title: 'routes.demo.table.resizeParentHeightTable'
+            title: '继承父级高度'
           }
         }
       ]
