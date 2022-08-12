@@ -28,16 +28,68 @@
           {{ pagination ? '关闭分页' : '开启分页' }}
         </el-button>
       </template>
+      <template #action="scope">
+        <TableAction
+          :actions="[
+            {
+              label: '编辑',
+              onClick: () => {}
+            },
+            {
+              label: '删除',
+              color: 'error',
+              popConfirm: {
+                title: '是否确认删除',
+                placement: 'left',
+                confirm: () => {}
+              }
+            }
+          ]"
+          :dropDownActions="[
+            {
+              label: '启用',
+              popConfirm: {
+                title: '是否启用？',
+                confirm: () => {}
+              },
+              ifShow: () => {
+                return scope.row.status !== 'enable'
+              }
+            },
+            {
+              label: '禁用',
+              popConfirm: {
+                title: '是否禁用？',
+                confirm: () => {}
+              },
+              ifShow: () => {
+                return scope.row.status === 'enable'
+              }
+            },
+            {
+              label: '同时控制',
+              popConfirm: {
+                title: '是否动态显示？',
+                confirm: () => {}
+              },
+              auth: 'super',
+              ifShow: () => {
+                return true
+              }
+            }
+          ]"
+        />
+      </template>
     </BasicTable>
   </div>
 </template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { BasicTable, ColumnChangeParam } from '@/components/index'
+import { BasicTable, ColumnChangeParam, TableAction } from '@/components/index'
 import { getBasicColumns, getBasicData } from './tableData'
 
 export default defineComponent({
-  components: { BasicTable },
+  components: { BasicTable, TableAction },
   setup() {
     const canResize = ref(false)
     const loading = ref(false)
