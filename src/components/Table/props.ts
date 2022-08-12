@@ -148,11 +148,6 @@ export const baseProps = {
     type: Boolean,
     default: false
   },
-  // 	合计行第一列的文本
-  sumText: {
-    type: String,
-    default: '合计'
-  },
   // 自定义的合计计算方法
   summaryMethod: Function as PropType<
     ({ columns, data }: { columns: TableColumnCtx<Recordable>[]; data: Recordable[] }) => void

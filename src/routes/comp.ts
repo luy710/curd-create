@@ -202,14 +202,14 @@ const comp = {
             title: '固定高度、表头自定义表格'
           }
         },
-        //     {
-        //       path: 'footerTable',
-        //       name: 'FooterTableDemo',
-        //       component: () => import('@views/table/FooterTable.vue'),
-        //       meta: {
-        //         title: '表尾合计'
-        //       }
-        //     },
+        {
+          path: 'footerTable',
+          name: 'FooterTableDemo',
+          component: () => import('@views/table/FooterTable.vue'),
+          meta: {
+            title: '表尾合计'
+          }
+        },
         //     {
         //       path: 'editCellTable',
         //       name: 'EditCellTableDemo',

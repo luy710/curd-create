@@ -246,8 +246,6 @@ export interface BasicTableProps {
   tooltipEffect?: string
   // 	是否在表尾显示合计行
   showSummary?: boolean
-  // 	合计行第一列的文本
-  sumText?: string
   // 自定义的合计计算方法
   summaryMethod?: ({ columns, data }: { columns: TableColumnCtx<Recordable>[]; data: Recordable[] }) => void
   // 自定义合计数据。如果有则显示该数据

@@ -13,7 +13,7 @@ const table = {
     totalField: 'total'
   },
   // Number of pages that can be selected
-  pageSizeOptions: [10, 50, 80, 100],
+  pageSizeOptions: [10, 20, 30, 40, 50, 80, 100],
   // Default display quantity on one page
   defaultPageSize: 10,
   // Default Size

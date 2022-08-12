@@ -181,11 +181,6 @@ const getBindValues = computed(() => {
   return propsData
 })
 
-watch(
-  () => getViewColumns.value,
-  (val) => console.log(val, '================')
-)
-
 const prefixCls = 'basic-table'
 const getWrapperClass = computed(() => {
   const values = unref(getBindValues)
