@@ -1,4 +1,5 @@
 import BasicForm from './Form/BasicForm.vue'
+import { /*BasicArrow, BasicTitle*/ BasicHelp } from './Basic/index'
 
 export * from './Form/types/form'
 export * from './Form/types/formItem'
@@ -9,7 +10,7 @@ export { default as ApiSelect } from './Form/components/ApiSelect.vue'
 export { default as RadioGroup } from './Form/components/RadioGroup.vue'
 export { default as CheckboxGroup } from './Form/components/CheckboxGroup.vue'
 
-export { BasicForm }
+export { BasicForm, /*BasicArrow, BasicTitle*/ BasicHelp }
 
 export { default as BasicTable } from './Table/BasicTable.vue'
 export { default as TableAction } from './Table/components/TableAction.vue'

@@ -1,28 +1,28 @@
 <template>
-  <el-menu :default-openeds="['/comp', 'form']" router class="el-menu-vertical-demo">
+  <el-menu :default-openeds="['/comp', 'form', 'table']" router class="el-menu-vertical-demo">
     <template v-for="item in BasicRoutes">
       <el-menu-item v-if="!hasChidlren(item)" :index="item.path">
         <template #title>
-          <span>{{ item.name }}</span>
+          <span>{{ item.meta.title }}</span>
         </template>
       </el-menu-item>
       <el-sub-menu v-else :index="item.path">
         <template #title>
-          <span>{{ item.name }}</span>
+          <span>{{ item.meta.title }}</span>
         </template>
         <template v-for="sub in item.children">
           <el-menu-item v-if="!hasChidlren(sub)" :index="sub.path">
             <template #title>
-              <span>{{ sub.name }}</span>
+              <span>{{ sub.meta.title }}</span>
             </template>
           </el-menu-item>
           <el-sub-menu v-else :index="sub.path">
             <template #title>
-              <span>{{ sub.name }}</span>
+              <span>{{ sub.meta.title }}</span>
             </template>
             <el-menu-item v-for="child in ((sub as Recordable)?.children as Recordable[])" :index="child.path">
               <template #title>
-                <span>{{ child.name }}</span>
+                <span>{{ child.meta.title }}</span>
               </template>
             </el-menu-item>
           </el-sub-menu>

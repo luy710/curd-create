@@ -131,13 +131,13 @@ export function getCustomHeaderColumns(): BasicColumn[] {
       // label: '姓名',
       prop: 'name',
       width: 120,
-      // slots: { label: 'customTitle' },
+      slots: { headerSlot: 'customTitle' },
     },
     {
       // label: '地址',
       prop: 'address',
       width: 120,
-      // slots: { label: 'customAddress' },
+      slots: { headerSlot: 'customAddress' },
       sortable: true,
     },
 
