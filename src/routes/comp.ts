@@ -146,14 +146,14 @@ const comp = {
             title: '自定义列'
           }
         },
-        //     {
-        //       path: 'formTable',
-        //       name: 'FormTableDemo',
-        //       component: () => import('@views/table/FormTable.vue'),
-        //       meta: {
-        //         title: '开启搜索区域'
-        //       }
-        //     },
+        {
+          path: 'formTable',
+          name: 'FormTableDemo',
+          component: () => import('@views/table/FormTable.vue'),
+          meta: {
+            title: '开启搜索区域'
+          }
+        },
         //     {
         //       path: 'useTable',
         //       name: 'UseTableDemo',

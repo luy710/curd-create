@@ -17,6 +17,7 @@ declare module '@vue/runtime-core' {
     ColumnSetting: typeof import('./../src/components/Table/components/settings/ColumnSetting.vue')['default']
     EditableCell: typeof import('./../src/components/Table/components/editable/EditableCell.vue')['default']
     EditTableHeaderIcon: typeof import('./../src/components/Table/components/EditTableHeaderIcon.vue')['default']
+    ElAlert: typeof import('element-plus/es')['ElAlert']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElBadge: typeof import('element-plus/es')['ElBadge']
