@@ -1,17 +1,33 @@
 <template>
   <div :class="[prefixCls, getAlign]" @click="onCellClick">
     <template v-for="(action, index) in getActions" :key="`${index}-${action.label}`">
-      <ElTooltip v-bind="getTooltip(action.tooltip)" :disabled="action.tooltip">
-        <ElPopconfirm v-bind="action">
-          <template #reference>
-            <!-- <Icon :icon="action.icon" :class="{ 'mr-1': !!action.label }" v-if="action.icon" /> -->
-            <el-button v-if="action.label">{{ action.label }}</el-button>
+      <ElTooltip v-bind="getTooltip(action.tooltip)" :disabled="!action.tooltip">
+        <div>
+          <template v-if="action.onConfirm">
+            <ElPopconfirm v-bind="action">
+              <template #reference>
+                <!-- <ElIcon :icon="action.icon" :class="{ 'mr-1': !!action.label }" v-if="action.icon" /> -->
+                <ElButton v-if="action.label" style="padding: 5px 3px" size="small" @click="action.onClick" text>
+                  {{ action.label }}
+                </ElButton>
+              </template>
+            </ElPopconfirm>
           </template>
-        </ElPopconfirm>
+          <template v-else>
+            <ElButton v-if="action.label" style="padding: 5px 3px" size="small" @click="action.onClick" text>
+              {{ action.label }}
+            </ElButton>
+          </template>
+        </div>
       </ElTooltip>
-      <ElDivider direction="vertical" class="action-divider" v-if="divider && index < getActions.length - 1" />
+      <ElDivider direction="vertical" style="margin: 0 3px" v-if="divider && index < getActions.length - 1" />
     </template>
-    <ElDropdown trigger="hover" v-if="dropDownActions && getDropdownList.length > 0">
+    <ElDropdown trigger="hover" v-if="dropDownActions && getDropdownList.length > 0" :hide-on-click="false">
+      <ElButton link size="small" v-if="!$slots.more">
+        <el-icon class="icon-more"><MoreFilled /></el-icon>
+      </ElButton>
+      <slot name="more"></slot>
+
       <template #dropdown>
         <ElDropdownMenu>
           <ElPopconfirm
@@ -22,23 +38,20 @@
             @cancel="item.onCancel"
           >
             <template #reference>
-              <ElDropdownItem> {{ item.text }}</ElDropdownItem>
+              <div>
+                <ElDropdownItem> {{ item.text }}</ElDropdownItem>
+              </div>
             </template>
           </ElPopconfirm>
         </ElDropdownMenu>
       </template>
-
-      <slot name="more"></slot>
-      <ElButton link size="small" v-if="!$slots.more">
-        <el-icon class="icon-more"><MoreFilled /></el-icon>
-      </ElButton>
     </ElDropdown>
   </div>
 </template>
 <script lang="ts">
 import { defineComponent, PropType, computed, toRaw, unref } from 'vue'
 import { MoreFilled } from '@element-plus/icons-vue'
-import { ElDivider, ElTooltip, ElPopconfirm, ElDropdown, ElButton } from 'element-plus'
+import { ElDivider, ElTooltip, ElPopconfirm, ElDropdown, ElButton, ElIcon } from 'element-plus'
 
 import { ActionItem, TableActionType } from '@/components/Table/types/table'
 
@@ -56,7 +69,8 @@ export default defineComponent({
     ElPopconfirm,
     ElDropdownItem: ElDropdown.DropdownItem,
     ElDropdownMenu: ElDropdown.DropdownMenu,
-    ElButton
+    ElButton,
+    ElIcon
   },
   props: {
     actions: {
@@ -103,7 +117,7 @@ export default defineComponent({
     }
 
     const getActions = computed(() => {
-      return (toRaw(props.actions) || [])
+      const listAction = (toRaw(props.actions) || [])
         .filter((action) => {
           return isIfShow(action)
         })
@@ -119,13 +133,16 @@ export default defineComponent({
             enable: !!popConfirm
           }
         })
+
+      return listAction
     })
 
     const getDropdownList = computed((): any[] => {
       const list = (toRaw(props.dropDownActions) || []).filter((action) => {
         return isIfShow(action)
       })
-      return list.map((action, index) => {
+
+      const listMap = list.map((action, index) => {
         const { label, popConfirm } = action
         return {
           ...action,
@@ -136,6 +153,8 @@ export default defineComponent({
           divider: index < list.length - 1 ? props.divider : false
         }
       })
+
+      return listMap
     })
 
     const getAlign = computed(() => {
@@ -147,7 +166,7 @@ export default defineComponent({
     function getTooltip(data: any): any {
       return {
         placement: 'bottom',
-        ...(isString(data) ? { title: data } : data)
+        ...(isString(data) ? { content: data } : data)
       }
     }
 
@@ -168,10 +187,6 @@ export default defineComponent({
 .basic-table-action {
   display: flex;
   align-items: center;
-
-  .action-divider {
-    display: table;
-  }
 
   &.left {
     justify-content: flex-start;
@@ -206,8 +221,6 @@ export default defineComponent({
   }
 
   .icon-more {
-    transform: rotate(90deg);
-
     svg {
       font-size: 1.1em;
       font-weight: 700;

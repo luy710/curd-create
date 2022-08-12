@@ -214,6 +214,7 @@ const handlers: InnerHandlers = {
   }
 }
 const { getHeaderProps, getHeaderSlots } = useTableHeader(getProps, slots, handlers)
+
 // 动态设置props
 function setProps(props: Partial<BasicTableProps>) {
   innerPropsRef.value = { ...unref(innerPropsRef), ...props }
