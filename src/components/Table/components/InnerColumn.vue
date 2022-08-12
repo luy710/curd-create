@@ -3,7 +3,7 @@ import { BasicColumn } from '../types/table'
 import type { Slots } from 'vue'
 import MultiColumn from './MultiTableHeader.vue'
 import { ElTableColumn } from 'element-plus'
-import { renderHeader, renderCell, CI, CellRenderParams } from './renderCell'
+import { renderHeader, renderCell, CI, CellRenderParams, renderExpandCell, ExpandCellParams } from './renderCell'
 import { pick } from 'lodash-es'
 
 export default defineComponent({
@@ -38,13 +38,16 @@ export default defineComponent({
 
         if (slots && slots.cellSlot) {
           if (props.slots[slots.cellSlot]) {
-            Object.assign(params, pick(defaultSlots, ['default']))
+            if (record.type === 'expand') {
+              params.default = (params: ExpandCellParams) => renderExpandCell(params, props.slots, props.column)
+            } else {
+              Object.assign(params, pick(defaultSlots, ['default']))
+            }
           }
         }
       } else {
         Object.assign(params, defaultSlots)
       }
-
       return params
     }
     const renderDom = (record: BasicColumn) => {
@@ -52,7 +55,7 @@ export default defineComponent({
       if (record.isMulti) {
         return <MultiColumn column={record} slots={props.slots}></MultiColumn>
       } else {
-        return <ElTableColumn {...record} v-slots={tableColumnSlots(record)}></ElTableColumn>
+        return <ElTableColumn {...record} v-slots={{ ...tableColumnSlots(record) }}></ElTableColumn>
       }
     }
     return () => renderDom(columnData.value)

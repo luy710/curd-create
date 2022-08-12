@@ -6,6 +6,7 @@ import { buildUUID } from '@/components/utils/uuid'
 import { isFunction, isBoolean } from '@/components/utils/is'
 import { get, cloneDeep, merge, omit } from 'lodash-es'
 import { FETCH_SETTING, ROW_KEY, PAGE_SIZE } from '../constant'
+import { useDebounceFn } from '@vueuse/core'
 
 interface ActionType {
   getPaginationInfo: ComputedRef<boolean | Partial<PaginationProps>>
@@ -71,26 +72,10 @@ export function useDataSource(
     }
   )
 
-  // 如果分页数据发生变化 需要重新请求数据库或者手动分页
-  watch(
-    () => [
-      unref(getPaginationInfo as Partial<PaginationProps>).currentPage,
-      unref(getPaginationInfo as Partial<PaginationProps>).pageSize
-    ],
-    () => {
-      const { api } = unref(propsRef)
-
-      if (!api) {
-        pickPageData()
-      } else {
-        fetch(searchState)
-      }
-    }
-  )
-
   const resetPage = () => {
     const { data, api } = unref(propsRef)
     if (!api && data) pickPageData()
+    else fetch()
   }
 
   // 过滤
@@ -104,7 +89,7 @@ export function useDataSource(
     }
     emit('filterChange', searchState.filterInfo)
     if (!filterFetchImmediate) return
-    fetch(searchState)
+    fetch()
   }
 
   const handleClearFilters = (columnKeys?: string[]) => {
@@ -116,7 +101,7 @@ export function useDataSource(
     }
     emit('filterChange', searchState.filterInfo)
     if (!filterFetchImmediate) return
-    fetch(searchState)
+    fetch()
   }
 
   const handleSortChange = (sort: SorterResult) => {
@@ -129,14 +114,14 @@ export function useDataSource(
     }
     emit('sortChange', searchState.sortInfo)
     if (!sortFetchImmediate) return
-    fetch(searchState)
+    fetch()
   }
 
   const handleClearSort = () => {
     const { sortFetchImmediate } = unref(propsRef)
     searchState.sortInfo = {}
     if (!sortFetchImmediate) return
-    fetch(searchState)
+    fetch()
   }
 
   // 分页数据变化设置

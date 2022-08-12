@@ -1,5 +1,5 @@
-import { FormProps, FormSchema } from '@/components/index'
-import { BasicColumn } from '@/components/Table/types/table'
+import { FormProps, FormSchema } from '@/components/index';
+import { BasicColumn } from '@/components/Table/types/table';
 
 export function getBasicColumns(): BasicColumn[] {
   return [
@@ -7,7 +7,8 @@ export function getBasicColumns(): BasicColumn[] {
       label: 'ID',
       prop: 'id',
       fixed: 'left',
-      width: 200
+      width: 200,
+      slots: {cellSlot: 'id'}
     },
     {
       label: '姓名',
@@ -16,19 +17,26 @@ export function getBasicColumns(): BasicColumn[] {
       helpMessage: ['这是id'],
       filters: [
         { text: 'Male', value: 'male' },
-        { text: 'Female', value: 'female' }
-      ]
+        { text: 'Female', value: 'female' },
+      ],
+    },
+    {
+      label: '年级',
+      prop: 'age',
+      width: 150,
+      helpMessage: ['这是id'],
     },
     {
       label: '地址',
-      prop: 'address'
+      prop: 'address',
+      minWidth: 240
     },
     {
       label: '编号',
       prop: 'no',
       width: 150,
       sortable: true,
-      defaultHidden: true
+      defaultHidden: false,
     },
     {
       label: '开始时间',

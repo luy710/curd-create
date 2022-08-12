@@ -37,7 +37,7 @@
         <slot :name="item" v-bind="data || {}"></slot>
       </template>
       <!-- column -->
-      <template v-for="column in getViewColumns">
+      <template v-for="column in getViewColumns" :key="column.columnKey">
         <InnerTableColumn :column="column" :slots="slots" />
       </template>
     </el-table>
@@ -180,6 +180,12 @@ const getBindValues = computed(() => {
   propsData = omit(propsData, ['class', 'onChange'])
   return propsData
 })
+
+watch(
+  () => getViewColumns.value,
+  (val) => console.log(val, '================')
+)
+
 const prefixCls = 'basic-table'
 const getWrapperClass = computed(() => {
   const values = unref(getBindValues)

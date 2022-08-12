@@ -233,7 +233,7 @@ export interface BasicTableProps {
     columnIndex: number
   }) => void | CSSProperties
   // 	行数据的 Key，用来优化 Table 的渲染； 在使用reserve-selection功能与显示树形数据时，该属性是必填的。 类型为 String 时，支持多层访问：user.info.id，但不支持 user.info[0].id，此种情况请使用 Function。
-  rowKey?: ((row: Recordable) => void) | string
+  rowKey?: ((row: Recordable) => any) | string
   // 	空数据时显示的文本内容， 也可以通过 #empty 设置
   emptyText?: string
   // 	是否默认展开所有行，当 Table 包含展开行存在或者为树形表格时有效
@@ -339,7 +339,7 @@ export interface BasicTableProps {
   // 是否继承父级高度
   isCanResizeParent?: boolean
   // 分页配置
-  pagination?: PaginationProps | boolean
+  pagination?: Partial<PaginationProps> | boolean
   clearSelectOnPageChange?: boolean
   // 表格 loading 状态
   loading?: boolean

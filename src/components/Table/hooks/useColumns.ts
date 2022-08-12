@@ -4,6 +4,7 @@ import { computed, Ref, ref, reactive, toRaw, unref, watch } from 'vue'
 // import { renderEditCell } from '../components/editable'
 import { isArray, isBoolean, isFunction, isMap, isString } from '@/components/utils/is'
 import { cloneDeep, isEqual } from 'lodash-es'
+import { buildUUID } from '@/components/utils/uuid'
 import { formatToDate } from '@/components/utils/dateUtil'
 import { ACTION_COLUMN_FLAG, DEFAULT_ALIGN, INDEX_COLUMN_FLAG, PAGE_SIZE } from '../constant'
 
@@ -90,7 +91,7 @@ export function useColumns(propsRef: ComputedRef<BasicTableProps>) {
       })
       .map((column) => {
         if (!column['columnKey']) {
-          column['columnKey'] = column.prop
+          column['columnKey'] = column.prop || buildUUID()
         }
         return reactive(column)
       })
