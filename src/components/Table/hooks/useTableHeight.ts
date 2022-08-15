@@ -1,7 +1,7 @@
 import type { BasicTableProps } from '../types/table'
 import { Ref, ComputedRef, ref, onMounted, onActivated } from 'vue'
 import { computed, unref, nextTick, watch } from 'vue'
-import { isBoolean, isObject } from '@/components/utils/is'
+import { isBoolean, isObject, isNumber, isString } from '@/components/utils/is'
 import { useWindowSizeFn } from '@/components/utils/useWindowSizeFn'
 import { debounce as useDebounceFn } from 'lodash-es'
 import { getViewportOffset } from '@/components/utils/domUtils'
@@ -145,9 +145,17 @@ export function useTableHeight(
 
   const getTableHeightRef = computed(() => {
     const tableHeight = unref(tableHeightRef)
-    const { canResize } = unref(propsRef)
+    const { canResize, height } = unref(propsRef)
+
+    if (height) {
+      if (isNumber(height) || (isString(height) && (height.indexOf('px') > -1 || /\d+$/.test(height)))) {
+        return parseInt(height)
+      }
+    }
+
     return canResize ? tableHeight : 'auto'
   })
+  console.log(isNumber('800'))
 
   return { getTableHeightRef, redoHeight }
 }

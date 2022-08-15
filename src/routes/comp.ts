@@ -7,7 +7,7 @@ const comp = {
   meta: {
     orderNo: 30,
     icon: 'ion:layers-outline',
-    title: 'routes.demo.comp.comp'
+    title: '组件'
   },
 
   children: [
@@ -18,7 +18,7 @@ const comp = {
       component: null,
       meta: {
         // icon: 'mdi:form-select',
-        title: 'routes.demo.form.form'
+        title: '表单组件'
       },
       children: [
         {
@@ -102,7 +102,7 @@ const comp = {
       component: null,
       meta: {
         // icon: 'carbon:table-split',
-        title: 'routes.demo.table.table'
+        title: '表格组件'
       },
 
       children: [
@@ -130,14 +130,14 @@ const comp = {
             title: '远程加载表格'
           }
         },
-        //     {
-        //       path: 'fixedColumn',
-        //       name: 'FixedColumnDemo',
-        //       component: () => import('@views/table/FixedColumn.vue'),
-        //       meta: {
-        //         title: '固定列'
-        //       }
-        //     },
+        {
+          path: 'fixedColumn',
+          name: 'FixedColumnDemo',
+          component: () => import('@views/table/FixedColumn.vue'),
+          meta: {
+            title: '固定列'
+          }
+        },
         {
           path: 'customerCell',
           name: 'CustomerCellDemo',
@@ -146,14 +146,14 @@ const comp = {
             title: '自定义列'
           }
         },
-        //     {
-        //       path: 'formTable',
-        //       name: 'FormTableDemo',
-        //       component: () => import('@views/table/FormTable.vue'),
-        //       meta: {
-        //         title: '开启搜索区域'
-        //       }
-        //     },
+        {
+          path: 'formTable',
+          name: 'FormTableDemo',
+          component: () => import('@views/table/FormTable.vue'),
+          meta: {
+            title: '开启搜索区域'
+          }
+        },
         //     {
         //       path: 'useTable',
         //       name: 'UseTableDemo',
@@ -194,22 +194,22 @@ const comp = {
             title: '可展开表格'
           }
         },
-        //     {
-        //       path: 'fixedHeight',
-        //       name: 'FixedHeightDemo',
-        //       component: () => import('@views/table/FixedHeight.vue'),
-        //       meta: {
-        //         title: '固定高度、表头自定义表格'
-        //       }
-        //     },
-        //     {
-        //       path: 'footerTable',
-        //       name: 'FooterTableDemo',
-        //       component: () => import('@views/table/FooterTable.vue'),
-        //       meta: {
-        //         title: '表尾合计'
-        //       }
-        //     },
+        {
+          path: 'fixedHeight',
+          name: 'FixedHeightDemo',
+          component: () => import('@views/table/FixedHeight.vue'),
+          meta: {
+            title: '固定高度、表头自定义表格'
+          }
+        },
+        {
+          path: 'footerTable',
+          name: 'FooterTableDemo',
+          component: () => import('@views/table/FooterTable.vue'),
+          meta: {
+            title: '表尾合计'
+          }
+        },
         //     {
         //       path: 'editCellTable',
         //       name: 'EditCellTableDemo',

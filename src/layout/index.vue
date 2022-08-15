@@ -12,9 +12,11 @@
 import Menus from './menus.vue'
 </script>
 <style lang="scss" scoped>
+.el-container,
 .el-main {
   height: 100vh;
   padding: 10px;
   box-sizing: border-box;
+  overflow: hidden;
 }
 </style>

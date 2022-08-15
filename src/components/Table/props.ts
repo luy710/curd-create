@@ -133,10 +133,7 @@ export const baseProps = {
   expandRowKeys: Array as PropType<Recordable[]>,
   // 	默认的排序列的 prop 和顺序。 它的 prop 属性指定默认的排序的列，order 指定默认排序的顺序 如果只指定了 prop, 没有指定 order, 则默认顺序是 ascending
   defaultSort: {
-    type: Object as PropType<Recordable>,
-    default: () => ({
-      order: 'ascending'
-    })
+    type: Object as PropType<Recordable>
   },
   // 	tooltip effect 属性
   tooltipEffect: {
@@ -147,11 +144,6 @@ export const baseProps = {
   showSummary: {
     type: Boolean,
     default: false
-  },
-  // 	合计行第一列的文本
-  sumText: {
-    type: String,
-    default: '合计'
   },
   // 自定义的合计计算方法
   summaryMethod: Function as PropType<

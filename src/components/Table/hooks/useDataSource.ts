@@ -146,6 +146,7 @@ export function useDataSource(
       }
     })
   }
+
   // 是否需要自动创建row-key
   const getAutoCreateKey = computed(() => {
     return unref(propsRef).autoCreateKey && !unref(propsRef).rowKey
@@ -383,6 +384,9 @@ export function useDataSource(
   }
 
   onMounted(() => {
+    if (propsRef.value.defaultSort) {
+      searchState.sortInfo = propsRef.value.defaultSort
+    }
     useTimeoutFn(() => {
       unref(propsRef).immediate && fetch()
     }, 16)
