@@ -52,7 +52,7 @@ export function getBasicColumns(): BasicColumn[] {
     },
     {
       label: '操作',
-      width: 100,
+      width: 200,
       prop: 'action',
       slots: {
         cellSlot: 'action'

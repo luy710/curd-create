@@ -403,7 +403,7 @@ export interface ActionItem {
   onClick?: Fn
   label?: string
   color?: 'success' | 'error' | 'warning'
-  icon?: string
+  icon?: any
   // popConfirm?: PopConfirm;
   popConfirm?: any
   disabled?: boolean
