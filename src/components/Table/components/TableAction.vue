@@ -3,26 +3,40 @@
     <template v-for="(action, index) in getActions" :key="`${index}-${action.label}`">
       <ElTooltip v-bind="getTooltip(action.tooltip)" :disabled="!action.tooltip">
         <div>
-          <template v-if="action.onConfirm">
-            <ElPopconfirm v-bind="action">
+          <template v-if="action.enable">
+            <ElPopconfirm v-bind="action.popConfirm" v-on="{ confirm: action.onConfirm, cancel: action.onCancel }">
               <template #reference>
-                <!-- <ElIcon :icon="action.icon" :class="{ 'mr-1': !!action.label }" v-if="action.icon" /> -->
-                <ElButton v-if="action.label" style="padding: 5px 3px" size="small" @click="action.onClick" text>
-                  {{ action.label }}
-                </ElButton>
+                <span class="option-item">
+                  <ElIcon v-if="action.icon" :class="{ 'mr-1': !!action.label }" @click="action.onClick">
+                    <component :is="action.icon()"></component>
+                  </ElIcon>
+                  <ElButton v-if="action.label" style="padding: 5px 3px" size="small" @click="action.onClick" text>
+                    {{ action.label }}
+                  </ElButton>
+                </span>
               </template>
             </ElPopconfirm>
           </template>
           <template v-else>
-            <ElButton v-if="action.label" style="padding: 5px 3px" size="small" @click="action.onClick" text>
-              {{ action.label }}
-            </ElButton>
+            <span class="option-item">
+              <ElIcon v-if="action.icon" :class="{ 'mr-1': !!action.label }" @click="action.onClick">
+                <component :is="action.icon()"></component>
+              </ElIcon>
+              <ElButton v-if="action.label" style="padding: 5px 3px" size="small" @click="action.onClick" text>
+                {{ action.label }}
+              </ElButton>
+            </span>
           </template>
         </div>
       </ElTooltip>
       <ElDivider direction="vertical" style="margin: 0 3px" v-if="divider && index < getActions.length - 1" />
     </template>
-    <ElDropdown trigger="hover" v-if="dropDownActions && getDropdownList.length > 0" :hide-on-click="false">
+    <ElDropdown
+      trigger="click"
+      v-if="dropDownActions && getDropdownList.length > 0"
+      popper-class="more-options"
+      :hide-on-click="false"
+    >
       <ElButton link size="small" v-if="!$slots.more">
         <el-icon class="icon-more"><MoreFilled /></el-icon>
       </ElButton>
@@ -31,11 +45,11 @@
       <template #dropdown>
         <ElDropdownMenu>
           <ElPopconfirm
+            :teleported="false"
             :title="item.title"
             v-for="item in getDropdownList"
-            v-bind="item"
-            @confirm="item.onConfirm"
-            @cancel="item.onCancel"
+            v-bind="item.popConfirm"
+            v-on="{ confirm: item.onConfirm, cancel: item.onCancel }"
           >
             <template #reference>
               <div>
@@ -153,7 +167,6 @@ export default defineComponent({
           divider: index < list.length - 1 ? props.divider : false
         }
       })
-
       return listMap
     })
 
@@ -183,7 +196,14 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+.option-item {
+  display: flex;
+  align-items: center;
+  .el-icon {
+    cursor: pointer;
+  }
+}
 .basic-table-action {
   display: flex;
   align-items: center;
@@ -224,6 +244,21 @@ export default defineComponent({
     svg {
       font-size: 1.1em;
       font-weight: 700;
+    }
+  }
+}
+</style>
+
+<style lang="scss">
+.more-options {
+  .el-scrollbar {
+    overflow: unset;
+    .el-scrollbar__wrap {
+      overflow: unset;
+    }
+
+    .el-scrollbar__bar {
+      display: none !important;
     }
   }
 }

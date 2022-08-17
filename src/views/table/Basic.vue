@@ -33,7 +33,12 @@
           :actions="[
             {
               label: '编辑',
-              onClick: () => {}
+              onClick: () => {},
+              icon: inconFun,
+              popConfirm: {
+                title: '是否启用？',
+                confirm: configTest
+              }
             },
             {
               label: '删除',
@@ -84,12 +89,12 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, h } from 'vue'
 import { BasicTable, ColumnChangeParam, TableAction } from '@/components/index'
 import { getBasicColumns, getBasicData } from './tableData'
-
+import { Edit } from '@element-plus/icons-vue'
 export default defineComponent({
-  components: { BasicTable, TableAction },
+  components: { BasicTable, TableAction, Edit },
   setup() {
     const canResize = ref(false)
     const loading = ref(false)
@@ -120,9 +125,18 @@ export default defineComponent({
     const togglePagination = () => {
       pagination.value = !pagination.value
     }
+
+    const inconFun = () => {
+      return h(Edit)
+    }
+
+    const configTest = () => {
+      console.log('ConfigTest')
+    }
     return {
       columns: getBasicColumns(),
       data: getBasicData(),
+      configTest,
       canResize,
       loading,
       striped,
@@ -133,7 +147,8 @@ export default defineComponent({
       toggleBorder,
       pagination,
       handleColumnChange,
-      togglePagination
+      togglePagination,
+      inconFun
     }
   }
 })

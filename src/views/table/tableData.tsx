@@ -50,7 +50,15 @@ export function getBasicColumns(): BasicColumn[] {
       sortable: true,
       prop: 'endTime',
     },
-  ];
+    {
+      label: '操作',
+      width: 200,
+      prop: 'action',
+      slots: {
+        cellSlot: 'action'
+      }
+    }
+  ]
 }
 
 export function getBasicShortColumns(): BasicColumn[] {
