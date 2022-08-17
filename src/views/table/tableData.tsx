@@ -94,11 +94,16 @@ export function getMultipleHeaderColumns(): BasicColumn[] {
       label: '地址',
       prop: 'address',
       sortable: true,
-      children: [
+      // isMulti: true,
+      helpMessage: ['地址信息','多级表头'],
+      slots: {
+        headerSlot: 'addressSlot'
+      },
+      columns: [
         {
           label: '编号',
           prop: 'no',
-          width: 120,
+          minWidth: 120,
           filters: [
             { text: 'Male', value: 'male' },
             { text: 'Female', value: 'female' },
@@ -107,12 +112,16 @@ export function getMultipleHeaderColumns(): BasicColumn[] {
         {
           label: '开始时间',
           prop: 'beginTime',
-          width: 120,
+          minWidth: 120,
+          helpMessage: ['开始时间', 'beginTime'],
+          slots: {
+            headerSlot: 'beginTime'
+          }
         },
         {
           label: '结束时间',
           prop: 'endTime',
-          width: 120,
+          minWidth: 120,
         },
       ] as BasicColumn[],
     },
@@ -153,12 +162,12 @@ export function getCustomHeaderColumns(): BasicColumn[] {
     {
       label: '开始时间',
       prop: 'beginTime',
-      width: 120,
+      // width: 120,
     },
     {
       label: '结束时间',
       prop: 'endTime',
-      width: 120,
+      // width: 120,
     },
   ];
 }
@@ -189,14 +198,12 @@ export function getMergeHeaderColumns(): BasicColumn[] {
     {
       label: '地址',
       prop: 'address',
-      colSpan: 2,
       width: 120,
       sortable: true,
     },
     {
       label: '编号',
       prop: 'no',
-      colSpan: 0,
       filters: [
         { text: 'Male', value: 'male', },
         { text: 'Female', value: 'female', },

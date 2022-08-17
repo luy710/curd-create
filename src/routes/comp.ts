@@ -170,22 +170,22 @@ const comp = {
         //         title: 'refTable'
         //       }
         //     },
-        //     {
-        //       path: 'multipleHeader',
-        //       name: 'MultipleHeaderDemo',
-        //       component: () => import('@views/table/MultipleHeader.vue'),
-        //       meta: {
-        //         title: '多级表头'
-        //       }
-        //     },
-        //     {
-        //       path: 'mergeHeader',
-        //       name: 'MergeHeaderDemo',
-        //       component: () => import('@views/table/MergeHeader.vue'),
-        //       meta: {
-        //         title: '合并单元格'
-        //       }
-        //     },
+        {
+          path: 'multipleHeader',
+          name: 'MultipleHeaderDemo',
+          component: () => import('@views/table/MultipleHeader.vue'),
+          meta: {
+            title: '多级表头'
+          }
+        },
+        {
+          path: 'mergeHeader',
+          name: 'MergeHeaderDemo',
+          component: () => import('@views/table/MergeHeader.vue'),
+          meta: {
+            title: '合并单元格'
+          }
+        },
         {
           path: 'expandTable',
           name: 'ExpandTableDemo',

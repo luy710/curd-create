@@ -50,7 +50,7 @@ export default defineComponent({
         {
           label: '展开收起',
           type: 'expand',
-          width: 100,
+          width: 50,
           fixed: 'left',
           slots: {
             cellSlot: 'expand'
@@ -60,6 +60,7 @@ export default defineComponent({
       ],
       rowKey: 'id',
       canResize: true,
+      showExpandColumn: true,
       actionColumn: {
         width: 160,
         label: 'Action',

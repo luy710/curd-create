@@ -29,17 +29,28 @@
       @filter-change="filterChange"
       @sort-change="sortChange"
     >
-      <el-table-column v-if="getProps?.showCheckColumn" type="selection" width="55" />
-      <el-table-column v-if="getProps?.showIndexColumn" type="index" fixed="left" label="#" width="50" />
-
       <!-- table 内部 slots -->
       <template #[item]="data" v-for="item in Object.keys(tableSlots)" :key="item">
         <slot :name="item" v-bind="data || {}"></slot>
       </template>
+      <!-- 操控性列 需固定在表格左侧，顺序为 展开/多选/序号 -->
+      <el-table-column v-if="getProps?.showExpandColumn" type="expand" v-bind="getExpandColumnProps">
+        <template #header="props">
+          <slot :name="getExpandColumnProps.slots?.headerSlot || 'expandedRowHender'" v-bind="props" />
+        </template>
+        <template #default="props">
+          <slot :name="getExpandColumnProps.slots?.cellSlot || 'expandedRowRender'" v-bind="props" />
+        </template>
+      </el-table-column>
+      <el-table-column v-if="getProps?.showSelectionColumn" type="selection" width="55" />
+      <el-table-column
+        v-if="getProps?.showIndexColumn && !getProps.isTreeTable"
+        type="index"
+        v-bind="getInndexColumnProps"
+      />
+
       <!-- column -->
-      <template v-for="column in getViewColumns" :key="column.columnKey">
-        <InnerTableColumn :column="column" :slots="slots" />
-      </template>
+      <InnerTableColumn :columns="getViewColumns" :slots="slots" />
     </el-table>
     <TablePagination
       v-if="!!getPaginationInfo"
@@ -53,7 +64,7 @@ import { BasicForm, useForm } from '@/components/index'
 import { baseProps } from './props'
 import { omit, pick } from 'lodash-es'
 import { isBoolean, isFunction } from '@/components/utils/is'
-import InnerTableColumn from './components/InnerColumn.vue'
+import InnerTableColumn from './components/InnerTableColumn.vue'
 import TablePagination from './components/Pagination.vue'
 import { BasicTableProps, ColumnChangeParam, InnerHandlers } from './types/table'
 import { useLoading } from './hooks/useLoading'
@@ -154,8 +165,17 @@ const {
   },
   emit as EmitType
 )
-const { getViewColumns, getColumns, setCacheColumnsByField, setColumns, getColumnsRef, getCacheColumns } =
-  useColumns(getProps)
+const {
+  getViewColumns,
+  getColumns,
+  setCacheColumnsByField,
+  setColumns,
+  getColumnsRef,
+  getCacheColumns,
+  getExpandColumnProps,
+  getInndexColumnProps,
+  getSelectColumnProps
+} = useColumns(getProps)
 const { getTableHeightRef, redoHeight } = useTableHeight(getProps, tableRef, wrapRef, formRef, getPaginationInfo)
 // 处理表单 table 参数
 const { getFormProps, replaceFormSlotKey, getFormSlotKeys, handleSearchInfoChange } = useTableForm(
@@ -224,6 +244,7 @@ const sortChange = (sort: SorterResult) => {
   handleSortChange(sort)
   onSortChange && isFunction(onSortChange) && onSortChange.call(undefined, sort as SorterResult)
 }
+console.log(slots)
 const tableAction: TableActionType = {
   reload,
   setPagination,

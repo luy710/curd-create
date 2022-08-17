@@ -3,38 +3,10 @@ import type { ComputedRef } from 'vue'
 import { computed, Ref, ref, reactive, toRaw, unref, watch } from 'vue'
 // import { renderEditCell } from '../components/editable'
 import { isArray, isBoolean, isFunction, isMap, isString } from '@/components/utils/is'
-import { cloneDeep, isEqual } from 'lodash-es'
+import { cloneDeep, isEqual, omit } from 'lodash-es'
 import { buildUUID } from '@/components/utils/uuid'
 import { formatToDate } from '@/components/utils/dateUtil'
 import { ACTION_COLUMN_FLAG, DEFAULT_ALIGN, INDEX_COLUMN_FLAG, PAGE_SIZE } from '../constant'
-
-// 判断是否需要在首位添加序号列
-function handleIndexColumn(propsRef: ComputedRef<BasicTableProps>, columns: Partial<BasicColumn>[]) {
-  const { showIndexColumn, indexColumnProps, isTreeTable } = unref(propsRef)
-
-  let pushIndexColumns = false
-  if (unref(isTreeTable)) {
-    return
-  }
-
-  const indIndex = columns.findIndex((column) => column.type && column.type === 'index')
-  if (showIndexColumn) {
-    pushIndexColumns = indIndex === -1
-  } else if (!showIndexColumn && indIndex !== -1) {
-    columns.splice(indIndex, 1)
-  }
-
-  if (!pushIndexColumns) return
-
-  columns.unshift({
-    type: 'index',
-    width: 60,
-    label: '序号',
-    align: 'center',
-    fixed: 'left',
-    ...indexColumnProps
-  })
-}
 
 // 二次处理action 列
 function handleActionColumn(propsRef: ComputedRef<BasicTableProps>, columns: BasicColumn[]) {
@@ -58,8 +30,6 @@ export function useColumns(propsRef: ComputedRef<BasicTableProps>) {
 
   const getColumnsRef = computed(() => {
     const columns = cloneDeep(unref(columnsRef))
-
-    // handleIndexColumn(propsRef, columns)
     handleActionColumn(propsRef, columns)
     if (!columns) {
       return []
@@ -87,7 +57,7 @@ export function useColumns(propsRef: ComputedRef<BasicTableProps>) {
     const columns = cloneDeep(viewColumns)
     return columns
       .filter((column) => {
-        return isIfShow(column)
+        return isIfShow(column) && !['expand', 'selection', 'index'].includes(column.type || '')
       })
       .map((column) => {
         if (!column['columnKey']) {
@@ -97,6 +67,54 @@ export function useColumns(propsRef: ComputedRef<BasicTableProps>) {
       })
   })
 
+  // 获取展开收起配置
+  const getExpandColumnProps = computed(() => {
+    const { expandColumnProps, columns } = unref(propsRef)
+    const expandCol = columns.find((col) => col.type === 'expand') ?? {}
+    return omit(
+      {
+        width: 40,
+        align: 'center',
+        fixed: 'left',
+        label: '',
+        ...expandCol,
+        ...expandColumnProps
+      },
+      ['type']
+    )
+  })
+  // 获取索引列配置
+  const getInndexColumnProps = computed(() => {
+    const { indexColumnProps, columns } = unref(propsRef)
+    const indexCol = columns.find((col) => col.type === 'index') ?? {}
+    return omit(
+      {
+        width: 60,
+        label: '#',
+        align: 'center',
+        fixed: 'left',
+        ...indexCol,
+        ...indexColumnProps
+      },
+      ['type']
+    )
+  })
+
+  // 获取多选列配置
+  const getSelectColumnProps = computed(() => {
+    const { selectionColumnProps, columns } = unref(propsRef)
+    const selectionCol = columns.find((col) => col.type === 'selection') ?? {}
+    return omit(
+      {
+        width: 60,
+        align: 'center',
+        fixed: 'left',
+        ...selectionCol,
+        ...selectionColumnProps
+      },
+      ['type']
+    )
+  })
   watch(
     () => unref(propsRef).columns,
     (columns) => {
@@ -182,6 +200,9 @@ export function useColumns(propsRef: ComputedRef<BasicTableProps>) {
 
   return {
     getColumnsRef,
+    getExpandColumnProps,
+    getInndexColumnProps,
+    getSelectColumnProps,
     getCacheColumns,
     getColumns,
     setColumns,

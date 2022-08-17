@@ -110,8 +110,9 @@ export type CellFormat =
   | ((text: string, record: Recordable, index: number) => string | number)
   | Map<string | number, any>
 
-export interface BasicColumn extends Partial<Omit<TableColumnCtx<Recordable>, 'children'>> {
+export interface BasicColumn extends Partial<Omit<TableColumnCtx<Recordable>, 'children' | 'columns'>> {
   children?: BasicColumn[]
+  columns?: BasicColumn[]
   customTitle?: VNode
   flag?: 'DEFAULT' | 'ACTION'
   // 是否是多级表头
@@ -328,6 +329,14 @@ export interface BasicTableProps {
   showIndexColumn?: boolean
   // 序号列配置 BasicColumn
   indexColumnProps?: BasicColumn
+  // 显示多选框列
+  showSelectionColumn?: boolean
+  // 多选列配置
+  selectionColumnProps?: BasicColumn
+  // 显示展开收起
+  showExpandColumn?: boolean
+  // 展开收起列配置
+  expandColumnProps?: BasicColumn
   // 表格右侧操作列配置 BasicColumn
   actionColumn?: BasicColumn
   // 文本过长是否显示ellipsis
@@ -387,8 +396,6 @@ export interface BasicTableProps {
   onHeaderDragend?: (newWidth: number, oldWidth: number, column: Recordable, event: MouseEvent) => void
   // 当用户对某一行展开或者关闭的时候会触发该事件（展开行时，回调的第二个参数为 expandedRows；树形表格时第二参数为 expanded）
   onExpandChange?: (row: Recordable, expanded: Recordable[] | boolean) => void
-  // 显示多选框列
-  showCheckColumn?: boolean
 }
 
 export type ColumnChangeParam = {

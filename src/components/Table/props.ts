@@ -317,6 +317,20 @@ export const baseProps = {
     type: Object as PropType<BasicColumn>,
     default: null
   },
+  // 显示多选框列
+  showSelectionColumn: { type: Boolean, default: false },
+  // 多选列配置
+  selectionColumnProps: {
+    type: Object as PropType<BasicColumn>,
+    default: null
+  },
+  // 显示展开收起
+  showExpandColumn: { type: Boolean, default: false },
+  // 展开收起列配置
+  expandColumnProps: {
+    type: Object as PropType<BasicColumn>,
+    default: null
+  },
   // 表格右侧操作列配置 BasicColumn
   actionColumn: {
     type: Object as PropType<BasicColumn>,

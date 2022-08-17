@@ -158,7 +158,7 @@ export default defineComponent({
     watchEffect(() => {
       const values = unref(getValues)
       checkIndex.value = !!values.showIndexColumn
-      checkSelect.value = !!values.showCheckColumn
+      checkSelect.value = !!values.showSelectionColumn
     })
 
     function getColumns() {
@@ -302,7 +302,7 @@ export default defineComponent({
     // Control whether the check box is displayed
     function handleSelectCheckChange(val: CheckboxValueType) {
       table.setProps({
-        showCheckColumn: val as boolean
+        showSelectionColumn: val as boolean
       })
     }
 
