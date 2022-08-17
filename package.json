@@ -1,6 +1,6 @@
 {
-  "name": "curd-create",
-  "version": "0.0.0",
+  "name": "@hobby/curd-form",
+  "version": "0.0.1",
   "license": "MIT",
   "author": {
     "name": "makai",
