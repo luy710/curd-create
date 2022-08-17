@@ -115,7 +115,7 @@ const comp = {
           }
         },
         {
-          path: 'treeTable',
+          path: '/comp/table/treeTable',
           name: 'TreeTableDemo',
           component: () => import('@views/table/TreeTable.vue'),
           meta: {
@@ -123,7 +123,7 @@ const comp = {
           }
         },
         {
-          path: 'fetchTable',
+          path: '/comp/table/fetchTable',
           name: 'FetchTableDemo',
           component: () => import('@views/table/FetchTable.vue'),
           meta: {
@@ -131,7 +131,7 @@ const comp = {
           }
         },
         {
-          path: 'fixedColumn',
+          path: '/comp/table/fixedColumn',
           name: 'FixedColumnDemo',
           component: () => import('@views/table/FixedColumn.vue'),
           meta: {
@@ -139,7 +139,7 @@ const comp = {
           }
         },
         {
-          path: 'customerCell',
+          path: '/comp/table/customerCell',
           name: 'CustomerCellDemo',
           component: () => import('@views/table/CustomerCell.vue'),
           meta: {
@@ -147,7 +147,7 @@ const comp = {
           }
         },
         {
-          path: 'formTable',
+          path: '/comp/table/formTable',
           name: 'FormTableDemo',
           component: () => import('@views/table/FormTable.vue'),
           meta: {
@@ -155,7 +155,7 @@ const comp = {
           }
         },
         {
-          path: 'useTable',
+          path: '/comp/table/useTable',
           name: 'UseTableDemo',
           component: () => import('@views/table/UseTable.vue'),
           meta: {
@@ -163,7 +163,7 @@ const comp = {
           }
         },
         {
-          path: 'refTable',
+          path: '/comp/table/refTable',
           name: 'RefTableDemo',
           component: () => import('@views/table/RefTable.vue'),
           meta: {
@@ -171,7 +171,7 @@ const comp = {
           }
         },
         {
-          path: 'multipleHeader',
+          path: '/comp/table/multipleHeader',
           name: 'MultipleHeaderDemo',
           component: () => import('@views/table/MultipleHeader.vue'),
           meta: {
@@ -179,7 +179,7 @@ const comp = {
           }
         },
         {
-          path: 'mergeHeader',
+          path: '/comp/table/mergeHeader',
           name: 'MergeHeaderDemo',
           component: () => import('@views/table/MergeHeader.vue'),
           meta: {
@@ -187,7 +187,7 @@ const comp = {
           }
         },
         {
-          path: 'expandTable',
+          path: '/comp/table/expandTable',
           name: 'ExpandTableDemo',
           component: () => import('@views/table/ExpandTable.vue'),
           meta: {
@@ -195,7 +195,7 @@ const comp = {
           }
         },
         {
-          path: 'fixedHeight',
+          path: '/comp/table/fixedHeight',
           name: 'FixedHeightDemo',
           component: () => import('@views/table/FixedHeight.vue'),
           meta: {
@@ -203,7 +203,7 @@ const comp = {
           }
         },
         {
-          path: 'footerTable',
+          path: '/comp/table/footerTable',
           name: 'FooterTableDemo',
           component: () => import('@views/table/FooterTable.vue'),
           meta: {
@@ -211,7 +211,7 @@ const comp = {
           }
         },
         //     {
-        //       path: 'editCellTable',
+        //       path: '/comp/table/editCellTable',
         //       name: 'EditCellTableDemo',
         //       component: () => import('@views/table/EditCellTable.vue'),
         //       meta: {
@@ -219,7 +219,7 @@ const comp = {
         //       }
         //     },
         //     {
-        //       path: 'editRowTable',
+        //       path: '/comp/table/editRowTable',
         //       name: 'EditRowTableDemo',
         //       component: () => import('@views/table/EditRowTable.vue'),
         //       meta: {
@@ -227,7 +227,7 @@ const comp = {
         //       }
         //     },
         //     {
-        //       path: 'authColumn',
+        //       path: '/comp/table/authColumn',
         //       name: 'AuthColumnDemo',
         //       component: () => import('@views/table/AuthColumn.vue'),
         //       meta: {
@@ -235,7 +235,7 @@ const comp = {
         //       }
         //     },
         {
-          path: 'resizeParentHeightTable',
+          path: '/comp/table/resizeParentHeightTable',
           name: 'ResizeParentHeightTable',
           component: () => import('@views/table/ResizeParentHeightTable.vue'),
           meta: {

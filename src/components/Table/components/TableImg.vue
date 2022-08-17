@@ -1,5 +1,5 @@
 <template>
-  <div :class="prefixCls" class="flex items-center mx-auto" v-if="imgList && imgList.length" :style="getWrapStyle">
+  <div :class="prefixCls" v-if="imgList && imgList.length" :style="getWrapStyle">
     <ElBadge :value="!showBadge || imgList.length == 1 ? 0 : imgList.length" v-if="simpleShow">
       <div class="img-div">
         <template v-for="(img, index) in imgList" :key="img">
@@ -17,6 +17,7 @@
     </ElBadge>
     <template v-for="(img, index) in imgList" :key="img" v-else>
       <ElImage
+        class="inline-image"
         :width="size"
         :style="{ marginLeft: index === 0 ? 0 : margin }"
         :src="srcPrefix + img"
@@ -78,7 +79,10 @@ export default defineComponent({
 </script>
 <style lang="scss">
 .basic-table-img {
-  .ant-image {
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  .inline-image {
     margin-right: 4px;
     cursor: zoom-in;
 
