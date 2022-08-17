@@ -176,7 +176,7 @@ export function useColumns(propsRef: ComputedRef<BasicTableProps>) {
   }
 
   function getColumns(opt?: GetColumnsParams) {
-    const { ignoreIndex, ignoreAction, ignoreSelection, sort } = opt || {}
+    const { ignoreIndex, ignoreAction, ignoreSelection, sort, ignoreExpand } = opt || {}
     let columns = toRaw(unref(getColumnsRef))
     if (ignoreIndex) {
       columns = columns.filter((item) => item.type !== 'index')
@@ -186,6 +186,10 @@ export function useColumns(propsRef: ComputedRef<BasicTableProps>) {
     }
     if (ignoreSelection) {
       columns = columns.filter((item) => item.type !== 'selection')
+    }
+
+    if (ignoreExpand) {
+      columns = columns.filter((item) => item.type !== 'expand')
     }
 
     if (sort) {
