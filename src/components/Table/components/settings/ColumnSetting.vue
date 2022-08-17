@@ -163,7 +163,7 @@ export default defineComponent({
 
     function getColumns() {
       const ret: Array<Recordable> = []
-      table.getColumns({ ignoreIndex: true, ignoreAction: true }).forEach((item) => {
+      table.getColumns({ ignoreAction: true, ignoreIndex: true, ignoreExpand: true }).forEach((item) => {
         ret.push({
           label: (item.label as string) || (item.customTitle as unknown as string),
           value: (item.prop || item.label) as string,
@@ -177,7 +177,7 @@ export default defineComponent({
       const columns = getColumns()
 
       const checkList = table
-        .getColumns({ ignoreAction: true })
+        .getColumns({ ignoreAction: true, ignoreIndex: true, ignoreExpand: true })
         .map((item) => {
           if (item.defaultHidden) {
             return ''

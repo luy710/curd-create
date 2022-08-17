@@ -16,6 +16,7 @@ export interface GetColumnsParams {
   ignoreIndex?: boolean
   ignoreAction?: boolean
   ignoreSelection?: boolean
+  ignoreExpand?: boolean
   sort?: boolean
 }
 
