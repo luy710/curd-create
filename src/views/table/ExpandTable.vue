@@ -4,7 +4,7 @@
       title="可展开表格"
       content="TableAction组件可配置stopButtonPropagation来阻止操作按钮的点击事件冒泡，以便配合Table组件的expandRowByClick"
     />
-    <BasicTable @register="registerTable">
+    <BasicTable @register="registerTable" @rowClick="rowClickHandle" @currentChange="currentChange">
       <template #expand="{ row }">
         <el-button size="small" type="primary">{{ row.no }}</el-button>
       </template>
@@ -42,9 +42,9 @@ import { demoListApi } from '@/api/demo/table'
 export default defineComponent({
   components: { BasicTable, TableAction },
   setup() {
-    const [registerTable, { toggleRowExpansion, getColumns }] = useTable({
+    const [registerTable, { toggleRowExpansion, getColumns, setCurrentRow }] = useTable({
       api: demoListApi,
-      title: '可展开表格演示',
+      title: '可展开表格演示 + 单选',
       titleHelpMessage: ['已启用expandRowByClick', '已启用stopButtonPropagation'],
       columns: [
         {
@@ -58,6 +58,7 @@ export default defineComponent({
         },
         ...getBasicColumns()
       ],
+      highlightCurrentRow: true,
       rowKey: 'id',
       canResize: true,
       showExpandColumn: true,
@@ -81,11 +82,21 @@ export default defineComponent({
       toggleRowExpansion(row, true)
     }
 
+    const rowClickHandle = (row: Recordable) => {
+      setCurrentRow(row)
+    }
+
+    const currentChange = (row: Recordable) => {
+      console.log(row)
+    }
+
     return {
       registerTable,
       handleDelete,
       handleOpen,
-      toggleExpand
+      toggleExpand,
+      rowClickHandle,
+      currentChange
     }
   }
 })

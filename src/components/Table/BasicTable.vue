@@ -42,7 +42,7 @@
           <slot :name="getExpandColumnProps.slots?.cellSlot || 'expandedRowRender'" v-bind="props" />
         </template>
       </el-table-column>
-      <el-table-column v-if="getProps?.showSelectionColumn" type="selection" width="55" />
+      <el-table-column v-if="getProps?.showSelectionColumn" type="selection" v-bind="getSelectColumnProps" />
       <el-table-column
         v-if="getProps?.showIndexColumn && !getProps.isTreeTable"
         type="index"
@@ -60,7 +60,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { BasicForm, useForm } from '@/components/index'
+import { BasicForm, useForm, FormProps } from '@/components/index'
 import { baseProps } from './props'
 import { omit, pick } from 'lodash-es'
 import { isBoolean, isFunction } from '@/components/utils/is'
@@ -244,7 +244,7 @@ const sortChange = (sort: SorterResult) => {
   handleSortChange(sort)
   onSortChange && isFunction(onSortChange) && onSortChange.call(undefined, sort as SorterResult)
 }
-console.log(slots)
+
 const tableAction: TableActionType = {
   reload,
   setPagination,
@@ -266,7 +266,7 @@ const tableAction: TableActionType = {
   setShowPagination,
   getShowPagination,
   setCacheColumnsByField,
-  getPagination,
+  getPaginationRef: getPagination,
   getSize: () => {
     return unref(getBindValues).size as SizeType
   },
@@ -281,7 +281,10 @@ const tableAction: TableActionType = {
   // 用于可扩展的表格或树表格，如果某行被扩展，则切换。 使用第二个参数，您可以直接设置该行应该被扩展或折叠。
   toggleRowExpansion: (row: Recordable, expanded: boolean) => tableRef.value.toggleRowExpansion(row, expanded),
   // 用于单选表格，设定某一行为选中行， 如果调用时不加参数，则会取消目前高亮行的选中状态。
-  setCurrentRow: (row: Recordable) => tableRef.value.setCurrentRow(row),
+  setCurrentRow: (row: Recordable) => {
+    console.log(tableRef.value, '////')
+    tableRef.value.setCurrentRow(row)
+  },
   // 用于清空排序条件，数据会恢复成未排序的状态
   clearSort: () => {
     tableRef.value.clearSort()

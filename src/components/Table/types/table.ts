@@ -64,7 +64,7 @@ export interface TableActionType {
   setLoading: (loading: boolean) => void
   setProps: (props: Partial<BasicTableProps>) => void
   redoHeight: () => void
-  getPaginationRef: () => PaginationProps | boolean
+  getPaginationRef: () => Partial<PaginationProps> | boolean
   getSize: () => SizeType
   getCacheColumns: () => BasicColumn[]
   emit?: EmitType

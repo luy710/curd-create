@@ -162,14 +162,14 @@ const comp = {
         //         title: 'useTable'
         //       }
         //     },
-        //     {
-        //       path: 'refTable',
-        //       name: 'RefTableDemo',
-        //       component: () => import('@views/table/RefTable.vue'),
-        //       meta: {
-        //         title: 'refTable'
-        //       }
-        //     },
+        {
+          path: 'refTable',
+          name: 'RefTableDemo',
+          component: () => import('@views/table/RefTable.vue'),
+          meta: {
+            title: 'refTable'
+          }
+        },
         {
           path: 'multipleHeader',
           name: 'MultipleHeaderDemo',
