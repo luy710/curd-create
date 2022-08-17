@@ -61,6 +61,7 @@ export default defineComponent({
     // 只有一页时是否隐藏
     hideOnSinglePage: Boolean
   },
+  emits: ['change', 'update:currentPage', 'update:pageSize'],
   setup(props, { emit, attrs }) {
     const currentPage = computed({
       get() {

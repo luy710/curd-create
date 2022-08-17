@@ -77,7 +77,6 @@
                 title: '是否动态显示？',
                 confirm: () => {}
               },
-              auth: 'super',
               ifShow: () => {
                 return true
               }

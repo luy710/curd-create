@@ -302,7 +302,7 @@ export const baseProps = {
   },
   // 表单配置
   formConfig: {
-    type: Object as PropType<Partial<FormProps>>,
+    type: Object as PropType<FormProps>,
     default: null
   },
   // 表单列信息 BasicColumn[]

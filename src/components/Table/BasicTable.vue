@@ -42,7 +42,7 @@
           <slot :name="getExpandColumnProps.slots?.cellSlot || 'expandedRowRender'" v-bind="props" />
         </template>
       </el-table-column>
-      <el-table-column v-if="getProps?.showSelectionColumn" type="selection" width="55" />
+      <el-table-column v-if="getProps?.showSelectionColumn" type="selection" v-bind="getSelectColumnProps" />
       <el-table-column
         v-if="getProps?.showIndexColumn && !getProps.isTreeTable"
         type="index"
@@ -60,13 +60,20 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { BasicForm, useForm } from '@/components/index'
+import { BasicForm, useForm, FormProps } from '@/components/index'
 import { baseProps } from './props'
 import { omit, pick } from 'lodash-es'
-import { isBoolean, isFunction } from '@/components/utils/is'
+import { isBoolean, isFunction, isString } from '@/components/utils/is'
 import InnerTableColumn from './components/InnerTableColumn.vue'
 import TablePagination from './components/Pagination.vue'
-import { BasicTableProps, ColumnChangeParam, InnerHandlers } from './types/table'
+import {
+  BasicTableProps,
+  ColumnChangeParam,
+  InnerHandlers,
+  SizeType,
+  TableActionType,
+  SorterResult
+} from './types/table'
 import { useLoading } from './hooks/useLoading'
 import { useTableForm } from './hooks/useTableForm'
 import { usePagination } from './hooks/usePagination'
@@ -75,7 +82,7 @@ import { useTableHeader } from './hooks/useTableHeader'
 import { createTableContext } from './hooks/useTableContext'
 import { useColumns } from './hooks/useColumns'
 import { useTableHeight } from './hooks/useTableHeight'
-import { SizeType, TableActionType, SorterResult } from './types/table'
+import { TableProps } from 'element-plus/es/components/table/src/table/defaults'
 // 定义emit事件
 const emit = defineEmits([
   'fetch-success',
@@ -99,6 +106,7 @@ const emit = defineEmits([
   // 'rowDblclick',
   // 'headerClick',
   // 'headerContextmenu',
+  'change',
   'sortChange',
   'filterChange'
   // 'currentChange',
@@ -186,10 +194,10 @@ const { getFormProps, replaceFormSlotKey, getFormSlotKeys, handleSearchInfoChang
 )
 const getBindValues = computed(() => {
   const dataSource = unref(getDataSourceRef)
-  let propsData: Recordable = {
+  let propsData: Partial<BasicTableProps> = {
     ...attrs,
     ...unref(getProps),
-    height: unref(getTableHeightRef),
+    height: unref(getTableHeightRef) as number | string,
     loading: unref(getLoading),
     tableLayout: 'fixed',
     rowKey: unref(getRowKey),
@@ -225,7 +233,7 @@ const handlers: InnerHandlers = {
   onColumnsChange: (data: ColumnChangeParam[]) => {
     emit('columns-change', data)
     // support useTable
-    // unref(getProps)?.onColumnsChange?.(data)
+    unref(getProps)?.onColumnsChange?.(data)
   }
 }
 const { getHeaderProps, getHeaderSlots } = useTableHeader(getProps, slots, handlers)
@@ -237,14 +245,14 @@ function setProps(props: Partial<BasicTableProps>) {
 const filterChange = (filter: Recordable) => {
   const { onFilterChange } = unref(getProps)
   handleFilterChange(filter)
-  onFilterChange && isFunction(onFilterChange) && onFilterChange.call(undefined, filter as Recordable)
+  onFilterChange && isFunction(onFilterChange) && onFilterChange(filter as Recordable)
 }
 const sortChange = (sort: SorterResult) => {
   const { onSortChange } = unref(getProps)
   handleSortChange(sort)
-  onSortChange && isFunction(onSortChange) && onSortChange.call(undefined, sort as SorterResult)
+  onSortChange && isFunction(onSortChange) && onSortChange(sort as SorterResult)
 }
-console.log(slots)
+
 const tableAction: TableActionType = {
   reload,
   setPagination,
@@ -261,12 +269,12 @@ const tableAction: TableActionType = {
   setProps,
   getColumns,
   getCacheColumns,
-  emit,
+  emit: emit as EmitType,
   updateTableData,
   setShowPagination,
   getShowPagination,
   setCacheColumnsByField,
-  getPagination,
+  getPaginationRef: getPagination,
   getSize: () => {
     return unref(getBindValues).size as SizeType
   },
@@ -305,7 +313,43 @@ const tableAction: TableActionType = {
   // 清除所有的sort信息并重新请求
   handleClearSort: () => handleClearSort(),
   // 清除所有的过滤信息
-  handleClearFilters: (columnKeys?: string[]) => handleClearFilters(columnKeys)
+  handleClearFilters: (columnKeys?: string[]) => handleClearFilters(columnKeys),
+  // 展开所有
+  expandAll: () => {
+    getDataSource().forEach((row) => {
+      tableRef.value.toggleRowExpansion(row, true)
+    })
+  },
+  // 收起所有
+  collapseAll: () => {
+    getDataSource().forEach((row) => {
+      tableRef.value.toggleRowExpansion(row, false)
+    })
+  },
+  // 获取所有选中行的row-key
+  getSelectRowKeys: (): (string | number)[] => {
+    const key = unref(getRowKey)
+    return tableRef.value.getSelectionRows().map((item: Recordable) => {
+      if (isString(key)) {
+        return item[key]
+      }
+      if (isFunction(key)) {
+        return key(item)
+      }
+    })
+  },
+  // 根据rowkey设置选中
+  setSelectedRowKeys: (keys: (string | number)[]) => {
+    const key = unref(getRowKey)
+    getDataSource().forEach((row: Recordable) => {
+      if (isString(key)) {
+        keys.includes(row[key]) && tableRef.value.toggleRowSelection(row, true)
+      }
+      if (isFunction(key)) {
+        keys.includes(key(row)) && tableRef.value.toggleRowSelection(row, true)
+      }
+    })
+  }
 }
 createTableContext({ ...tableAction, wrapRef, getBindValues })
 // 导出内部事件方法
