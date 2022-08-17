@@ -155,7 +155,6 @@ export function useTableHeight(
 
     return canResize ? tableHeight : 'auto'
   })
-  console.log(isNumber('800'))
 
   return { getTableHeightRef, redoHeight }
 }

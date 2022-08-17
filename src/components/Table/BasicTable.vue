@@ -66,7 +66,14 @@ import { omit, pick } from 'lodash-es'
 import { isBoolean, isFunction, isString } from '@/components/utils/is'
 import InnerTableColumn from './components/InnerTableColumn.vue'
 import TablePagination from './components/Pagination.vue'
-import { BasicTableProps, ColumnChangeParam, InnerHandlers } from './types/table'
+import {
+  BasicTableProps,
+  ColumnChangeParam,
+  InnerHandlers,
+  SizeType,
+  TableActionType,
+  SorterResult
+} from './types/table'
 import { useLoading } from './hooks/useLoading'
 import { useTableForm } from './hooks/useTableForm'
 import { usePagination } from './hooks/usePagination'
@@ -75,7 +82,7 @@ import { useTableHeader } from './hooks/useTableHeader'
 import { createTableContext } from './hooks/useTableContext'
 import { useColumns } from './hooks/useColumns'
 import { useTableHeight } from './hooks/useTableHeight'
-import { SizeType, TableActionType, SorterResult } from './types/table'
+import { TableProps } from 'element-plus/es/components/table/src/table/defaults'
 // 定义emit事件
 const emit = defineEmits([
   'fetch-success',
@@ -187,10 +194,10 @@ const { getFormProps, replaceFormSlotKey, getFormSlotKeys, handleSearchInfoChang
 )
 const getBindValues = computed(() => {
   const dataSource = unref(getDataSourceRef)
-  let propsData: Recordable = {
+  let propsData: Partial<BasicTableProps> = {
     ...attrs,
     ...unref(getProps),
-    height: unref(getTableHeightRef),
+    height: unref(getTableHeightRef) as number | string,
     loading: unref(getLoading),
     tableLayout: 'fixed',
     rowKey: unref(getRowKey),
@@ -262,7 +269,7 @@ const tableAction: TableActionType = {
   setProps,
   getColumns,
   getCacheColumns,
-  emit,
+  emit: emit as EmitType,
   updateTableData,
   setShowPagination,
   getShowPagination,
@@ -282,10 +289,7 @@ const tableAction: TableActionType = {
   // 用于可扩展的表格或树表格，如果某行被扩展，则切换。 使用第二个参数，您可以直接设置该行应该被扩展或折叠。
   toggleRowExpansion: (row: Recordable, expanded: boolean) => tableRef.value.toggleRowExpansion(row, expanded),
   // 用于单选表格，设定某一行为选中行， 如果调用时不加参数，则会取消目前高亮行的选中状态。
-  setCurrentRow: (row: Recordable) => {
-    console.log(tableRef.value, '////')
-    tableRef.value.setCurrentRow(row)
-  },
+  setCurrentRow: (row: Recordable) => tableRef.value.setCurrentRow(row),
   // 用于清空排序条件，数据会恢复成未排序的状态
   clearSort: () => {
     tableRef.value.clearSort()

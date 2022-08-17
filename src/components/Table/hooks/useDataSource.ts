@@ -258,7 +258,7 @@ export function useDataSource(
   }
 
   // 根据索引添加数据
-  function insertTableDataRecord(record: Recordable, index: number): Recordable | undefined {
+  function insertTableDataRecord(record: Recordable, index?: number): Recordable[] {
     index = index ?? dataSourceRef.value?.length
     unref(dataSourceRef).splice(index, 0, record)
     resetPage()
