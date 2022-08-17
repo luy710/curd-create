@@ -210,22 +210,22 @@ const comp = {
             title: '表尾合计'
           }
         },
-        //     {
-        //       path: 'editCellTable',
-        //       name: 'EditCellTableDemo',
-        //       component: () => import('@views/table/EditCellTable.vue'),
-        //       meta: {
-        //         title: '可编辑单元格'
-        //       }
-        //     },
-        //     {
-        //       path: 'editRowTable',
-        //       name: 'EditRowTableDemo',
-        //       component: () => import('@views/table/EditRowTable.vue'),
-        //       meta: {
-        //         title: '可编辑行'
-        //       }
-        //     },
+        {
+          path: 'editCellTable',
+          name: 'EditCellTableDemo',
+          component: () => import('@views/table/EditCellTable.vue'),
+          meta: {
+            title: '可编辑单元格'
+          }
+        },
+        {
+          path: 'editRowTable',
+          name: 'EditRowTableDemo',
+          component: () => import('@views/table/EditRowTable.vue'),
+          meta: {
+            title: '可编辑行'
+          }
+        },
         //     {
         //       path: 'authColumn',
         //       name: 'AuthColumnDemo',

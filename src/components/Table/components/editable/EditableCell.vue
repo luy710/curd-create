@@ -478,7 +478,7 @@ export default defineComponent({
     border-radius: 2px;
   }
 }
-.ditable-cell {
+.editable-cell {
   position: relative;
 
   &__wrapper {
@@ -496,7 +496,7 @@ export default defineComponent({
       transform: scale(1.2);
 
       svg {
-        // color: @primary-color;
+        color: var(--el-primary-color);
       }
     }
   }
@@ -523,7 +523,7 @@ export default defineComponent({
   }
 
   &:hover {
-    .ditable-cell__normal-icon {
+    .editable-cell__normal-icon {
       display: inline-block;
     }
   }

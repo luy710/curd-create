@@ -18,6 +18,7 @@ export const CellComponent: FunctionalComponent = (
   { attrs }
 ) => {
   const Comp = componentMap.get(component) as typeof defineComponent
+  console.log('attrs: ', attrs)
 
   /* @ts-ignore */
   const DefaultComp = h(Comp, attrs)
@@ -31,7 +32,7 @@ export const CellComponent: FunctionalComponent = (
       visible: !!popoverVisible
     },
     {
-      default: () => DefaultComp,
+      reference: () => DefaultComp,
       content: () => ruleMessage
     }
   )

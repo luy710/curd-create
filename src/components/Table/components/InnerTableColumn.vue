@@ -4,6 +4,7 @@ import { ElTableColumn } from 'element-plus'
 import { renderHeader, renderCell, CI, CellRenderParams } from './renderCell'
 import { pick } from 'lodash-es'
 import { Slots } from 'vue'
+import { renderEditCell } from './editable'
 
 export default defineComponent({
   name: 'InnerTableColumn',
@@ -51,6 +52,12 @@ export default defineComponent({
         }
       }
 
+      if (record.edit || record.editRow) {
+        Object.assign(params, {
+          default: renderEditCell(record)
+        })
+      }
+
       if (slots && slots.cellSlot && !hasChild(record).length) {
         if (props.slots[slots.cellSlot]) {
           Object.assign(params, pick(defaultSlots, ['default']))
@@ -61,6 +68,7 @@ export default defineComponent({
           default: () => hasChild(record).map((item) => renderColumn(item))
         })
       }
+
       return params
     }
     const renderColumn = (record: BasicColumn) => {

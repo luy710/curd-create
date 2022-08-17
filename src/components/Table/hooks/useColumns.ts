@@ -1,7 +1,7 @@
 import type { BasicColumn, BasicTableProps, CellFormat, GetColumnsParams } from '../types/table'
 import type { ComputedRef } from 'vue'
 import { computed, Ref, ref, reactive, toRaw, unref, watch } from 'vue'
-// import { renderEditCell } from '../components/editable'
+import { renderEditCell } from '../components/editable'
 import { isArray, isBoolean, isFunction, isMap, isString } from '@/components/utils/is'
 import { cloneDeep, isEqual, omit } from 'lodash-es'
 import { buildUUID } from '@/components/utils/uuid'
