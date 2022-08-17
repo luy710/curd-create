@@ -305,6 +305,65 @@ export function getTreeTableData() {
             beginTime: new Date().toLocaleString(),
             endTime: new Date().toLocaleString(),
           },
+          {
+            id: `l3-${index}`,
+            name: 'John Brown222',
+            age: `2${index}`,
+            no: `${index + 10 + 1}`,
+            address: 'New York No. 1 Lake ParkNew York No. 1ssssssss Lake Park',
+            beginTime: new Date().toLocaleString(),
+            endTime: new Date().toLocaleString(),
+            children: [
+              {
+                id: `l2-${index}-3`,
+                name: 'John Brown',
+                age: `1${index}3`,
+                no: `${index + 10}-3`,
+                address: 'New York No. 1 Lake ParkNew York No. 1 Lake Park',
+                beginTime: new Date().toLocaleString(),
+                endTime: new Date().toLocaleString(),
+                children: [
+                  {
+                    id: `l2-${index}-4`,
+                    name: 'John Brown',
+                    age: `1${index}3`,
+                    no: `${index + 10}-4`,
+                    address: 'New York No. 1 Lake ParkNew York No. 1 Lake Park',
+                    beginTime: new Date().toLocaleString(),
+                    endTime: new Date().toLocaleString(),
+                    children: [
+                      {
+                        id: `l2-${index}-5`,
+                        name: 'John Brown',
+                        age: `1${index}3`,
+                        no: `${index + 10}-5`,
+                        address: 'New York No. 1 Lake ParkNew York No. 1 Lake Park',
+                        beginTime: new Date().toLocaleString(),
+                        endTime: new Date().toLocaleString(),
+                        children: [
+                          {
+                            id: `l2-${index}-6`,
+                            name: 'John Brown',
+                            age: `1${index}3`,
+                            no: `${index + 10}-6`,
+                            address: 'New York No. 1 Lake ParkNew York No. 1 Lake Park',
+                            beginTime: new Date().toLocaleString(),
+                            endTime: new Date().toLocaleString(),
+                            children: [
+                              {
+                                id: `l2-${index}-7`,
+                                name: 'John Brown',
+                                age: `1${index}3`,
+                                no: `${index + 10}-7`,
+                                address: 'New York No. 1 Lake ParkNew York No. 1 Lake Park',
+                                beginTime: new Date().toLocaleString(),
+                                endTime: new Date().toLocaleString(),
+                              }]
+                          }]
+                      }]
+                  }]
+              }]
+          },
         ],
       });
     }

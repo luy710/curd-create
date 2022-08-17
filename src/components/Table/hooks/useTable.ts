@@ -163,7 +163,31 @@ export function useTable(tableProps?: Props): [
     // 清除所有的sort信息并重新请求
     handleClearSort: () => getTableInstance().handleClearSort(),
     // 清除所有的过滤信息
-    handleClearFilters: (columnKeys?: string[]) => getTableInstance().handleClearFilters(columnKeys)
+    handleClearFilters: (columnKeys?: string[]) => getTableInstance().handleClearFilters(columnKeys),
+    // 展开所有
+    expandAll: () => {
+      getTableInstance()
+        .getDataSource()
+        .forEach((row) => {
+          getTableInstance().toggleRowExpansion(row, true)
+        })
+    },
+    // 收起所有
+    collapseAll: () => {
+      getTableInstance()
+        .getDataSource()
+        .forEach((row) => {
+          getTableInstance().toggleRowExpansion(row, false)
+        })
+    },
+    // 获取所有选中行的row-key
+    getSelectRowKeys: (): (string | number)[] => {
+      return getTableInstance().getSelectRowKeys()
+    },
+    // 根据rowkey设置选中
+    setSelectedRowKeys: (keys: (string | number)[]) => {
+      getTableInstance().setSelectedRowKeys(keys)
+    }
   }
 
   return [register, methods]

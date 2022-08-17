@@ -114,14 +114,14 @@ const comp = {
             title: '基础表格'
           }
         },
-        //     {
-        //       path: 'treeTable',
-        //       name: 'TreeTableDemo',
-        //       component: () => import('@views/table/TreeTable.vue'),
-        //       meta: {
-        //         title: '树形表格'
-        //       }
-        //     },
+        {
+          path: 'treeTable',
+          name: 'TreeTableDemo',
+          component: () => import('@views/table/TreeTable.vue'),
+          meta: {
+            title: '树形表格'
+          }
+        },
         {
           path: 'fetchTable',
           name: 'FetchTableDemo',
@@ -154,14 +154,14 @@ const comp = {
             title: '开启搜索区域'
           }
         },
-        //     {
-        //       path: 'useTable',
-        //       name: 'UseTableDemo',
-        //       component: () => import('@views/table/UseTable.vue'),
-        //       meta: {
-        //         title: 'useTable'
-        //       }
-        //     },
+        {
+          path: 'useTable',
+          name: 'UseTableDemo',
+          component: () => import('@views/table/UseTable.vue'),
+          meta: {
+            title: 'useTable'
+          }
+        },
         {
           path: 'refTable',
           name: 'RefTableDemo',

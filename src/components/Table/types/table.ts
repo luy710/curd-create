@@ -104,6 +104,14 @@ export interface TableActionType {
   handleClearSort: () => void
   // 清除所有的过滤信息
   handleClearFilters: (columnKeys?: string[]) => void
+  // 展开所有
+  expandAll: () => void
+  // 收起所有
+  collapseAll: () => void
+  // 获取所有选中行的row-key
+  getSelectRowKeys: () => (string | number)[]
+  // 根据rowkey设置选中
+  setSelectedRowKeys: (keys: (string | number)[]) => void
 }
 
 export type CellFormat =
@@ -353,32 +361,32 @@ export interface BasicTableProps {
   loading?: boolean
   // 单元格编辑状态提交回调，返回false将阻止单元格提交数据到table。该回调在行编辑模式下无效。
   beforeEditSubmit?: (data: { record: Recordable; index: number; key: string | number; value: any }) => Promise<any>
-  // 当用户手动勾选数据行的 Checkbox 时触发的事件
-  onSelect?: (selection: Recordable[], row: Recordable) => void
-  // 当用户手动勾选全选 Checkbox 时触发的事件
-  onSelectAll?: (selection: Recordable[]) => void
-  // 当选择项发生变化时会触发该事件
-  onSelectionChange?: (selection: Recordable[]) => void
-  // 当单元格 hover 进入时会触发该事件
-  onCellMouseEnter?: (row: Recordable, column: Recordable, cell: HTMLElement, event: MouseEvent) => void
-  // 当单元格 hover 退出时会触发该事件
-  onCellMouseLeave?: (row: Recordable, column: Recordable, cell: HTMLElement, event: MouseEvent) => void
-  // 当某个单元格被点击时会触发该事件
-  onCellClick?: (row: Recordable, column: Recordable, cell: HTMLElement, event: MouseEvent) => void
-  // 当某个单元格被双击击时会触发该事件
-  onCellDblclick?: (row: Recordable, column: Recordable, cell: HTMLElement, event: MouseEvent) => void
-  // 当某个单元格被鼠标右键点击时会触发该事件
-  onCellContextmenu?: (row: Recordable, column: Recordable, cell: HTMLElement, event: PointerEvent) => void
-  // 当某一行被点击时会触发该事件
-  onRowClick?: (row: Recordable, column: Recordable, event: MouseEvent) => void
-  // 当某一行被鼠标右键点击时会触发该事件
-  onRowContextmenu?: (row: Recordable, column: Recordable, event: PointerEvent) => void
-  // 当某一行被双击时会触发该事件
-  onRowDblclick?: (row: Recordable, column: Recordable, event: MouseEvent) => void
-  // 当某一列的表头被点击时会触发该事件
-  onHeaderClick?: (column: Recordable, event: PointerEvent) => void
-  // 当某一列的表头被鼠标右键点击时触发该事件
-  onHeaderContextmenu?: (column: Recordable, event: PointerEvent) => void
+  // // 当用户手动勾选数据行的 Checkbox 时触发的事件
+  // onSelect?: (selection: Recordable[], row: Recordable) => void
+  // // 当用户手动勾选全选 Checkbox 时触发的事件
+  // onSelectAll?: (selection: Recordable[]) => void
+  // // 当选择项发生变化时会触发该事件
+  // onSelectionChange?: (selection: Recordable[]) => void
+  // // 当单元格 hover 进入时会触发该事件
+  // onCellMouseEnter?: (row: Recordable, column: Recordable, cell: HTMLElement, event: MouseEvent) => void
+  // // 当单元格 hover 退出时会触发该事件
+  // onCellMouseLeave?: (row: Recordable, column: Recordable, cell: HTMLElement, event: MouseEvent) => void
+  // // 当某个单元格被点击时会触发该事件
+  // onCellClick?: (row: Recordable, column: Recordable, cell: HTMLElement, event: MouseEvent) => void
+  // // 当某个单元格被双击击时会触发该事件
+  // onCellDblclick?: (row: Recordable, column: Recordable, cell: HTMLElement, event: MouseEvent) => void
+  // // 当某个单元格被鼠标右键点击时会触发该事件
+  // onCellContextmenu?: (row: Recordable, column: Recordable, cell: HTMLElement, event: PointerEvent) => void
+  // // 当某一行被点击时会触发该事件
+  // onRowClick?: (row: Recordable, column: Recordable, event: MouseEvent) => void
+  // // 当某一行被鼠标右键点击时会触发该事件
+  // onRowContextmenu?: (row: Recordable, column: Recordable, event: PointerEvent) => void
+  // // 当某一行被双击时会触发该事件
+  // onRowDblclick?: (row: Recordable, column: Recordable, event: MouseEvent) => void
+  // // 当某一列的表头被点击时会触发该事件
+  // onHeaderClick?: (column: Recordable, event: PointerEvent) => void
+  // // 当某一列的表头被鼠标右键点击时触发该事件
+  // onHeaderContextmenu?: (column: Recordable, event: PointerEvent) => void
   // 当表格的排序条件发生变化的时候会触发该事件
   onSortChange?: ({
     column,
@@ -391,12 +399,16 @@ export interface BasicTableProps {
   }) => void
   // column 的 key， 如果需要使用 filter-change 事件，则需要此属性标识是哪个 column 的筛选条件
   onFilterChange?: (filters: { [k: string]: string[] }) => void
-  // 当表格的当前行发生变化的时候会触发该事件，如果要高亮当前行，请打开表格的 highlight-current-row 属性
-  onCurrentChange?: (currentRow: Recordable, oldCurrentRow: Recordable) => void
-  // 当拖动表头改变了列的宽度的时候会触发该事件
-  onHeaderDragend?: (newWidth: number, oldWidth: number, column: Recordable, event: MouseEvent) => void
-  // 当用户对某一行展开或者关闭的时候会触发该事件（展开行时，回调的第二个参数为 expandedRows；树形表格时第二参数为 expanded）
-  onExpandChange?: (row: Recordable, expanded: Recordable[] | boolean) => void
+  // // 当表格的当前行发生变化的时候会触发该事件，如果要高亮当前行，请打开表格的 highlight-current-row 属性
+  // onCurrentChange?: (currentRow: Recordable, oldCurrentRow: Recordable) => void
+  // // 当拖动表头改变了列的宽度的时候会触发该事件
+  // onHeaderDragend?: (newWidth: number, oldWidth: number, column: Recordable, event: MouseEvent) => void
+  // // 当用户对某一行展开或者关闭的时候会触发该事件（展开行时，回调的第二个参数为 expandedRows；树形表格时第二参数为 expanded）
+  // onExpandChange?: (row: Recordable, expanded: Recordable[] | boolean) => void
+  // 分页 过滤 排序变化的callback
+  onChange?: (pagination: any, filters: any, sorter: any) => void
+  // 表格列表变化回调
+  onColumnsChange?: (data: ColumnChangeParam[]) => void
 }
 
 export type ColumnChangeParam = {

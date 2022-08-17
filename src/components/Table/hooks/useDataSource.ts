@@ -88,6 +88,7 @@ export function useDataSource(
       searchState.filterInfo = Object.assign(searchState.filterInfo, filter)
     }
     emit('filterChange', searchState.filterInfo)
+    handleChange()
     if (!filterFetchImmediate) return
     fetch()
   }
@@ -100,6 +101,7 @@ export function useDataSource(
       searchState.filterInfo = omit(searchState.filterInfo, columnKeys)
     }
     emit('filterChange', searchState.filterInfo)
+    handleChange()
     if (!filterFetchImmediate) return
     fetch()
   }
@@ -113,6 +115,7 @@ export function useDataSource(
       searchState.sortInfo = sort
     }
     emit('sortChange', searchState.sortInfo)
+    handleChange()
     if (!sortFetchImmediate) return
     fetch()
   }
@@ -120,8 +123,17 @@ export function useDataSource(
   const handleClearSort = () => {
     const { sortFetchImmediate } = unref(propsRef)
     searchState.sortInfo = {}
+    emit('sortChange', {})
+    handleChange()
     if (!sortFetchImmediate) return
     fetch()
+  }
+
+  const handleChange = () => {
+    const { onChange } = unref(propsRef)
+    const { filterInfo, sortInfo } = searchState
+    emit('change', unref(getPaginationInfo), filterInfo, sortInfo)
+    onChange && isFunction(onChange) && onChange(unref(getPaginationInfo), filterInfo, sortInfo)
   }
 
   // 分页数据变化设置
@@ -132,6 +144,7 @@ export function useDataSource(
     }
     setPagination(pagination)
     resetPage()
+    handleChange()
   }
 
   // 设置每一条数据的唯一值，默认是column-key
