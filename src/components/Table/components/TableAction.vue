@@ -10,7 +10,14 @@
                   <ElIcon v-if="action.icon" :class="{ 'mr-1': !!action.label }" @click="action.onClick">
                     <component :is="action.icon()"></component>
                   </ElIcon>
-                  <ElButton v-if="action.label" style="padding: 5px 3px" size="small" @click="action.onClick" text>
+                  <ElButton
+                    v-if="action.label"
+                    style="padding: 5px 3px"
+                    :size="getSize"
+                    type="primary"
+                    @click="action.onClick"
+                    text
+                  >
                     {{ action.label }}
                   </ElButton>
                 </span>
@@ -22,7 +29,14 @@
               <ElIcon v-if="action.icon" :class="{ 'mr-1': !!action.label }" @click="action.onClick">
                 <component :is="action.icon()"></component>
               </ElIcon>
-              <ElButton v-if="action.label" style="padding: 5px 3px" size="small" @click="action.onClick" text>
+              <ElButton
+                v-if="action.label"
+                style="padding: 5px 3px"
+                :size="getSize"
+                type="primary"
+                @click="action.onClick"
+                text
+              >
                 {{ action.label }}
               </ElButton>
             </span>
@@ -35,9 +49,10 @@
       trigger="click"
       v-if="dropDownActions && getDropdownList.length > 0"
       popper-class="more-options"
+      :size="getSize"
       :hide-on-click="false"
     >
-      <ElButton link size="small" v-if="!$slots.more">
+      <ElButton link :size="getSize" v-if="!$slots.more">
         <el-icon class="icon-more"><MoreFilled /></el-icon>
       </ElButton>
       <slot name="more"></slot>
@@ -63,7 +78,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, PropType, computed, toRaw, unref } from 'vue'
+import { defineComponent, PropType, computed, toRaw } from 'vue'
 import { MoreFilled } from '@element-plus/icons-vue'
 import { ElDivider, ElTooltip, ElPopconfirm, ElDropdown, ElButton, ElIcon } from 'element-plus'
 
@@ -87,6 +102,10 @@ export default defineComponent({
     ElIcon
   },
   props: {
+    size: {
+      type: String,
+      default: 'small'
+    },
     actions: {
       type: Array as PropType<ActionItem[]>,
       default: null
@@ -115,6 +134,7 @@ export default defineComponent({
     if (!props.outside) {
       table = useTableContext()
     }
+    const getSize = computed(() => props.size)
 
     function isIfShow(action: ActionItem): boolean {
       const ifShow = action.ifShow
@@ -139,7 +159,7 @@ export default defineComponent({
           const { popConfirm } = action
           return {
             type: 'link',
-            size: 'small',
+            size: getSize.value,
             ...action,
             ...(popConfirm || {}),
             onConfirm: popConfirm?.confirm,
@@ -192,7 +212,7 @@ export default defineComponent({
       isInButton && e.stopPropagation()
     }
 
-    return { prefixCls, getActions, getDropdownList, getAlign, onCellClick, getTooltip }
+    return { prefixCls, getActions, getDropdownList, getAlign, getSize, onCellClick, getTooltip }
   }
 })
 </script>
