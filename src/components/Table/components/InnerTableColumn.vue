@@ -45,11 +45,7 @@ export default defineComponent({
       }
       let params: Recordable = {}
       const { slots } = record
-      if (slots && slots.headerSlot) {
-        if (props.slots[slots.headerSlot]) {
-          Object.assign(params, pick(defaultSlots, ['header']))
-        }
-      }
+      Object.assign(params, pick(defaultSlots, ['header']))
 
       if (slots && slots.cellSlot && !hasChild(record).length) {
         if (props.slots[slots.cellSlot]) {

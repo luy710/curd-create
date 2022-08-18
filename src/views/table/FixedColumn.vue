@@ -6,7 +6,6 @@
           :actions="[
             {
               label: '删除',
-              icon: 'ic:outline-delete-outline',
               onClick: handleDelete.bind(null, row)
             }
           ]"
@@ -39,7 +38,14 @@ const columns: BasicColumn[] = [
   {
     label: '姓名',
     prop: 'name',
-    width: 260
+    width: 260,
+    edit: true,
+    editRule: async (text) => {
+      if (text === '2') {
+        return '不能输入该值'
+      }
+      return ''
+    }
   },
   {
     label: '地址',

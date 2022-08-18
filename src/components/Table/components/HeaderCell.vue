@@ -3,7 +3,12 @@
     {{ getTitle }}
   </EditTableHeaderCell>
   <span v-else>{{ getTitle }}</span>
-  <BasicHelp v-if="getHelpMessage" :text="getHelpMessage" :class="`${prefixCls}__help`" />
+  <BasicHelp
+    v-if="getHelpMessage"
+    :text="getHelpMessage"
+    v-bind="getHelpComponentProps"
+    :class="`${prefixCls}__help`"
+  />
 </template>
 <script lang="ts">
 import type { PropType } from 'vue'
@@ -28,10 +33,10 @@ export default defineComponent({
     const prefixCls = 'basic-table-header-cell'
 
     const getIsEdit = computed(() => !!props.column?.edit)
-    const getTitle = computed(() => props.column?.customTitle /* || props.column?.title */)
+    const getTitle = computed(() => props.column?.label || props.column?.prop)
     const getHelpMessage = computed(() => props.column?.helpMessage)
-
-    return { prefixCls, getIsEdit, getTitle, getHelpMessage }
+    const getHelpComponentProps = computed(() => props.column?.helpComponentProps)
+    return { prefixCls, getIsEdit, getTitle, getHelpMessage, getHelpComponentProps }
   }
 })
 </script>
