@@ -2,7 +2,6 @@
 import { BasicColumn } from '../types/table'
 import { ElTableColumn } from 'element-plus'
 import { renderHeader, renderCell, CI, CellRenderParams } from './renderCell'
-import { pick } from 'lodash-es'
 import { Slots } from 'vue'
 
 export default defineComponent({
@@ -43,21 +42,12 @@ export default defineComponent({
           return renderCell(params, props.slots)
         }
       }
-      let params: Recordable = {}
-      const { slots } = record
-      Object.assign(params, pick(defaultSlots, ['header']))
-
-      if (slots && slots.cellSlot && !hasChild(record).length) {
-        if (props.slots[slots.cellSlot]) {
-          Object.assign(params, pick(defaultSlots, ['default']))
-        }
-      }
       if (hasChild(record) && hasChild(record).length) {
-        Object.assign(params, {
+        Object.assign(defaultSlots, {
           default: () => hasChild(record).map((item) => renderColumn(item))
         })
       }
-      return params
+      return defaultSlots
     }
     const renderColumn = (record: BasicColumn) => {
       return <ElTableColumn {...record} v-slots={tableColumnSlots(record)} key={record.columnKey}></ElTableColumn>
@@ -67,10 +57,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style lang="scss" scoped>
-.custom-cell-title {
-  display: inline-flex;
-  align-items: center;
-}
-</style>
