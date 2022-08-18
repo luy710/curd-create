@@ -130,7 +130,7 @@ export default defineComponent({
     }
 
     const configTest = () => {
-      console.log('ConfigTest')
+      console.log('ConfigTest', getBasicColumns())
     }
     return {
       columns: getBasicColumns(),

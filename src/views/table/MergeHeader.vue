@@ -44,7 +44,7 @@ export default defineComponent({
       }
     }
     const [registerTable] = useTable({
-      title: '多级表头示例',
+      title: '合并单元格',
       border: true,
       stripe: true,
       api: demoListApi,

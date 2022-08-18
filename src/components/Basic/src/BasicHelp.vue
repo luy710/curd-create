@@ -84,12 +84,15 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .m-basic-help {
-  margin-left: 3px;
+  margin: 0 3px;
   line-height: 1;
   &__wrap {
     p {
       margin: 0;
     }
+  }
+  .el-icon {
+    vertical-align: middle;
   }
 }
 </style>
