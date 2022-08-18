@@ -17,7 +17,7 @@ import { BasicTable, ColumnChangeParam, TableAction, useTable } from '@/componen
 import { demoListApi } from '@/api/demo/table'
 // import { treeOptionsListApi } from '@/api/demo/tree'
 // import { useMessage } from '/@/hooks/web/useMessage'
-// import { Progress } from 'ant-design-vue'
+import { ElProgress } from 'element-plus'
 const columns: BasicColumn[] = [
   {
     label: '输入框',
@@ -44,8 +44,7 @@ const columns: BasicColumn[] = [
     // 默认必填校验
     editRule: true,
     width: 200
-  }
-  /*
+  },
   {
     label: '输入框函数校验',
     prop: 'name2',
@@ -72,9 +71,10 @@ const columns: BasicColumn[] = [
       }
     },
     editRender: ({ text }) => {
-      //   return h(Progress, { percent: Number(text) })
+        return h(ElProgress, { percentage: Number(text) })
     }
-  },
+  }
+  /*
   {
     label: '下拉框',
     prop: 'name3',

@@ -479,6 +479,7 @@ export default defineComponent({
 }
 .editable-cell {
   position: relative;
+  min-height: 23px;
 
   &__wrapper {
     display: flex;
