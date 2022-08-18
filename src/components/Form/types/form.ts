@@ -35,7 +35,7 @@ export interface FormActionType {
     first?: boolean | undefined
   ) => Promise<void>
   validateField: (props?: FormItemProp, callback?: (isValid: boolean, invalidFields?: any) => void) => Promise<any>
-  validate: (callback?: (isValid: boolean, invalidFields?: any) => void) => Promise<Recordable>
+  validate: () => Promise<Recordable>
   scrollToField: (prop: FormItemProp) => void
 }
 
@@ -117,6 +117,7 @@ export interface FormProps {
   submitFunc?: () => Promise<void>
   // 时间格式转换函数
   transformDateFunc?: (date: any) => string
+  // table的内部方法
   tableAction?: Partial<TableActionType>
 }
 
@@ -128,7 +129,7 @@ export interface FormSchema {
   // 双向绑定的key，默认value
   valueField?: string
   // 标签名称
-  label: string | VNode
+  label: string
   // 二级标签
   subLabel?: string
   // 提示信息
@@ -137,8 +138,6 @@ export interface FormSchema {
   helpComponentProps?: Partial<HelpComponentProps>
   // 标签宽度
   labelWidth?: string | number
-  // 禁用 form 全局设置的 labelWidth,自己手动设置 labelCol 和 wrapperCol
-  disabledLabelWidth?: boolean
   // 使用的组件
   component: ComponentType
   // 组件的配置参数
@@ -157,16 +156,19 @@ export interface FormSchema {
   rules?: Rule[]
   // 校验信息是否加入 label
   rulesMessageJoinLabel?: boolean
-  // formitem 配置
-  itemProps?: Partial<FormItemProp>
   // 参数的col 配置
   colProps?: Partial<ColEx>
   // 默认值
   defaultValue?: any
+  // error
+  error?: string
+  // 是否显示校验错误信息
+  showMessage?: boolean
+  // 是否在行内显示校验信息
+  inlineMessage?: boolean
+  // 用于控制该表单域下组件的默认尺寸	 'default'
+  size?: 'large' | 'default' | 'small'
   isAdvanced?: boolean
-
-  // Matching details components
-  span?: number
   // 是否加载
   ifShow?: boolean | ((renderCallbackParams: RenderCallbackParams) => boolean)
   // 加载后是否显示
