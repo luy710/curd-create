@@ -459,26 +459,14 @@ export default defineComponent({
 <style lang="scss">
 .edit-cell-align-left {
   text-align: left;
-
-  input:not(.ant-calendar-picker-input, .ant-time-picker-input) {
-    text-align: left;
-  }
 }
 
 .edit-cell-align-center {
   text-align: center;
-
-  input:not(.ant-calendar-picker-input, .ant-time-picker-input) {
-    text-align: center;
-  }
 }
 
 .edit-cell-align-right {
   text-align: right;
-
-  input:not(.ant-calendar-picker-input, .ant-time-picker-input) {
-    text-align: right;
-  }
 }
 
 .el-popover.el-popper.edit-cell-rule-popover {
@@ -497,9 +485,13 @@ export default defineComponent({
     align-items: center;
     justify-content: center;
 
-    > .el-select {
+    > .el-select, .el-input-number {
       min-width: calc(100% - 48px);
     }
+    > .el-tooltip__trigger{
+      flex: 1;
+    }
+
     .el-loading-spinner {
       .circular {
         width: 20px;
@@ -516,7 +508,7 @@ export default defineComponent({
       transform: scale(1.2);
 
       svg {
-        color: var(--el-primary-color);
+        color: var(--el-color-primary);
       }
     }
   }
