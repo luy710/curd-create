@@ -69,7 +69,7 @@ export default defineComponent({
     const getComponentProps = computed(() => {
       const isCheckValue = unref(getIsCheckComp)
 
-      const valueField = isCheckValue ? 'checked' : 'modelValue'
+      const valueField = 'modelValue'
       const val = unref(currentValueRef)
 
       const value = isCheckValue ? (isNumber(val) && isBoolean(val) ? val : !!val) : val
@@ -95,6 +95,16 @@ export default defineComponent({
         [valueField]: value,
         disabled: unref(getDisable)
       } as any
+    })
+
+    const getComponentEvent = computed(() => {
+      let eventProp: string = 'onChange'
+      if (['Input', 'InputNumber'].includes(getComponent.value)) {
+        eventProp = 'onInput'
+      }
+      return {
+        [eventProp]: handleChange
+      }
     })
     function upEditDynamicDisabled(record: any, column: any, value: any) {
       if (!record) return false
@@ -140,7 +150,8 @@ export default defineComponent({
         return {}
       }
       return {
-        width: 'calc(100% - 48px)'
+        // width: 'calc(100% - 48px)',
+        width: '100%'
       }
     })
 
@@ -181,7 +192,7 @@ export default defineComponent({
       if (!e) {
         currentValueRef.value = e
       } else if (component === 'Checkbox') {
-        currentValueRef.value = (e as ChangeEvent).target.checked
+        currentValueRef.value = e
       } else if (component === 'Switch') {
         currentValueRef.value = e
       } else if (e?.target && Reflect.has(e.target, 'value')) {
@@ -314,7 +325,7 @@ export default defineComponent({
     function handleOptionsChange(options: LabelValueOptions) {
       const { replaceFields } = unref(getComponentProps)
       const component = unref(getComponent)
-      if (component === 'ApiTreeSelect') {
+      if (component === 'TreeSelect') {
         const { title = 'title', value = 'value', children = 'children' } = replaceFields || {}
         let listOptions: Recordable[] = treeToList(options, { children })
         listOptions = listOptions.map((item) => {
@@ -376,6 +387,7 @@ export default defineComponent({
       ruleMessage,
       getRuleVisible,
       getComponentProps,
+      getComponentEvent,
       handleOptionsChange,
       getWrapperStyle,
       getWrapperClass,
@@ -423,8 +435,7 @@ export default defineComponent({
               ruleMessage={this.ruleMessage}
               class={this.getWrapperClass}
               ref="elRef"
-              onInput={this.handleChange}
-              onChange={this.handleChange}
+              {...this.getComponentEvent}
               onOptionsChange={this.handleOptionsChange}
               onPressEnter={this.handleEnter}
             />
@@ -486,8 +497,8 @@ export default defineComponent({
     align-items: center;
     justify-content: center;
 
-    > .ant-select {
-      min-width: calc(100% - 50px);
+    > .el-select {
+      min-width: calc(100% - 48px);
     }
     .el-loading-spinner {
       .circular {

@@ -3,7 +3,7 @@ export type ComponentType =
   | 'InputNumber'
   | 'Select'
   | 'AutoComplete'
-  | 'ApiTreeSelect'
+  | 'TreeSelect'
   | 'Checkbox'
   | 'Switch'
   | 'DatePicker'

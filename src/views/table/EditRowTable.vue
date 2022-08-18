@@ -108,7 +108,7 @@ const columns: BasicColumn[] = [
     label: '远程下拉树',
     prop: 'name71',
     edit: true,
-    editComponent: 'ApiTreeSelect',
+    editComponent: 'TreeSelect',
     editRule: false,
     editComponentProps: {
       // api: treeOptionsListApi,

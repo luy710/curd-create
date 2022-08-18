@@ -20,7 +20,8 @@ export const CellComponent: FunctionalComponent = (
   const Comp = componentMap.get(component) as typeof defineComponent
 
   /* @ts-ignore */
-  const DefaultComp = h(Comp, attrs)
+  const DefaultComp = h('div', [h(Comp, attrs)])
+  // const DefaultComp =h(Comp, attrs)
   if (!rule) {
     return DefaultComp
   }

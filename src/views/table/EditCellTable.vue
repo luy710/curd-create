@@ -11,11 +11,12 @@
 <script lang="ts">
 import { defineComponent, h } from 'vue'
 //   import { BasicTable, useTable, BasicColumn } from '/@/components/Table';
-//   import { optionsListApi } from '/@/api/demo/select';
+import { optionsListApi } from '@/api/demo/select'
 import { BasicColumn } from '@/components/Table/types/table'
 import { BasicTable, ColumnChangeParam, TableAction, useTable } from '@/components/index'
 import { demoListApi } from '@/api/demo/table'
-// import { treeOptionsListApi } from '@/api/demo/tree'
+import { treeOptionsListApi } from '@/api/demo/tree'
+
 // import { useMessage } from '/@/hooks/web/useMessage'
 import { ElProgress } from 'element-plus'
 const columns: BasicColumn[] = [
@@ -71,10 +72,9 @@ const columns: BasicColumn[] = [
       }
     },
     editRender: ({ text }) => {
-        return h(ElProgress, { percentage: Number(text) })
+      return h(ElProgress, { percentage: Number(text) })
     }
-  }
-  /*
+  },
   {
     label: '下拉框',
     prop: 'name3',
@@ -100,7 +100,7 @@ const columns: BasicColumn[] = [
     edit: true,
     editComponent: 'Select',
     editComponentProps: {
-      //   api: optionsListApi,
+      api: optionsListApi,
       resultField: 'list',
       labelField: 'name',
       valueField: 'id'
@@ -111,10 +111,21 @@ const columns: BasicColumn[] = [
     label: '远程下拉树',
     prop: 'name71',
     edit: true,
-    editComponent: 'ApiTreeSelect',
+    editComponent: 'Select',
     editRule: false,
     editComponentProps: {
-      //   api: treeOptionsListApi,
+      api: treeOptionsListApi,
+      groupField: 'children',
+      labelField: 'title',
+      isGroup: true,
+      collapseTags: true,
+      collapseTagsTooltip: true,
+      validateTrigger: 'blur',
+      afterFetch: (params: Recordable) => {
+        console.log('params: ', params)
+        return params.list
+      },
+      multiple: true,
       resultField: 'list'
     },
     width: 200
@@ -160,7 +171,7 @@ const columns: BasicColumn[] = [
       return value ? '开' : '关'
     },
     width: 200
-  } */
+  }
 ]
 export default defineComponent({
   components: { BasicTable },

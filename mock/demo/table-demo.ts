@@ -27,6 +27,7 @@ const demoList = (() => {
       name6: '@cname()',
       name7: '@cname()',
       name8: '@cname()',
+      name71: '@cname()',
       avatar: Random.image('400x400', Random.color(), Random.color(), Random.first()),
       imgArr: getRandomPics(Math.ceil(Math.random() * 3) + 1),
       imgs: getRandomPics(Math.ceil(Math.random() * 3) + 1),
