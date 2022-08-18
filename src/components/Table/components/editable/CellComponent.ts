@@ -18,22 +18,23 @@ export const CellComponent: FunctionalComponent = (
   { attrs }
 ) => {
   const Comp = componentMap.get(component) as typeof defineComponent
-  console.log('attrs: ', attrs)
 
   /* @ts-ignore */
   const DefaultComp = h(Comp, attrs)
   if (!rule) {
     return DefaultComp
   }
+
   return h(
     ElPopover,
     {
-      overlayClassName: 'edit-cell-rule-popover',
-      visible: !!popoverVisible
+      popperClass: 'edit-cell-rule-popover',
+      visible: !!popoverVisible,
+      placement: 'top'
     },
     {
       reference: () => DefaultComp,
-      content: () => ruleMessage
+      default: () => ruleMessage
     }
   )
 }

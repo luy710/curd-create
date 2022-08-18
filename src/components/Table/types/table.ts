@@ -72,7 +72,7 @@ export interface TableActionType {
   updateTableData: (index: number, key: string, value: any) => Recordable
   setShowPagination: (show: boolean) => Promise<void>
   getShowPagination: () => boolean
-  setCacheColumnsByField?: (dataIndex: string | undefined, value: BasicColumn) => void
+  setCacheColumnsByField?: (prop: string | undefined, value: BasicColumn) => void
   // 组件内暴露事件
   // 用于多选表格，清空用户的选择
   clearSelection: () => void
@@ -412,7 +412,7 @@ export interface BasicTableProps {
 }
 
 export type ColumnChangeParam = {
-  dataIndex: string
+  prop: string
   fixed: boolean | 'left' | 'right' | undefined
   visible: boolean
 }

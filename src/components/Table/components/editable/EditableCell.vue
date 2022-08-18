@@ -14,7 +14,7 @@ import clickOutside from '@/directives/clickOutside'
 
 import { isArray, isBoolean, isFunction, isNumber, isString } from '@/components/utils/is'
 import { createPlaceholderMessage } from './helper'
-import { omit, pick, set } from 'lodash-es'
+import { pick, set } from 'lodash-es'
 import { treeToList } from '@/components/utils/treeHelper'
 
 export default defineComponent({
@@ -69,12 +69,13 @@ export default defineComponent({
     const getComponentProps = computed(() => {
       const isCheckValue = unref(getIsCheckComp)
 
-      const valueField = isCheckValue ? 'checked' : 'value'
+      const valueField = isCheckValue ? 'checked' : 'modelValue'
       const val = unref(currentValueRef)
 
       const value = isCheckValue ? (isNumber(val) && isBoolean(val) ? val : !!val) : val
 
       let compProps = props.column?.editComponentProps ?? {}
+
       const { record, column, index } = props
 
       if (isFunction(compProps)) {
@@ -97,9 +98,9 @@ export default defineComponent({
     })
     function upEditDynamicDisabled(record: any, column: any, value: any) {
       if (!record) return false
-      const { key, dataIndex } = column
-      if (!key && !dataIndex) return
-      const dataKey = (dataIndex || key) as string
+      const { columnKey, prop } = column
+      if (!columnKey && !prop) return
+      const dataKey = (prop || columnKey) as string
       set(record, dataKey, value)
     }
     const getDisable = computed(() => {
@@ -160,7 +161,7 @@ export default defineComponent({
 
     watchEffect(() => {
       const { editable } = props.column
-      if (isBoolean(editable) || isBoolean(unref(getRowEditable))) {
+      if (isBoolean(editable) || unref(getRowEditable)) {
         isEdit.value = !!editable || unref(getRowEditable)
       }
     })
@@ -196,10 +197,10 @@ export default defineComponent({
         value: unref(currentValueRef),
         record: toRaw(props.record)
       })
-      handleSubmiRule()
+      handleSubmitRule()
     }
 
-    async function handleSubmiRule() {
+    async function handleSubmitRule() {
       const { column, record } = props
       const { editRule } = column
       const currentValue = unref(currentValueRef)
@@ -229,7 +230,7 @@ export default defineComponent({
 
     async function handleSubmit(needEmit = true, valid = true) {
       if (valid) {
-        const isPass = await handleSubmiRule()
+        const isPass = await handleSubmitRule()
         if (!isPass) return false
       }
 
@@ -337,7 +338,7 @@ export default defineComponent({
 
     if (props.record) {
       initCbs('submitCbs', handleSubmit)
-      initCbs('validCbs', handleSubmiRule)
+      initCbs('validCbs', handleSubmitRule)
       initCbs('cancelCbs', handleCancel)
 
       if (props.column.prop) {
@@ -412,32 +413,31 @@ export default defineComponent({
           )}
         </div>
         {this.isEdit && (
-          <div v-loading={this.spinning}>
-            <div class={`${this.prefixCls}__wrapper`} v-click-outside={this.onClickOutside}>
-              <CellComponent
-                {...this.getComponentProps}
-                component={this.getComponent}
-                style={this.getWrapperStyle}
-                popoverVisible={this.getRuleVisible}
-                rule={this.getRule}
-                ruleMessage={this.ruleMessage}
-                class={this.getWrapperClass}
-                ref="elRef"
-                onChange={this.handleChange}
-                onOptionsChange={this.handleOptionsChange}
-                onPressEnter={this.handleEnter}
-              />
-              {!this.getRowEditable && (
-                <div class={`${this.prefixCls}__action`}>
-                  <el-icon class={[`${this.prefixCls}__icon`, 'mx-2']} onClick={this.handleSubmitClick}>
-                    <Check />
-                  </el-icon>
-                  <el-icon class={`${this.prefixCls}__icon `} onClick={this.handleCancel}>
-                    <Close />
-                  </el-icon>
-                </div>
-              )}
-            </div>
+          <div v-loading={this.spinning} class={`${this.prefixCls}__wrapper`} v-click-outside={this.onClickOutside}>
+            <CellComponent
+              {...this.getComponentProps}
+              component={this.getComponent}
+              style={this.getWrapperStyle}
+              popoverVisible={this.getRuleVisible}
+              rule={this.getRule}
+              ruleMessage={this.ruleMessage}
+              class={this.getWrapperClass}
+              ref="elRef"
+              onInput={this.handleChange}
+              onChange={this.handleChange}
+              onOptionsChange={this.handleOptionsChange}
+              onPressEnter={this.handleEnter}
+            />
+            {!this.getRowEditable && (
+              <div class={`${this.prefixCls}__action`}>
+                <el-icon class={[`${this.prefixCls}__icon`]} onClick={this.handleSubmitClick}>
+                  <Check />
+                </el-icon>
+                <el-icon class={`${this.prefixCls}__icon `} onClick={this.handleCancel}>
+                  <Close />
+                </el-icon>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -470,13 +470,12 @@ export default defineComponent({
   }
 }
 
-.edit-cell-rule-popover {
-  .ant-popover-inner-content {
-    padding: 4px 8px;
-    color: var(--el-color-error);
-    // border: 1px solid @error-color;
-    border-radius: 2px;
-  }
+.el-popover.el-popper.edit-cell-rule-popover {
+  padding: 4px 8px;
+  color: var(--el-color-error);
+  // border: 1px solid @error-color;
+  border-radius: 2px;
+  font-size: 13px;
 }
 .editable-cell {
   position: relative;
@@ -489,9 +488,18 @@ export default defineComponent({
     > .ant-select {
       min-width: calc(100% - 50px);
     }
+    .el-loading-spinner {
+      .circular {
+        width: 20px;
+      }
+    }
   }
-
+  &__action {
+    display: flex;
+  }
   &__icon {
+    cursor: pointer;
+    margin-left: 3px;
     &:hover {
       transform: scale(1.2);
 

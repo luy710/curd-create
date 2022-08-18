@@ -11,53 +11,49 @@ interface Params {
   $index: number
 }
 
-export function renderEditCell(column: BasicColumn) {
-  return (params: Params) => {
-    const { row: record, $index } = params
+export function renderEditCell(params: Params, column: BasicColumn) {
+  const { row: record, $index } = params
 
-    console.log('record: ', record)
-
-    if (typeof record.onValid !== 'function') {
-      record.onValid = async () => {
-        if (isArray(record?.validCbs)) {
-          const validFns = (record?.validCbs || []).map((fn) => fn())
-          const res = await Promise.all(validFns)
-          return res.every((item) => !!item)
-        } else {
-          return false
-        }
+  if (typeof record.onValid !== 'function') {
+    record.onValid = async () => {
+      if (isArray(record?.validCbs)) {
+        const validFns = (record?.validCbs || []).map((fn) => fn())
+        const res = await Promise.all(validFns)
+        return res.every((item) => !!item)
+      } else {
+        return false
       }
     }
-    if (typeof record.onEdit !== 'function') {
-      record.onEdit = async (edit: boolean, submit = false) => {
-        if (!submit) {
-          record.editable = edit
-        }
-
-        if (!edit && submit) {
-          if (!(await record.onValid())) return false
-          const res = await record.onSubmitEdit?.()
-          if (res) {
-            record.editable = false
-            return true
-          }
-          return false
-        }
-        // cancel
-        if (!edit && !submit) {
-          record.onCancelEdit?.()
-        }
-        return true
-      }
-    }
-
-    return h(EditableCell, {
-      value: record[column.columnKey as string],
-      row: unref(record),
-      column,
-      index: $index
-    })
   }
+  if (typeof record.onEdit !== 'function') {
+    record.onEdit = async (edit: boolean, submit = false) => {
+      if (!submit) {
+        record.editable = edit
+      }
+
+      if (!edit && submit) {
+        if (!(await record.onValid())) return false
+        const res = await record.onSubmitEdit?.()
+        if (res) {
+          record.editable = false
+          return true
+        }
+        return false
+      }
+      // cancel
+      if (!edit && !submit) {
+        record.onCancelEdit?.()
+      }
+      return true
+    }
+  }
+
+  return h(EditableCell, {
+    value: record[column.prop as string],
+    record: unref(record),
+    column,
+    index: $index
+  })
 }
 
 export type EditRecordRow<T = Recordable> = Partial<

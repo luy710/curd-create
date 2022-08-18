@@ -1,6 +1,7 @@
 import type { Slots } from 'vue'
 import { BasicColumn } from '../types/table'
 import TableHeaderCell from './HeaderCell.vue'
+import { renderEditCell } from './editable/index'
 export interface CI {
   column: BasicColumn
   $index: number
@@ -20,13 +21,16 @@ export const renderHeader = ({ column, $index }: CI, propsSlots: Slots) => {
 }
 
 export const renderCell = ({ row, column, $index }: CellRenderParams, propsSlots: Slots) => {
-  const { prop, slots } = column
+  const { prop, slots, edit, editRow } = column
   if (slots && slots?.cellSlot) {
     if (propsSlots[slots.cellSlot]) {
       return (propsSlots[slots.cellSlot] as Function)({ row, column, $index })
     }
   }
 
-  
+  if (edit || editRow) {
+    return renderEditCell({ text: row[column.prop as string], row, $index }, column)
+  }
+
   return <span>{row[prop as string]}</span>
 }

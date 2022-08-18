@@ -331,10 +331,11 @@ export default defineComponent({
           columns.findIndex(
             (c: BasicColumn | string) => c === col.value || (typeof c !== 'string' && c.prop === col.value)
           ) !== -1
-        return { dataIndex: col.value, fixed: col.fixed, visible }
+        return { prop: col.value, fixed: col.fixed, visible }
       })
 
       emit('columns-change', data)
+      console.log('data: ', data);
     }
 
     return {

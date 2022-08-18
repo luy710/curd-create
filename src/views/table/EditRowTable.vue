@@ -21,7 +21,7 @@ import { demoListApi } from '@/api/demo/table'
 const columns: BasicColumn[] = [
   {
     label: '输入框',
-    columnKey: 'name',
+    prop: 'name',
     edit: true,
     editComponentProps: {
       prefix: '$'
@@ -30,14 +30,14 @@ const columns: BasicColumn[] = [
   },
   /* {
     label: '默认输入状态',
-    columnKey: 'name7',
+    prop: 'name7',
     edit: true,
     editable: true,
     width: 200
   },
   {
     label: '输入框校验',
-    columnKey: 'name1',
+    prop: 'name1',
     edit: true,
     // 默认必填校验
     editRule: true,
@@ -45,7 +45,7 @@ const columns: BasicColumn[] = [
   },
   {
     label: '输入框函数校验',
-    columnKey: 'name2',
+    prop: 'name2',
     edit: true,
     editRule: async (text) => {
       if (text === '2') {
@@ -57,7 +57,7 @@ const columns: BasicColumn[] = [
   },
   {
     label: '数字输入框',
-    columnKey: 'id',
+    prop: 'id',
     edit: true,
     editRule: true,
     editComponent: 'InputNumber',
@@ -74,7 +74,7 @@ const columns: BasicColumn[] = [
   },
   {
     label: '下拉框',
-    columnKey: 'name3',
+    prop: 'name3',
     edit: true,
     editComponent: 'Select',
     editComponentProps: {
@@ -93,7 +93,7 @@ const columns: BasicColumn[] = [
   },
   {
     label: '远程下拉',
-    columnKey: 'name4',
+    prop: 'name4',
     edit: true,
     editComponent: 'Select',
     editComponentProps: {
@@ -106,7 +106,7 @@ const columns: BasicColumn[] = [
   },
   {
     label: '远程下拉树',
-    columnKey: 'name71',
+    prop: 'name71',
     edit: true,
     editComponent: 'ApiTreeSelect',
     editRule: false,
@@ -118,7 +118,7 @@ const columns: BasicColumn[] = [
   },
   {
     label: '日期选择',
-    columnKey: 'date',
+    prop: 'date',
     edit: true,
     editComponent: 'DatePicker',
     editComponentProps: {
@@ -129,7 +129,7 @@ const columns: BasicColumn[] = [
   },
   {
     label: '时间选择',
-    columnKey: 'time',
+    prop: 'time',
     edit: true,
     editComponent: 'TimePicker',
     editComponentProps: {
@@ -140,7 +140,7 @@ const columns: BasicColumn[] = [
   },
   {
     label: '勾选框',
-    columnKey: 'name5',
+    prop: 'name5',
     edit: true,
     editComponent: 'Checkbox',
     editValueMap: (value) => {
@@ -150,7 +150,7 @@ const columns: BasicColumn[] = [
   },
   {
     label: '开关',
-    columnKey: 'name6',
+    prop: 'name6',
     edit: true,
     editComponent: 'Switch',
     editValueMap: (value) => {
