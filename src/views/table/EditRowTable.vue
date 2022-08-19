@@ -20,10 +20,10 @@ import { treeOptionsListApi } from '@/api/demo/tree'
 const columns: BasicColumn[] = [
   {
     label: '输入框',
+    editDynamicChange: true,
     prop: 'name',
     editRow: true,
-    editComponentProps: {
-    },
+    editComponentProps: {},
     width: 150
   },
   {
@@ -193,10 +193,9 @@ export default defineComponent({
         try {
           const data = cloneDeep(record.editValueRefs)
           console.log(data)
-          //TODO 此处将数据提交给服务器保存
           // ...
           // 保存之后提交编辑状态
-          const pass = await record.onEdit?.(false, true)
+          const pass = await record.onEdit?.(false, false)
           if (pass) {
             currentEditKeyRef.value = ''
           }

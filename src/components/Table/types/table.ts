@@ -162,7 +162,10 @@ export interface BasicColumn extends Partial<Omit<TableColumnCtx<Recordable>, 'c
     index: number
   }) => VNodeChild | JSX.Element
   // 动态 Disabled
-  editDynamicDisabled?: boolean | ((record: Recordable) => boolean)
+  editDynamicDisabled?: boolean | ((record: Recordable) => boolean),
+  // 动态值改变
+  editDynamicChange?: boolean | ((record: Recordable) => boolean),
+
 }
 
 export interface BasicTableProps {

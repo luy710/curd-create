@@ -86,7 +86,9 @@ export default defineComponent({
       if (component === 'Select') {
         apiSelectProps.cache = true
       }
+
       upEditDynamicDisabled(record, column, value)
+
       return {
         size: 'small',
         placeholder: createPlaceholderMessage(unref(getComponent)),
@@ -112,6 +114,19 @@ export default defineComponent({
       }
     })
     function upEditDynamicDisabled(record: any, column: any, value: any) {
+      const { editDynamicChange } = props.column
+      let dynamicChange = false
+      if (isBoolean(editDynamicChange)) {
+        dynamicChange = editDynamicChange
+      }
+      if (isFunction(editDynamicChange)) {
+        const { record } = props
+        dynamicChange = editDynamicChange({ record })
+      }
+      if (!dynamicChange) {
+        return
+      }
+      
       if (!record) return false
       const { columnKey, prop } = column
       if (!columnKey && !prop) return
