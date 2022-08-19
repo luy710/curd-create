@@ -17,7 +17,7 @@
           :collapseTags="true"
           :collapseTagsTooltip="true"
           :multiple="true"
-          @change="(params) => (model[field] = params)"
+          @change="(params: any) => (model[field] = params)"
         />
       </template>
       <template #selectB="{ model, field }">
@@ -27,7 +27,7 @@
           :collapseTags="true"
           :collapseTagsTooltip="true"
           :multiple="true"
-          @change="(params) => (model[field] = params)"
+          @change="(params: any) => (model[field] = params)"
         />
       </template>
     </BasicForm>

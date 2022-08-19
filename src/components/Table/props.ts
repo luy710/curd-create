@@ -220,11 +220,6 @@ export const baseProps = {
     type: Function as PropType<(data: Partial<Recordable<string[]>>) => any>,
     default: DEFAULT_FILTER_FN
   },
-  // 点击行选中
-  clickToRowSelect: {
-    type: Boolean,
-    default: false
-  },
   // 是否是树形表格
   isTreeTable: {
     type: Boolean,
