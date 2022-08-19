@@ -1,81 +1,70 @@
 <template>
   <div class="p-4">
-    <BasicTable
-      @register="registerTable"
-      @edit-end="handleEditEnd"
-      @edit-cancel="handleEditCancel"
-      :beforeEditSubmit="beforeEditSubmit"
-    />
+    <BasicTable @register="registerTable" @edit-change="onEditChange">
+      <template #action="scope">
+        <TableAction :actions="createActions(scope.row, scope.column)" />
+      </template>
+    </BasicTable>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, h } from 'vue'
+import { defineComponent, ref } from 'vue'
+import type { ActionItem, EditRecordRow } from '@/components/index'
+import { cloneDeep } from 'lodash-es'
+import { optionsListApi } from '@/api/demo/select'
 import { BasicColumn } from '@/components/Table/types/table'
 import { BasicTable, ColumnChangeParam, TableAction, useTable } from '@/components/index'
 import { demoListApi } from '@/api/demo/table'
+import { treeOptionsListApi } from '@/api/demo/tree'
 
-// import { optionsListApi } from '/@/api/demo/select'
-
-// import { treeOptionsListApi } from '/@/api/demo/tree'
-// import { useMessage } from '/@/hooks/web/useMessage'
 const columns: BasicColumn[] = [
   {
     label: '输入框',
     prop: 'name',
-    edit: true,
+    editRow: true,
     editComponentProps: {
-      prefix: '$'
     },
-    width: 200
+    width: 150
   },
-  /* {
+  {
     label: '默认输入状态',
     prop: 'name7',
-    edit: true,
-    editable: true,
-    width: 200
+    editRow: true,
+    width: 150
   },
   {
     label: '输入框校验',
     prop: 'name1',
-    edit: true,
+    editRow: true,
+    align: 'left',
     // 默认必填校验
     editRule: true,
-    width: 200
+    width: 150
   },
   {
     label: '输入框函数校验',
     prop: 'name2',
-    edit: true,
+    editRow: true,
+    align: 'right',
     editRule: async (text) => {
       if (text === '2') {
         return '不能输入该值'
       }
       return ''
-    },
-    width: 200
+    }
   },
   {
     label: '数字输入框',
     prop: 'id',
-    edit: true,
+    editRow: true,
     editRule: true,
     editComponent: 'InputNumber',
-    width: 200,
-    editComponentProps: () => {
-      return {
-        max: 100,
-        min: 0
-      }
-    }
-    // editRender: ({ text }) => {
-    //   return h(Progress, { percent: Number(text) })
-    // }
+    width: 150
   },
   {
     label: '下拉框',
     prop: 'name3',
-    edit: true,
+    editRow: true,
     editComponent: 'Select',
     editComponentProps: {
       options: [
@@ -86,6 +75,10 @@ const columns: BasicColumn[] = [
         {
           label: 'Option2',
           value: '2'
+        },
+        {
+          label: 'Option3',
+          value: '3'
         }
       ]
     },
@@ -94,10 +87,10 @@ const columns: BasicColumn[] = [
   {
     label: '远程下拉',
     prop: 'name4',
-    edit: true,
+    editRow: true,
     editComponent: 'Select',
     editComponentProps: {
-      // api: optionsListApi,
+      api: optionsListApi,
       resultField: 'list',
       labelField: 'name',
       valueField: 'id'
@@ -106,12 +99,12 @@ const columns: BasicColumn[] = [
   },
   {
     label: '远程下拉树',
-    prop: 'name71',
-    edit: true,
-    editComponent: 'TreeSelect',
+    prop: 'name8',
+    editRow: true,
+    editComponent: 'Select',
     editRule: false,
     editComponentProps: {
-      // api: treeOptionsListApi,
+      api: treeOptionsListApi,
       resultField: 'list'
     },
     width: 200
@@ -119,106 +112,141 @@ const columns: BasicColumn[] = [
   {
     label: '日期选择',
     prop: 'date',
-    edit: true,
+    editRow: true,
     editComponent: 'DatePicker',
     editComponentProps: {
       valueFormat: 'YYYY-MM-DD',
       format: 'YYYY-MM-DD'
     },
-    width: 200
+    width: 150
   },
   {
     label: '时间选择',
     prop: 'time',
-    edit: true,
+    editRow: true,
     editComponent: 'TimePicker',
     editComponentProps: {
       valueFormat: 'HH:mm',
       format: 'HH:mm'
     },
-    width: 200
+    width: 100
   },
   {
     label: '勾选框',
     prop: 'name5',
-    edit: true,
+    editRow: true,
+
     editComponent: 'Checkbox',
     editValueMap: (value) => {
       return value ? '是' : '否'
     },
-    width: 200
+    width: 100
   },
   {
     label: '开关',
     prop: 'name6',
-    edit: true,
+    editRow: true,
     editComponent: 'Switch',
     editValueMap: (value) => {
       return value ? '开' : '关'
     },
-    width: 200
-  } */
+    width: 100
+  }
 ]
+
 export default defineComponent({
-  components: { BasicTable },
+  components: { BasicTable, TableAction },
   setup() {
+    // const { createMessage: msg } = useMessage();
+    const currentEditKeyRef = ref('')
     const [registerTable] = useTable({
-      title: '可编辑单元格示例',
+      title: '可编辑行示例',
+      titleHelpMessage: ['本例中修改[数字输入框]这一列时，同一行的[远程下拉]列的当前编辑数据也会同步发生改变'],
       api: demoListApi,
       columns: columns,
-      showIndexColumn: false
-      // bordered: true
+      showIndexColumn: false,
+      showTableSetting: true,
+      tableSetting: { fullScreen: true },
+      actionColumn: {
+        width: 160,
+        label: 'Action',
+        prop: 'action',
+        slots: { cellSlot: 'action' }
+      }
     })
 
-    // const { createMessage } = useMessage()
-
-    function handleEditEnd({ record, index, key, value }: Recordable) {
-      console.log(record, index, key, value)
-      return false
+    function handleEdit(record: EditRecordRow) {
+      currentEditKeyRef.value = record.key
+      record.onEdit?.(true)
     }
 
-    // 模拟将指定数据保存
-    function feakSave({ value, key, id }: any) {
-      // createMessage.loading({
-      //   content: `正在模拟保存${key}`,
-      //   key: '_save_fake_data',
-      //   duration: 0
-      // })
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          if (value === '') {
-            // createMessage.error({
-            //   content: '保存失败：不能为空',
-            //   key: '_save_fake_data',
-            //   duration: 2
-            // })
-            resolve(false)
-          } else {
-            // createMessage.success({
-            //   content: `记录${id}的${key}已保存`,
-            //   key: '_save_fake_data',
-            //   duration: 2
-            // })
-            resolve(true)
+    function handleCancel(record: EditRecordRow) {
+      currentEditKeyRef.value = ''
+      record.onEdit?.(false, false)
+    }
+
+    async function handleSave(record: EditRecordRow) {
+      // 校验
+      // msg.loading({ content: '正在保存...', duration: 0, key: 'saving' });
+      const valid = await record.onValid?.()
+      if (valid) {
+        try {
+          const data = cloneDeep(record.editValueRefs)
+          console.log(data)
+          //TODO 此处将数据提交给服务器保存
+          // ...
+          // 保存之后提交编辑状态
+          const pass = await record.onEdit?.(false, true)
+          if (pass) {
+            currentEditKeyRef.value = ''
           }
-        }, 2000)
-      })
+          // msg.success({ content: '数据已保存', key: 'saving' });
+        } catch (error) {
+          // msg.error({ content: '保存失败', key: 'saving' });
+        }
+      } else {
+        // msg.error({ content: '请填写正确的数据', key: 'saving' });
+      }
     }
 
-    async function beforeEditSubmit({ record, index, key, value }: any) {
-      console.log('单元格数据正在准备提交', { record, index, key, value })
-      return await feakSave({ id: record.id, key, value })
+    function createActions(record: EditRecordRow, column: BasicColumn): ActionItem[] {
+      if (!record.editable) {
+        return [
+          {
+            label: '编辑',
+            disabled: currentEditKeyRef.value ? currentEditKeyRef.value !== record.key : false,
+            onClick: handleEdit.bind(null, record)
+          }
+        ]
+      }
+      return [
+        {
+          label: '保存',
+          onClick: handleSave.bind(null, record, column)
+        },
+        {
+          label: '取消',
+          popConfirm: {
+            title: '是否取消编辑',
+            confirm: handleCancel.bind(null, record, column)
+          }
+        }
+      ]
     }
 
-    function handleEditCancel() {
-      console.log('cancel')
+    function onEditChange({ column, value, record }: any) {
+      // 本例
+      if (column.prop === 'id') {
+        record.editValueRefs.name4.value = `${value}`
+      }
+      console.log(column, value, record)
     }
 
     return {
       registerTable,
-      handleEditEnd,
-      handleEditCancel,
-      beforeEditSubmit
+      handleEdit,
+      createActions,
+      onEditChange
     }
   }
 })
