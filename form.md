@@ -207,7 +207,8 @@ updateSchema([
 |submitOnReset|点击重置表单时 触发一次查询| `boolean`|`false`|
 |submitOnChange|表单变化时自动触发查询| `boolean`|`false`|
 |baseRowStyle|配置所有 Row 的 style 样式| `CSSProperties`|-|
-|baseColProps|配置所有选子项的 ColProps，不需要逐个配置，子项也可单独配置优先与全局 | - |`Partial<ColEx>`|-||schemas|表单配置，见下方 `FormSchema` 配置 | `FormSchema[]`|`[]`|
+|baseColProps|配置所有选子项的 ColProps，不需要逐个配置，子项也可单独配置优先与全局 | - |`Partial<ColEx>`|-|
+|schemas|表单配置，见下方 `FormSchema` 配置 | `FormSchema[]`|`[]`|
 |mergeDynamicData|额外传递到子组件的参数 values| `Recordable`|`{}`|
 |compact|紧凑类型表单，减少 margin-bottom| `boolean`|`false`|
 |emptySpan|空白行格,可以是数值或者 col 对象 数| `number \| Partial<ColEx>`|`0`|
