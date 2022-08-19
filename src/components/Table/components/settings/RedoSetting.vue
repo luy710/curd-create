@@ -21,8 +21,6 @@ export default defineComponent({
     const table = useTableContext()
 
     function redo() {
-      console.log('redo: ')
-
       table.reload()
     }
 
