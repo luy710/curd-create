@@ -166,48 +166,6 @@ const schemas: FormSchema[] = [
       ]
     }
   }
-  // {
-  //   field: 'field8',
-  //   component: 'ApiCascader',
-  //   label: '联动',
-  //   colProps: {
-  //     span: 8
-  //   },
-  //   componentProps: {
-  //     api: areaRecord,
-  //     apiParamKey: 'parentCode',
-  //     dataField: 'data',
-  //     labelField: 'name',
-  //     valueField: 'code',
-  //     initFetchParams: {
-  //       parentCode: ''
-  //     },
-  //     isLeaf: (record) => {
-  //       return !(record.levelType < 3)
-  //     }
-  //   }
-  // },
-  // {
-  //   field: 'field9',
-  //   component: 'ApiCascader',
-  //   label: '联动回显',
-  //   colProps: {
-  //     span: 8
-  //   },
-  //   componentProps: {
-  //     api: areaRecord,
-  //     apiParamKey: 'parentCode',
-  //     dataField: 'data',
-  //     labelField: 'name',
-  //     valueField: 'code',
-  //     initFetchParams: {
-  //       parentCode: ''
-  //     },
-  //     isLeaf: (record) => {
-  //       return !(record.levelType < 3)
-  //     }
-  //   }
-  // }
 ]
 
 export default defineComponent({

@@ -3,7 +3,7 @@ import { FormSchema, FormProps, FormActionType, Rule, RenderCallbackParams } fro
 import { TableActionType } from '@/components/Table/types/table'
 import { BasicHelp } from '@/components/Basic'
 import { isFunction, isBoolean, isNull } from '@/components/utils/is'
-import { cloneDeep, upperFirst } from 'lodash-es'
+import { cloneDeep, upperFirst, pick } from 'lodash-es'
 import { createPlaceholderMessage, setComponentRuleType } from '../helper'
 import { getSlot } from '@/components/utils/tsxHelper'
 import { componentMap } from '../componentMap'
@@ -291,7 +291,8 @@ export default defineComponent({
     }
 
     const renderItem = () => {
-      const { itemProps, slot, render, field, suffix, component } = props.schema
+      const { slot, render, field, suffix, component } = props.schema
+      const itemProps = pick(props.schema, ['size', 'required', 'showMessage', 'inlineMessage', 'error', 'labelWidth'])
       if (component === 'Divider') {
         return (
           <el-col span={24}>

@@ -12,7 +12,7 @@ export const basicProps = {
   // 标签宽度  固定宽度
   labelWidth: {
     type: [Number, String] as PropType<number | string>,
-    default: 0
+    default: 50
   },
   labelPosition: {
     type: String,
@@ -167,13 +167,8 @@ export const basicProps = {
   // 自定义重置函数
   resetFunc: Function as PropType<() => Promise<void>>,
   submitFunc: Function as PropType<() => Promise<void>>,
-
-  labelCol: Object as PropType<Partial<ColEx>>,
-
   tableAction: {
     type: Object as PropType<TableActionType>,
     default: () => ({})
-  },
-
-  wrapperCol: Object as PropType<Partial<ColEx>>
+  }
 }
