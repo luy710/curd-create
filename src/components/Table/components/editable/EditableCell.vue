@@ -102,6 +102,11 @@ export default defineComponent({
       if (['Input', 'InputNumber'].includes(getComponent.value)) {
         eventProp = 'onInput'
       }
+
+      if (['DatePicker', 'TimePicker'].includes(getComponent.value)) {
+        eventProp = 'onUpdate:modelValue'
+      }
+
       return {
         [eventProp]: handleChange
       }
@@ -479,16 +484,21 @@ export default defineComponent({
 .editable-cell {
   position: relative;
   min-height: 23px;
+  .el-date-editor.el-input,
+  .el-date-editor.el-input__wrapper {
+    width: unset;
+  }
 
   &__wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
 
-    > .el-select, .el-input-number {
+    > .el-select,
+    .el-input-number {
       min-width: calc(100% - 48px);
     }
-    > .el-tooltip__trigger{
+    > .el-tooltip__trigger {
       flex: 1;
     }
 

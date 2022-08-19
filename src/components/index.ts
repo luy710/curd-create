@@ -19,4 +19,4 @@ export { default as TableImg } from './Table/components/TableImg.vue'
 
 export * from './Table/types/table'
 export { useTable } from './Table/hooks/useTable'
-// export type { EditRecordRow } from './Table/components/editable';
+export type { EditRecordRow } from './Table/components/editable';
