@@ -9,7 +9,7 @@ import { getSlot } from '@/components/utils/tsxHelper'
 export function useTableHeader(propsRef: ComputedRef<BasicTableProps>, slots: Slots, handlers: InnerHandlers) {
   const getHeaderProps = computed((): Recordable => {
     const { title, showTableSetting, titleHelpMessage, tableSetting } = unref(propsRef)
-    console.log('title: ', title)
+
     const hideTitle = !slots.tableTitle && !title && !slots.toolbar && !showTableSetting
     if (hideTitle && !isString(title)) {
       return {}

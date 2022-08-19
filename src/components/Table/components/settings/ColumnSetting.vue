@@ -335,7 +335,6 @@ export default defineComponent({
       })
 
       emit('columns-change', data)
-      console.log('data: ', data);
     }
 
     return {

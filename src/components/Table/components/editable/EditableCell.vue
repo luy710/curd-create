@@ -126,7 +126,7 @@ export default defineComponent({
       if (!dynamicChange) {
         return
       }
-      
+
       if (!record) return false
       const { columnKey, prop } = column
       if (!columnKey && !prop) return
@@ -434,9 +434,7 @@ export default defineComponent({
                   column: this.column,
                   index: this.index
                 })
-              : this.getValues
-              ? this.getValues
-              : '\u00A0'}
+              : this.getValues}
           </div>
           {!this.column.editRow && (
             <el-icon class={`${this.prefixCls}__normal-icon`}>
