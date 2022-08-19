@@ -580,7 +580,7 @@ export default defineComponent({
 </script>
 ```
 
-### BasicForm 插槽
+### BasicForm插槽
 
 | 名称          | 说明         |
 | ------------- | ------------ |

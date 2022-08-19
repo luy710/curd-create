@@ -122,7 +122,7 @@ export type CellFormat =
 export interface BasicColumn extends Partial<Omit<TableColumnCtx<Recordable>, 'children' | 'columns'>> {
   children?: BasicColumn[]
   columns?: BasicColumn[]
-  customTitle?: VNode
+  customLabel?: VNode
   flag?: 'DEFAULT' | 'ACTION'
   // 是否是多级表头
   isMulti?: boolean

@@ -5,6 +5,7 @@
       titleHelpMessage="温馨提醒"
       :columns="columns"
       :data="data"
+      :inset="true"
       :canResize="canResize"
       :loading="loading"
       :stripe="striped"

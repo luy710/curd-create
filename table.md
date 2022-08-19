@@ -379,7 +379,7 @@ register 用于注册 useTable，如果需要使用`useTable`提供的 api，必
 
 ## BasicTable属性
 
-> 部分属性如若没有请参考 element-plus 文档
+> 部分属性如若没有请参考 element-plus 文档， 以下为 TableProps 扩展参数
 
 | 属性 | 说明 | 类型 | 默认值 |
 | -- | -- | -- | -- |
@@ -479,3 +479,206 @@ export interface FetchSetting {
   totalField: string
 }
 ```
+
+## TableColumn 属性
+
+**BasicColumn**
+
+> 除了 element-plus table-column配置[ TableColumnCtx ]外，以下为扩展参数
+
+| 属性 | 说明 | 类型 | 默认值 |
+| -- | -- | -- | -- |
+| children | 多级表头子集与 columns属性作用一致，如果有数据则认为是多级表头 | `BasicColumn[]` | - |
+| columns | 多级表头子集与 children属性作用一致，如果有数据则认为是多级表头 |  `BasicColumn[]` | - |
+| customLabel | tableColumn的自定义label | `VNode \| string` | - |
+| flag | tableColumn的类型标记 | `'DEFAULT' \| 'ACTION'` | - |
+| slots | 自定义插槽 | `Recordable<{cellSlot?: string; headerSlot?: string}>` | - | 
+| defaultHidden | 是否默认隐藏 | `boolean` | `false` |
+| helpMessage | 该列的解释信息 | `string \| string[]` | - |
+| helpComponentProps | 提示信息组件的props | `Partial<HelpComponentProps>` | - |
+| format | 单元格内的数据格式化，主要是针对时间戳 | `CellFormat` | - |
+| edit | 是否开启单元格编辑 | `boolean` | `false` |
+| editRow | 是否开启整行编辑 | `boolean` | `false` |
+| editable | 是否处于编辑状态 | `boolean` | `false` |
+| editComponent | 行内编辑组件的类型 | `ComponentType` | `Input` |
+| editComponentProps | 对应编辑组件的 props | `((opt: {text: string \| number \| boolean \| Recordable; record: Recordable; column: BasicColumn; index: number; }) => Recordable) \| Recordable` | - |
+| editRule  | 对应编辑组件的表单校验 | `((text: string, record: Recordable) => Promise<string>)` | - |
+| editValueMap | 对应单元格值枚举 | `(value: any) => string` | - |
+| onEditRow | 触发行编辑 | `（）=>void`| - |
+| ifShow | 业务控制是否显示 | `boolean \| ((column: BasicColumn) => boolean)` | - | 
+| editRender | 自定义修改后显示的内容 | `((opt: {text: string \| number \| boolean \| Recordable; record: Recordable; column: BasicColumn; index: number; }) => VNodeChild \| JSX.Element` | - |
+| editDynamicDisabled | 动态 Disabled | `boolean \| ((record: Recordable) => boolean)` | - |
+
+**ComponentType**
+
+```ts
+export type ComponentType =
+  | 'Input'
+  | 'InputNumber'
+  | 'Select'
+  | 'ApiSelect'
+  | 'Checkbox'
+  | 'Switch'
+  | 'DatePicker'  
+  | 'TimePicker'; 
+```
+
+
+**HelpComponentProps**
+```ts
+export interface HelpComponentProps {
+  maxWidth: string
+  // Whether to display the serial number
+  showIndex: boolean
+  // Text list
+  text: any
+  // colour
+  color: string
+  // font size
+  fontSize: string
+  icon: string
+  absolute: boolean
+  // Positioning
+  position: any
+}
+```
+
+**CellFormat**
+```ts
+export type CellFormat =
+  | string
+  | ((text: string, record: Recordable, index: number) => string | number)
+  | Map<string | number, any>
+```
+
+## BasicTable 事件
+
+> 除以下事件外，官方文档内的 event 也都支持，具体可以参考 element-plus table 事件
+
+| 事件             | 回调参数                                | 说明                                |
+| ---------------- | --------------------------------------- | ----------------------------------- |
+| fetch-success    | `Function({items,total})`               | 接口请求成功后触发                  |
+| fetch-error      | `Function(error)`                       | 错误信息                            |
+| register         | `Function(tableAction, formActions)`    | 表单注册事件                        |
+| columns-change   | `Function(record[])`                    | 列表columns变化时触发               |
+| change           | `Function(PaginationProps, filterInfo, sortInfo)`| 分页、排序、过滤条件变化时触发|
+| sort-change      | `Function(sortInfo)`                    | 排序参数变化时触发                 |
+| filter-change    | `Function(filterInfo)`                  | 过滤条件变化时触发                 |
+| edit-end         | `Function({record, index, key, value})` | 单元格编辑完成触发                  |
+| edit-cancel      | `Function({record, index, key, value})` | 单元格取消编辑触发                  |
+| edit-row-end     | `Function()`                            | 行编辑结束触发                      |
+| edit-change      | `Function({column,value,record})`       | 单元格编辑组件的 value 发生变化时触发 |
+
+::: tip edit-change 说明
+
+:::
+
+```javascript
+      function onEditChange({ column, record }) {
+        // 当同一行的单价或者数量发生变化时，更新合计金额（三个数据均为当前行编辑组件的值）
+        if (column.dataIndex === 'qty' || column.dataIndex === 'price') {
+          const { editValueRefs: { total, qty, price } } = record;
+          total.value = unref(qty) * unref(price);
+        }
+      }
+```
+
+## 插槽
+
+::: tip 温馨提醒
+
+除以下参数外，支持官方文档内的 'append', 'empty' 两个 slot 
+
+:::
+
+| 名称              | 说明             | 
+| ----------------- | ---------------- | 
+| tableTitle        | 表格顶部左侧区域 | 
+| toolbar           | 表格顶部右侧区域 | 
+| expandedRowRender | 展开行区域，如若expandColumnProps设置了slots，则优先使用expandColumnProps的配置 | 
+| headerTop | 表格顶部区域（标题上方）       |
+
+
+## BasicForm-Slots
+
+当开启 form 表单后。以`form-xxxx`为前缀的 slot 会被视为 form 的 slot
+
+xxxx 为 form 组件的 slot。具体参考[form 组件文档](./form.md#BasicForm插槽)
+
+例如
+
+```
+form-submitBefore
+```
+
+
+## 内置组件（只能用于表格内部）
+
+### TableAction
+
+用于表格右侧操作列渲染
+
+#### Props
+
+| 属性                  | 类型           | 默认值  | 可选值       | 说明                            |
+| --------------------- | -------------- | ------- | ------------ | ------------------------------- |
+| actions               | `ActionItem[]` | -       | -            | 右侧操作列按钮列表              |
+| dropDownActions       | `ActionItem[]` | -       | -            | 右侧操作列更多下拉按钮列表      |
+| stopButtonPropagation | `boolean`      | `false` | `true/false` | 是否阻止操作按钮的click事件冒泡 |
+
+**ActionItem**
+
+```ts
+export interface ActionItem {
+  // 按钮文本
+  label: string;
+  // 是否禁用
+  disabled?: boolean;
+  // 按钮颜色
+  color?: 'success' | 'error' | 'warning';
+  // 按钮类型
+  type?: string;
+  // button组件props
+  props?: any;
+  // 按钮图标
+  icon?: VNode;
+  // 气泡确认框
+  popConfirm?: PopConfirm;
+  // 是否显示分隔线，v2.0.0+
+  divider?: boolean;
+  // 根据业务状态来控制当前列是否显示，v2.4.0+
+  ifShow?: boolean | ((action: ActionItem) => boolean);
+  // 点击回调
+  onClick?: Fn;
+  // Tooltip配置，2.5.3以上版本支持，可以配置为string，或者完整的tooltip属性
+  tooltip?: string | TooltipProps
+}
+```
+有关TooltipProps的说明，请参考[tooltip](https://element-plus.gitee.io/zh-CN/component/tooltip.html#属性)
+
+**PopConfirm**
+```ts
+export interface PopConfirm {
+  title: string;
+  okText?: string;
+  cancelText?: string;
+  confirm: Fn;
+  cancel?: Fn;
+  icon?: string;
+}
+```
+
+### TableImg
+
+用于渲染单元格图片,支持图片预览
+
+#### Props
+
+| 属性       | 类型       | 默认值  | 可选值       | 说明                             | 
+| ---------- | ---------- | ------- | ------------ | -------------------------------- | 
+| imgList    | `string[]` | -       | -            | 图片地址列表                     | 
+| size       | `number`   | -       | -            | 图片大小                         | 
+| simpleShow | `boolean`  | `false` | `true/false` | 简单显示模式（只显示第一张图片） | 
+| showBadge  | `boolean`  | `true`  | `true/false` | 简单模式下是否显示计数Badge      | 
+| margin     | `number`   | 4       | -            | 常规模式下的图片间距             | 
+| srcPrefix  | `string`   | -       | -            | 在每一个图片src前插入的内容      | 

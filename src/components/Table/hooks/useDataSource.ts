@@ -87,7 +87,7 @@ export function useDataSource(
     } else {
       searchState.filterInfo = Object.assign(searchState.filterInfo, filter)
     }
-    emit('filterChange', searchState.filterInfo)
+    emit('filter-change', searchState.filterInfo)
     handleChange()
     if (!filterFetchImmediate) return
     fetch()
@@ -100,7 +100,7 @@ export function useDataSource(
     } else {
       searchState.filterInfo = omit(searchState.filterInfo, columnKeys)
     }
-    emit('filterChange', searchState.filterInfo)
+    emit('filter-change', searchState.filterInfo)
     handleChange()
     if (!filterFetchImmediate) return
     fetch()
@@ -114,7 +114,7 @@ export function useDataSource(
     } else {
       searchState.sortInfo = sort
     }
-    emit('sortChange', searchState.sortInfo)
+    emit('sort-change', searchState.sortInfo)
     handleChange()
     if (!sortFetchImmediate) return
     fetch()
@@ -123,7 +123,7 @@ export function useDataSource(
   const handleClearSort = () => {
     const { sortFetchImmediate } = unref(propsRef)
     searchState.sortInfo = {}
-    emit('sortChange', {})
+    emit('sort-change', {})
     handleChange()
     if (!sortFetchImmediate) return
     fetch()

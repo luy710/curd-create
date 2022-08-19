@@ -165,7 +165,7 @@ export default defineComponent({
       const ret: Array<Recordable> = []
       table.getColumns({ ignoreAction: true, ignoreIndex: true, ignoreExpand: true }).forEach((item) => {
         ret.push({
-          label: (item.label as string) || (item.customTitle as unknown as string),
+          label: (item.label as string) || (item.customLabel as unknown as string),
           value: (item.prop || item.label) as string,
           ...item
         })
@@ -335,7 +335,7 @@ export default defineComponent({
       })
 
       emit('columns-change', data)
-      console.log('data: ', data);
+      console.log('data: ', data)
     }
 
     return {

@@ -107,8 +107,8 @@ const emit = defineEmits([
   // 'headerClick',
   // 'headerContextmenu',
   'change',
-  'sortChange',
-  'filterChange'
+  'sort-change',
+  'filter-change'
   // 'currentChange',
   // 'headerDragend',
   // 'expandChange'
@@ -369,6 +369,10 @@ emit('register', tableAction, formActions)
   .el-pagination {
     margin-top: 10px;
     justify-content: right;
+  }
+
+  &--inset {
+    padding: 0;
   }
 }
 </style>
