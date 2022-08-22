@@ -2,7 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@element-plus/icons-vue': ^2.0.6
-  '@hobby/curd-create': ^0.0.9
+  '@hobby/curd-create': ^0.0.5
   '@types/lodash-es': ^4.17.6
   '@types/mockjs': ^1.0.6
   '@types/node': ^18.0.4
@@ -37,7 +37,7 @@ specifiers:
 
 dependencies:
   '@element-plus/icons-vue': 2.0.6_vue@3.2.37
-  '@hobby/curd-create': 0.0.9
+  '@hobby/curd-create': 0.0.5
   '@types/node': 18.0.4
   '@vueuse/core': 9.1.0_vue@3.2.37
   axios: 0.27.2
@@ -427,63 +427,9 @@ packages:
     dev: false
 
   /@hobby/curd-create/0.0.5:
-    resolution: {integrity: sha512-bdRLmdI+u7nzouuI/S37KD2FBreA8a1gswI6Tg6YNJWHq6Tes2wFDB7UqhLT2RdlfJ75LJLr80gx3sch/8C9Hg==}
+    resolution: {integrity: sha512-Pqxf7qvay/bGDCHlwE9ebj4bDE6KgwqcQznGKut9IDN5CU5eE8/+cCfqYZFe4ot8VZouqYq2Kac/6WigKwznYw==}
     dependencies:
       '@element-plus/icons-vue': 2.0.6_vue@3.2.37
-      '@types/node': 18.0.4
-      '@vueuse/core': 9.1.0_vue@3.2.37
-      axios: 0.27.2
-      dayjs: 1.11.3
-      element-plus: 2.2.11_vue@3.2.37
-      lodash-es: 4.17.21
-      vue: 3.2.37
-      vue-router: 4.1.2_vue@3.2.37
-    transitivePeerDependencies:
-      - '@vue/composition-api'
-      - debug
-    dev: false
-
-  /@hobby/curd-create/0.0.6:
-    resolution: {integrity: sha512-XNVwzoxnY76nA4i5aTE9PiebTwBy920OBT6XfUuBqj18pBX69kO5VuKzvZz4K57L5lztRShvu588LQlswZrekQ==}
-    dependencies:
-      '@element-plus/icons-vue': 2.0.6_vue@3.2.37
-      '@hobby/curd-create': 0.0.5
-      '@types/node': 18.0.4
-      '@vueuse/core': 9.1.0_vue@3.2.37
-      axios: 0.27.2
-      dayjs: 1.11.3
-      element-plus: 2.2.11_vue@3.2.37
-      lodash-es: 4.17.21
-      vue: 3.2.37
-      vue-router: 4.1.2_vue@3.2.37
-    transitivePeerDependencies:
-      - '@vue/composition-api'
-      - debug
-    dev: false
-
-  /@hobby/curd-create/0.0.7:
-    resolution: {integrity: sha512-3foRJarb37G0tM5slpYJpN37CcdUFRTFKl7tfXyQ3H8RaHuvcD7cw+p82oPncuLh8S4T+RWOY+vZ8Hh+dk4oKA==}
-    dependencies:
-      '@element-plus/icons-vue': 2.0.6_vue@3.2.37
-      '@hobby/curd-create': 0.0.6
-      '@types/node': 18.0.4
-      '@vueuse/core': 9.1.0_vue@3.2.37
-      axios: 0.27.2
-      dayjs: 1.11.3
-      element-plus: 2.2.11_vue@3.2.37
-      lodash-es: 4.17.21
-      vue: 3.2.37
-      vue-router: 4.1.2_vue@3.2.37
-    transitivePeerDependencies:
-      - '@vue/composition-api'
-      - debug
-    dev: false
-
-  /@hobby/curd-create/0.0.9:
-    resolution: {integrity: sha512-Ay5XxS0pFMF5fcOFLHN3xiBpx38HuPtE8lnxcrqVeuk16hIL5ZSDdiTksQFmp3LqzVap1DqynYkgRf8BXjh5jA==}
-    dependencies:
-      '@element-plus/icons-vue': 2.0.6_vue@3.2.37
-      '@hobby/curd-create': 0.0.7
       '@types/node': 18.0.4
       '@vueuse/core': 9.1.0_vue@3.2.37
       axios: 0.27.2
@@ -1160,7 +1106,7 @@ packages:
     dev: false
 
   /commander/2.20.3:
-    resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
+    resolution: {integrity: sha1-/UhehMA+tIgcIHIrpIA16FMa6zM=}
     requiresBuild: true
     dev: true
     optional: true
@@ -1819,7 +1765,7 @@ packages:
     dev: true
 
   /fsevents/2.3.2:
-    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
+    resolution: {integrity: sha1-ilJveLj99GI7cJ4Ll1xSwkwC/Ro=}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
     requiresBuild: true
