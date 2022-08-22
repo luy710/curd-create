@@ -1,6 +1,6 @@
 {
   "name": "@hobby/curd-create",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "license": "MIT",
   "author": {
     "name": "makai",
@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.6",
+    "@hobby/curd-create": "^0.0.5",
     "@types/node": "^18.0.4",
     "@vueuse/core": "^9.1.0",
     "axios": "^0.27.2",
