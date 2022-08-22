@@ -9,7 +9,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { BasicTable, useTable } from '@/components/index'
+import { BasicTable, useTable } from '@hobby/curd-create'
 import { getMultipleHeaderColumns } from './tableData'
 
 import { demoListApi } from '@/api/demo/table'

@@ -15,7 +15,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { BasicTable, useTable, BasicHelp } from '@/components/index'
+import { BasicTable, useTable, BasicHelp } from '@hobby/curd-create'
 import { getCustomHeaderColumns } from './tableData'
 import { demoListApi } from '@/api/demo/table'
 // import HeaderCell from '@/components/Table/components/HeaderCell.vue'

@@ -1,4 +1,4 @@
-import { FormProps, FormSchema } from '@/components/index';
+import { FormProps, FormSchema } from '@hobby/curd-create';
 import { BasicColumn } from '@/components/Table/types/table';
 
 export function getBasicColumns(): BasicColumn[] {

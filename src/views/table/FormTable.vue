@@ -24,7 +24,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { BasicTable, useTable } from '@/components/index'
+import { BasicTable, useTable } from '@hobby/curd-create'
 import { getBasicColumns, getFormConfig } from './tableData'
 
 import { demoListApi } from '@/api/demo/table'

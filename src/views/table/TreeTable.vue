@@ -12,7 +12,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { BasicTable, useTable } from '@/components/index'
+import { BasicTable, useTable } from '@hobby/curd-create'
 import { getBasicColumns, getTreeTableData } from './tableData'
 
 export default defineComponent({

@@ -4,7 +4,7 @@
       v-if="getBindValues.useSearchForm"
       ref="formRef"
       submitOnReset
-      v-bind="getFormProps"
+      v-bind="(getFormProps as any)"
       :tableAction="tableAction"
       @register="registerForm"
       @submit="handleSearchInfoChange"

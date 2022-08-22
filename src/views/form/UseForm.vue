@@ -53,7 +53,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { BasicForm, FormSchema, useForm } from '@/components/index'
+import { BasicForm, FormSchema, useForm } from '@hobby/curd-create'
 import { areaRecord } from '@/api/demo/cascader'
 import { ElMessage } from 'element-plus'
 

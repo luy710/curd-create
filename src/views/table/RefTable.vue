@@ -29,7 +29,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, unref } from 'vue'
-import { BasicTable, TableActionType } from '@/components/index'
+import { BasicTable, TableActionType } from '@hobby/curd-create'
 import { getBasicColumns, getBasicShortColumns } from './tableData'
 import { demoListApi } from '@/api/demo/table'
 import { ElMessage } from 'element-plus'

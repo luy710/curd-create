@@ -13,7 +13,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { BasicForm, FormSchema, useForm } from '@/components/index'
+import { BasicForm, FormSchema, useForm } from '@hobby/curd-create'
 
 const getSchamas = (): FormSchema[] => {
   return [

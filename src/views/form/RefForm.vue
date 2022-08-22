@@ -48,7 +48,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { BasicForm, FormSchema, FormActionType, FormProps } from '@/components/index'
+import { BasicForm, FormSchema, FormActionType, FormProps } from '@hobby/curd-create'
 import { ElMessage } from 'element-plus'
 
 const schemas: FormSchema[] = [

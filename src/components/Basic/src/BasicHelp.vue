@@ -2,6 +2,7 @@
 import type { CSSProperties, PropType } from 'vue'
 import { Warning } from '@element-plus/icons-vue'
 import { isString, isArray } from '@/components/utils/is'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'BasicHelp',

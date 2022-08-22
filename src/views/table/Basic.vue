@@ -90,7 +90,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, h } from 'vue'
-import { BasicTable, ColumnChangeParam, TableAction } from '@/components/index'
+import { BasicTable, ColumnChangeParam, TableAction } from '@hobby/curd-create'
 import { getBasicColumns, getBasicData } from './tableData'
 import { Edit } from '@element-plus/icons-vue'
 export default defineComponent({

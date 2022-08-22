@@ -5,7 +5,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { BasicTable, useTable } from '@/components/index'
+import { BasicTable, useTable } from '@hobby/curd-create'
 import { getBasicColumns } from './tableData'
 import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults'
 import { demoListApi } from '@/api/demo/table'

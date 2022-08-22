@@ -18,7 +18,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { BasicTable, ColumnChangeParam, useTable } from '@/components/index'
+import { BasicTable, ColumnChangeParam, useTable } from '@hobby/curd-create'
 import { getBasicColumns, getBasicShortColumns } from './tableData'
 import { ElMessage } from 'element-plus'
 import { demoListApi } from '@/api/demo/table'

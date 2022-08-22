@@ -25,7 +25,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { BasicTable, useTable, BasicColumn, TableAction } from '@/components/index'
+import { BasicTable, useTable, BasicColumn, TableAction } from '@hobby/curd-create'
 
 import { demoListApi } from '@/api/demo/table'
 const columns: BasicColumn[] = [

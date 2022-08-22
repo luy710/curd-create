@@ -10,7 +10,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { BasicForm, useForm } from '@/components/index'
+import { BasicForm, useForm } from '@hobby/curd-create'
 import { ElInput as Input } from 'element-plus'
 
 export default defineComponent({

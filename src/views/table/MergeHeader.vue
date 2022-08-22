@@ -5,7 +5,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { BasicTable, useTable, BasicColumn } from '@/components/index'
+import { BasicTable, useTable, BasicColumn } from '@hobby/curd-create'
 import { getMergeHeaderColumns } from './tableData'
 
 import { demoListApi } from '@/api/demo/table'

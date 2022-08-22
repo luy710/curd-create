@@ -13,7 +13,7 @@ import { defineComponent, h } from 'vue'
 //   import { BasicTable, useTable, BasicColumn } from '/@/components/Table';
 import { optionsListApi } from '@/api/demo/select'
 import { BasicColumn } from '@/components/Table/types/table'
-import { BasicTable, ColumnChangeParam, TableAction, useTable } from '@/components/index'
+import { BasicTable, ColumnChangeParam, TableAction, useTable } from '@hobby/curd-create'
 import { demoListApi } from '@/api/demo/table'
 import { treeOptionsListApi } from '@/api/demo/tree'
 

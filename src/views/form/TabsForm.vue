@@ -18,7 +18,7 @@
 <script lang="ts">
 import { ref, defineComponent } from 'vue'
 import { omit, merge as deepMerge } from 'lodash-es'
-import { BasicForm, FormSchema, useForm, FormProps, UseFormReturnType } from '@/components/index'
+import { BasicForm, FormSchema, useForm, FormProps, UseFormReturnType } from '@hobby/curd-create'
 import { ElMessage } from 'element-plus'
 
 export default defineComponent({

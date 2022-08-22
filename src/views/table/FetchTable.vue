@@ -10,7 +10,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { BasicTable, useTable } from '@/components/index'
+import { BasicTable, useTable } from '@hobby/curd-create'
 import { getBasicColumns } from './tableData'
 import { omit } from 'lodash-es'
 import { demoListApi } from '@/api/demo/table'

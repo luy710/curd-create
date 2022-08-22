@@ -81,7 +81,7 @@
 import { defineComponent, PropType, computed, toRaw } from 'vue'
 import { MoreFilled } from '@element-plus/icons-vue'
 import { ElDivider, ElTooltip, ElPopconfirm, ElDropdown, ElButton, ElIcon } from 'element-plus'
-
+import { SizeType } from '../types/table'
 import { ActionItem, TableActionType } from '@/components/Table/types/table'
 
 import { useTableContext } from '../hooks/useTableContext'
@@ -134,7 +134,7 @@ export default defineComponent({
     if (!props.outside) {
       table = useTableContext()
     }
-    const getSize = computed(() => props.size)
+    const getSize = computed(() => props.size as SizeType)
 
     function isIfShow(action: ActionItem): boolean {
       const ifShow = action.ifShow

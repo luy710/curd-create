@@ -9,11 +9,11 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import type { ActionItem, EditRecordRow } from '@/components/index'
+import type { ActionItem, EditRecordRow } from '@hobby/curd-create'
 import { cloneDeep } from 'lodash-es'
 import { optionsListApi } from '@/api/demo/select'
 import { BasicColumn } from '@/components/Table/types/table'
-import { BasicTable, ColumnChangeParam, TableAction, useTable } from '@/components/index'
+import { BasicTable, ColumnChangeParam, TableAction, useTable } from '@hobby/curd-create'
 import { demoListApi } from '@/api/demo/table'
 import { treeOptionsListApi } from '@/api/demo/tree'
 
