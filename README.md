@@ -1436,19 +1436,31 @@ export interface PopConfirm {
 
 
 ## Q&A
-- el-input组件使用onchange为什么不能在输入的触发？
+- 1. el-input组件使用onchange为什么不能在输入的触发？
 > ant-design-vue自定义事件如下 onChange: handleChange,onInput: handleChange,触发的同一个事件
 > element-plus自定义事件如下，>    onInput: handleInput,onChange: handleChange,则为两个不同事件
 
-- element-plus双向绑定事件的关键key 使用的是modelValue/v-model
+- 2. element-plus双向绑定事件的关键key 使用的是modelValue/v-model
 
-- vite 库构建模式下，external设置了 element-plus仍会被按需打包进去
+- 3. vite 库构建模式下，external设置了 element-plus仍会被按需打包进去
 ```ts
 // 主要是因为构建时使用了一下依赖，那么构建时会默认引入，造成external失效
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 
 ```
+- 4. 组件引入错误： ReferenceError: defineComponent is not defined
+> 请使用setup语法，并自动导入vue
+```ts
+import AutoImport from 'unplugin-auto-import/vite'
 
+plugins: [
+  AutoImport({
+    imports: ['vue'],
+    dts: './types/auto-imports.d.ts',
+    resolvers: [ElementPlusResolver()]
+  })
+]
+```
 
 
