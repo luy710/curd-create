@@ -77,6 +77,7 @@ interface Branch {
 }
 function init() {
   const ctx = canvasRef.value?.getContext('2d')
+  // @ts-ignore
   ctx.strokeStyle = '#F2F3F5'
   step({
     start: { x: 0, y: 0 },
