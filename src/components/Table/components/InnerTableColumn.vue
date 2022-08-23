@@ -2,7 +2,7 @@
 import { BasicColumn } from '../types/table'
 import { ElTableColumn } from 'element-plus'
 import { renderHeader, renderCell, CI, CellRenderParams } from './renderCell'
-import { Slots } from 'vue'
+import { Slots, defineComponent, computed } from 'vue'
 
 export default defineComponent({
   name: 'InnerTableColumn',

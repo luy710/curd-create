@@ -4,7 +4,7 @@
   </span>
 </template>
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, defineProps } from 'vue'
 // import { Icon } from '/@/components/Icon'
 const props = defineProps({
   /**

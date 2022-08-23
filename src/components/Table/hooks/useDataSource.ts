@@ -6,7 +6,6 @@ import { buildUUID } from '@/components/utils/uuid'
 import { isFunction, isBoolean } from '@/components/utils/is'
 import { get, cloneDeep, merge, omit } from 'lodash-es'
 import { FETCH_SETTING, ROW_KEY, PAGE_SIZE } from '../constant'
-import { useDebounceFn } from '@vueuse/core'
 
 interface ActionType {
   getPaginationInfo: ComputedRef<boolean | Partial<PaginationProps>>

@@ -62,12 +62,10 @@ onMounted(() => {
   z-index: 1;
 }
 </style> -->
-<!-- <script setup lang="ts">
-const el = ref<HTMLCanvasElement>()
-const ctx = computed(() => {
-  if (!el.value) return
-  return el.value.getContext('2d')
-})
+<script setup lang="ts">
+import { ref, unref, onMounted } from 'vue'
+
+const canvasRef = ref<HTMLCanvasElement>()
 interface Point {
   x: number
   y: number
@@ -78,7 +76,8 @@ interface Branch {
   theta: number
 }
 function init() {
-  ctx.value.strokeStyle = '#fff5'
+  const ctx = canvasRef.value?.getContext('2d')
+  ctx.strokeStyle = '#F2F3F5'
   step({
     start: { x: 0, y: 0 },
     length: 10,
@@ -135,6 +134,7 @@ function startFrame() {
 }
 startFrame()
 function lineTo(p1: Point, p2: Point) {
+  const ctx = canvasRef.value?.getContext('2d')
   const _ctx = unref(ctx)
   if (!_ctx) return
   _ctx.beginPath()
@@ -154,9 +154,9 @@ function drawBranch(b: Branch) {
 onMounted(() => {
   init()
 })
-</script> -->
+</script>
 
 <template>
-  <canvas ref="el" width="2000" height="2000" scale-50 origin-top-left />
+  <canvas ref="canvasRef" width="800" height="800" scale-50 origin-top-left />
 </template>
 >

@@ -2,6 +2,7 @@ import type { FormProps, FormActionType, FormSchema, UseFormReturnType } from '.
 import type { FormItemProp } from 'element-plus'
 import { DynamicProps } from '#/utils.d'
 import { getDynamicProps } from '@/components/utils'
+import { ref, unref, nextTick, onUnmounted, watch } from 'vue'
 
 export declare type ValidateFields = (nameList?: FormItemProp) => Promise<Recordable>
 

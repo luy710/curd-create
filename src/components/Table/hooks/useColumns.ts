@@ -1,12 +1,11 @@
 import type { BasicColumn, BasicTableProps, CellFormat, GetColumnsParams } from '../types/table'
 import type { ComputedRef } from 'vue'
 import { computed, Ref, ref, reactive, toRaw, unref, watch } from 'vue'
-import { renderEditCell } from '../components/editable'
 import { isArray, isBoolean, isFunction, isMap, isString } from '@/components/utils/is'
 import { cloneDeep, isEqual, omit } from 'lodash-es'
 import { buildUUID } from '@/components/utils/uuid'
 import { formatToDate } from '@/components/utils/dateUtil'
-import { ACTION_COLUMN_FLAG, DEFAULT_ALIGN, INDEX_COLUMN_FLAG, PAGE_SIZE } from '../constant'
+import { ACTION_COLUMN_FLAG } from '../constant'
 
 // 二次处理action 列
 function handleActionColumn(propsRef: ComputedRef<BasicTableProps>, columns: BasicColumn[]) {

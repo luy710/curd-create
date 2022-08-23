@@ -60,7 +60,8 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { BasicForm, useForm, FormProps } from '@/components/index'
+import { defineEmits, defineProps, ref, computed, unref, useSlots, useAttrs, toRaw } from 'vue'
+import { BasicForm, useForm } from '@/components/index'
 import { baseProps } from './props'
 import { omit, pick } from 'lodash-es'
 import { isBoolean, isFunction, isString } from '@/components/utils/is'
@@ -82,7 +83,7 @@ import { useTableHeader } from './hooks/useTableHeader'
 import { createTableContext } from './hooks/useTableContext'
 import { useColumns } from './hooks/useColumns'
 import { useTableHeight } from './hooks/useTableHeight'
-import { TableProps } from 'element-plus/es/components/table/src/table/defaults'
+
 // 定义emit事件
 const emit = defineEmits([
   'fetch-success',

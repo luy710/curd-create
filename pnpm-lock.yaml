@@ -2,7 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@element-plus/icons-vue': ^2.0.6
-  '@hobby/curd-create': ^0.0.5
+  '@hobby/curd-create': ^0.0.9
   '@types/lodash-es': ^4.17.6
   '@types/mockjs': ^1.0.6
   '@types/node': ^18.0.4
@@ -37,7 +37,7 @@ specifiers:
 
 dependencies:
   '@element-plus/icons-vue': 2.0.6_vue@3.2.37
-  '@hobby/curd-create': 0.0.5
+  '@hobby/curd-create': 0.0.9_re2t36pugp2ht6wvay4di5rewe
   '@types/node': 18.0.4
   '@vueuse/core': 9.1.0_vue@3.2.37
   axios: 0.27.2
@@ -426,21 +426,18 @@ packages:
       '@floating-ui/core': 0.7.3
     dev: false
 
-  /@hobby/curd-create/0.0.5:
-    resolution: {integrity: sha512-Pqxf7qvay/bGDCHlwE9ebj4bDE6KgwqcQznGKut9IDN5CU5eE8/+cCfqYZFe4ot8VZouqYq2Kac/6WigKwznYw==}
+  /@hobby/curd-create/0.0.9_re2t36pugp2ht6wvay4di5rewe:
+    resolution: {integrity: sha512-pJX0Wl8mPQNPxb+6+XeXX2RCf0zPfA1NNmSb0Y57qCzEdEHrjpcolJWBE7+CChqVziY9JiWfVzM9BwzGVlXkIA==}
+    peerDependencies:
+      dayjs: ^1.11.3
+      element-plus: ^2.2.9
+      lodash-es: ^4.17.21
+      vue: ^3.2.25
     dependencies:
-      '@element-plus/icons-vue': 2.0.6_vue@3.2.37
-      '@types/node': 18.0.4
-      '@vueuse/core': 9.1.0_vue@3.2.37
-      axios: 0.27.2
       dayjs: 1.11.3
       element-plus: 2.2.11_vue@3.2.37
       lodash-es: 4.17.21
       vue: 3.2.37
-      vue-router: 4.1.2_vue@3.2.37
-    transitivePeerDependencies:
-      - '@vue/composition-api'
-      - debug
     dev: false
 
   /@humanwhocodes/config-array/0.9.5:

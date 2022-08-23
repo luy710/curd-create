@@ -1,6 +1,6 @@
 import type { BasicColumn } from '@/components/Table/types/table'
 
-import { h, Ref } from 'vue'
+import { h, Ref, unref } from 'vue'
 
 import EditableCell from './EditableCell.vue'
 import { isArray } from '@/components/utils/is'

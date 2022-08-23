@@ -1,5 +1,6 @@
 <script lang="tsx">
 import { ElPagination } from 'element-plus'
+import { defineComponent, computed } from 'vue'
 
 export default defineComponent({
   name: 'TablePagination',

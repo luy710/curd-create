@@ -45,7 +45,7 @@ export default ({ command }: ConfigEnv): UserConfig => {
           `
       }),
       AutoImport({
-        imports: ['vue'],
+        imports: [],
         dts: './types/auto-imports.d.ts',
         resolvers: isBuild ? [] : [ElementPlusResolver()]
       }),
