@@ -23,6 +23,7 @@
 import type { ColEx } from '../types/index'
 import type { ButtonOptions } from '../types/form'
 import { defineProps, computed, defineEmits } from 'vue'
+import { ElCol, ElButton, ElFormItem } from 'element-plus'
 // type xxx=x&{sex:string}
 // 可以实现接口和接口的交叉,但是只能赋值给type类型
 // type x=接口&接口
@@ -73,7 +74,7 @@ const props = defineProps({
 
 const emit = defineEmits(['toggle-advanced', 'reset', 'submit'])
 
-const actionColOpt = computed(() => {
+const actionColOpt = computed<any>(() => {
   const { showAdvancedButton, actionSpan: span, actionColOptions } = props
 
   const actionSpan = 24 - span

@@ -8,9 +8,10 @@ import { createPlaceholderMessage, setComponentRuleType } from '../helper'
 import { getSlot } from '@/components/utils/tsxHelper'
 import { componentMap } from '../componentMap'
 import { defineComponent, computed, unref } from 'vue'
-
+import { ElCol, ElDivider, ElFormItem } from 'element-plus'
 export default defineComponent({
   name: 'BasicFormItem',
+  components: { ElCol, ElDivider, ElFormItem },
   inheritAttrs: false,
   props: {
     schema: {
