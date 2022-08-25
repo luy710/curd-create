@@ -44,7 +44,7 @@
   </el-card>
 </template>
 <script lang="tsx">
-import { computed, defineComponent, unref, ref } from 'vue'
+import { computed, defineComponent, unref, ref, watch } from 'vue'
 import { BasicForm, FormSchema } from '@hobby/curd-create'
 import { AlarmClock } from '@element-plus/icons-vue'
 import { optionsListApi } from '@/api/demo/select'

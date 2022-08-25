@@ -75,8 +75,28 @@ interface Branch {
   length: number
   theta: number
 }
+
+const create = (canvas: HTMLCanvasElement, width: number = 400, height: number = 400, radio: number = 1) => {
+  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+  const deviceRadio = window.devicePixelRatio || 1 // 获取设备的缩放比：用几个像素点渲染一个像素，通常是2
+  const canvasRadio = 1 // canvas缩放比，webkitBackingStorePixelRatio已废弃
+  const _radio = radio ?? deviceRadio / canvasRadio
+
+  canvas.style.width = width + 'px'
+  canvas.style.height = height + 'px'
+  canvas.width = _radio * width
+  canvas.height = _radio * height
+  ctx.scale(_radio, _radio)
+
+  return {
+    ctx,
+    dpi: _radio
+  }
+}
+
 function init() {
-  const ctx = canvasRef.value?.getContext('2d')
+  const { ctx, dpi } = create(canvasRef.value, window.innerWidth, window.innerHeight)
+  // @ts-ignore
   ctx.strokeStyle = '#F2F3F5'
   step({
     start: { x: 0, y: 0 },
@@ -157,6 +177,18 @@ onMounted(() => {
 </script>
 
 <template>
-  <canvas ref="canvasRef" width="800" height="800" scale-50 origin-top-left />
+  <canvas ref="canvasRef" class="custom-wrapper" scale-50 origin-top-left />
 </template>
->
+
+<style lang="scss" scoped>
+.custom-wrapper {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+</style>
+-->
