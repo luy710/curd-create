@@ -95,8 +95,7 @@ const create = (canvas: HTMLCanvasElement, width: number = 400, height: number =
 }
 
 function init() {
-  const { ctx, dpi } = create(canvasRef.value, window.innerWidth, window.innerHeight)
-  // @ts-ignore
+  const ctx = canvasRef.value?.getContext('2d')
   ctx.strokeStyle = '#F2F3F5'
   step({
     start: { x: 0, y: 0 },
