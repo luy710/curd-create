@@ -1,6 +1,6 @@
 {
   "name": "@hobby/curd-create",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "license": "MIT",
   "author": {
     "name": "makai",
@@ -8,7 +8,7 @@
   },
   "main": "dist/lib.umd.js",
   "module": "dist/lib.es.js",
-  "typings": "dist/lib.es.d.ts",
+  "types": "lib.es.d.ts",
   "homepage": "",
   "keywords": [
     "JSON Schema",
@@ -28,6 +28,13 @@
     ".": {
       "import": "./dist/lib.es.js",
       "require": "./dist/lib.umd.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*.d.ts"
+      ]
     }
   },
   "scripts": {
