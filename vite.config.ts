@@ -58,6 +58,7 @@ export default ({ command }: ConfigEnv): UserConfig => {
       dts({
         cleanVueFileName: true,
         insertTypesEntry: true,
+        outputDir: 'dist/types',
         exclude: ['./types/auto-imports.d.ts', './types/components.d.ts', './types/module.d.ts']
       })
     ],

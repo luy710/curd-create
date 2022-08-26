@@ -8,7 +8,7 @@
   },
   "main": "dist/lib.umd.js",
   "module": "dist/lib.es.js",
-  "types": "lib.es.d.ts",
+  "types": "types/src/components/index.d.ts",
   "homepage": "",
   "keywords": [
     "JSON Schema",
