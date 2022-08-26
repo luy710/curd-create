@@ -22,7 +22,7 @@
 <script lang="ts" setup>
 import type { ColEx } from '../types/index'
 import type { ButtonOptions } from '../types/form'
-import { defineProps, computed, defineEmits } from 'vue'
+// import { defineProps, computed, defineEmits } from 'vue'
 // type xxx=x&{sex:string}
 // 可以实现接口和接口的交叉,但是只能赋值给type类型
 // type x=接口&接口

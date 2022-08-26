@@ -29,12 +29,12 @@
 </template>
 <script lang="ts">
 import type { CSSProperties } from 'vue'
-import { defineComponent, computed } from 'vue'
-import { ElImage, ElBadge } from 'element-plus'
+// import { defineComponent, computed } from 'vue'?
+// import { ElImage, ElBadge } from 'element-plus'
 
 export default defineComponent({
   name: 'TableImage',
-  components: { ElImage, ElBadge },
+  // components: { ElImage, ElBadge },
   props: {
     imgList: {
       type: Array as PropType<Array<string>>,

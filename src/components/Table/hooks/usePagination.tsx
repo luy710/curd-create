@@ -1,5 +1,6 @@
 import type { BasicTableProps } from '../types/table';
-import { computed, unref, ref, ComputedRef, watch } from 'vue';
+// import { computed, unref, ref, ComputedRef, watch } from 'vue';
+import type { ComputedRef } from 'vue'
 import { isBoolean } from '@/components/utils/is';
 import { PaginationProps } from 'element-plus'
 import { PAGE_SIZE, PAGE_SIZE_OPTIONS } from '../constant';

@@ -78,9 +78,9 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, PropType, computed, toRaw } from 'vue'
+// import { defineComponent, PropType, computed, toRaw } from 'vue'
 import { MoreFilled } from '@element-plus/icons-vue'
-import { ElDivider, ElTooltip, ElPopconfirm, ElDropdown, ElButton, ElIcon } from 'element-plus'
+// import { ElDivider, ElTooltip, ElPopconfirm, ElDropdown, ElButton, ElIcon } from 'element-plus'
 import { SizeType } from '../types/table'
 import { ActionItem, TableActionType } from '@/components/Table/types/table'
 
@@ -91,15 +91,15 @@ import { ACTION_COLUMN_FLAG } from '../constant'
 export default defineComponent({
   name: 'TableAction',
   components: {
-    ElDivider,
-    ElDropdown,
-    MoreFilled,
-    ElTooltip,
-    ElPopconfirm,
-    ElDropdownItem: ElDropdown.DropdownItem,
-    ElDropdownMenu: ElDropdown.DropdownMenu,
-    ElButton,
-    ElIcon
+    // ElDivider,
+    // ElDropdown,
+    MoreFilled
+    // ElTooltip,
+    // ElPopconfirm,
+    // ElDropdownItem: ElDropdown.DropdownItem,
+    // ElDropdownMenu: ElDropdown.DropdownMenu,
+    // ElButton,
+    // ElIcon
   },
   props: {
     size: {

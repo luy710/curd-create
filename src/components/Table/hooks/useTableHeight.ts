@@ -1,6 +1,6 @@
 import type { BasicTableProps } from '../types/table'
-import { Ref, ComputedRef, ref, onMounted, onActivated } from 'vue'
-import { computed, unref, nextTick, watch } from 'vue'
+import type { Ref, ComputedRef } from 'vue'
+// import { computed, unref, nextTick, watch, ref, onMounted, onActivated } from 'vue'
 import { isBoolean, isObject, isNumber, isString } from '@/components/utils/is'
 import { useWindowSizeFn } from '@/components/utils/useWindowSizeFn'
 import { debounce as useDebounceFn } from 'lodash-es'

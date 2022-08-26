@@ -6,12 +6,12 @@
   </span>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+// import { defineComponent } from 'vue'
 import { Edit } from '@element-plus/icons-vue'
-import { ElIcon } from 'element-plus'
+// import { ElIcon } from 'element-plus'
 export default defineComponent({
   name: 'EditIconComponent',
-  components: { Edit, ElIcon },
+  components: { Edit },
   props: { title: { type: String, default: '' } }
 })
 </script>

@@ -3,7 +3,7 @@ import type { ComponentType } from '../../types/componentType'
 import { componentMap } from '@/components/Table/componentMap'
 
 import { ElPopover } from 'element-plus'
-import { h } from 'vue'
+// import { h } from 'vue'
 
 export interface ComponentProps {
   component: ComponentType

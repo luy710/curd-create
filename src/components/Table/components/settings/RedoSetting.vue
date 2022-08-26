@@ -4,7 +4,7 @@
   </ElTooltip>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+// import { defineComponent } from 'vue'
 import { ElTooltip } from 'element-plus'
 import { RefreshRight } from '@element-plus/icons-vue'
 import { useTableContext } from '../../hooks/useTableContext'

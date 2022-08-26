@@ -45,7 +45,7 @@ export default ({ command }: ConfigEnv): UserConfig => {
           `
       }),
       AutoImport({
-        imports: [],
+        imports: ['vue'],
         dts: './types/auto-imports.d.ts',
         resolvers: isBuild ? [] : [ElementPlusResolver()]
       }),
@@ -58,7 +58,7 @@ export default ({ command }: ConfigEnv): UserConfig => {
       dts({
         cleanVueFileName: true,
         insertTypesEntry: true,
-        exclude: ['./types/auto-imports.d.ts', './types/components.d.ts', './types/module.d.ts']
+        exclude: []
       })
     ],
     build: {

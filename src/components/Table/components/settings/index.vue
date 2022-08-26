@@ -9,7 +9,7 @@
 <script lang="ts">
 import type { PropType } from 'vue'
 import type { TableSetting, ColumnChangeParam } from '../../types/table'
-import { defineComponent, computed } from 'vue'
+// import { defineComponent, computed } from 'vue'
 import ColumnSetting from './ColumnSetting.vue'
 import SizeSetting from './SizeSetting.vue'
 import RedoSetting from './RedoSetting.vue'
