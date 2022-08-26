@@ -23,14 +23,14 @@
 
     <ElTable
       ref="tableRef"
-      v-loading="getBindValues.loading"
+      v-loading="getLoading"
       v-bind="getBindValues"
       v-show="getEmptyDataIsShowTable"
       @filter-change="filterChange"
       @sort-change="sortChange"
     >
       <!-- table 内部 slots -->
-      <template #[item]="data" v-for="item in Object.keys(tableSlots)" :key="item">
+      <template #[item]="data" v-for="item in ['append', 'empty']" :key="item">
         <slot :name="item" v-bind="data || {}"></slot>
       </template>
       <!-- 操控性列 需固定在表格左侧，顺序为 展开/多选/序号 -->
@@ -50,7 +50,7 @@
       />
 
       <!-- column -->
-      <InnerTableColumn :columns="getViewColumns" :slots="slots" />
+      <InnerTableColumn :columns="getViewColumns" :slots="$slots" />
     </ElTable>
     <TablePagination
       v-if="!!getPaginationInfo"
@@ -63,7 +63,7 @@
 // import { defineEmits, defineProps, ref, computed, unref, useSlots, useAttrs, toRaw } from 'vue'
 import { BasicForm, useForm } from '@/components/index'
 import { baseProps } from './props'
-import { omit, pick } from 'lodash-es'
+import { omit } from 'lodash-es'
 import { isBoolean, isFunction, isString } from '@/components/utils/is'
 import InnerTableColumn from './components/InnerTableColumn.vue'
 import TablePagination from './components/Pagination.vue'
@@ -127,10 +127,6 @@ const formRef = ref()
 const tableRef = ref()
 // 插槽
 const slots = useSlots()
-// table内的slot
-const tableSlots = computed(() => {
-  return pick(slots, ['append', 'empty'])
-})
 // 表格数据
 const tableData = ref<Recordable[]>([])
 // 获取所有的props
@@ -207,7 +203,7 @@ const getBindValues = computed<any>(() => {
     pagination: toRaw(unref(getPaginationInfo)),
     data: dataSource
   }
-  propsData = omit(propsData, ['class', 'onChange'])
+  propsData = omit(propsData, ['class', 'onChange', 'loading'])
   return propsData
 })
 
