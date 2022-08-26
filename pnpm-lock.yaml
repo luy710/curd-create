@@ -2,7 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@element-plus/icons-vue': ^2.0.6
-  '@hobby/curd-create': link:lib
+  '@hobby/curd-create': ^0.1.4
   '@types/lodash-es': ^4.17.6
   '@types/mockjs': ^1.0.6
   '@types/node': ^18.0.4
@@ -37,7 +37,7 @@ specifiers:
 
 dependencies:
   '@element-plus/icons-vue': 2.0.6_vue@3.2.37
-  '@hobby/curd-create': 0.1.3
+  '@hobby/curd-create': 0.1.4
   '@types/node': 18.0.4
   '@vueuse/core': 9.1.0_vue@3.2.37
   axios: 0.27.2
@@ -426,8 +426,8 @@ packages:
       '@floating-ui/core': 0.7.3
     dev: false
 
-  /@hobby/curd-create/0.1.3:
-    resolution: {integrity: sha512-HOCNGLc9h1SBRHCIHTXl2Ifw1gbigtJ4j4IgifKdLooRtin/0xFV7PaYrtD9CicH4H2zdtCegcEngIHz6F74tQ==}
+  /@hobby/curd-create/0.1.4:
+    resolution: {integrity: sha512-S6grRdizGFD2ndE2t3DX5S7sKcCajKvr9ql+ejQo3aNQXLAKrvvAf9A1kwlGAR2KR+74FDI8jYZsMnsTuHexVQ==}
     dev: false
 
   /@humanwhocodes/config-array/0.9.5:
