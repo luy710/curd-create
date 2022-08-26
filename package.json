@@ -1,6 +1,6 @@
 {
   "name": "@hobby/curd-create",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MIT",
   "author": {
     "name": "makai",
@@ -8,7 +8,7 @@
   },
   "main": "dist/lib.umd.js",
   "module": "dist/lib.es.js",
-  "typings": "dist/lib.es.d.ts",
+  "types": "./dist/lib.es.d.ts",
   "homepage": "",
   "keywords": [
     "JSON Schema",
@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.6",
-    "@hobby/curd-create": "^0.1.0",
+    "@hobby/curd-create": "link:lib",
     "@types/node": "^18.0.4",
     "@vueuse/core": "^9.1.0",
     "axios": "^0.27.2",

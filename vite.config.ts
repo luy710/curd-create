@@ -56,7 +56,6 @@ export default ({ command }: ConfigEnv): UserConfig => {
       }),
       isBuild && VitePluginStyleInject('curd-create'),
       dts({
-        cleanVueFileName: true,
         insertTypesEntry: true,
         exclude: []
       })
