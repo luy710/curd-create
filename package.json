@@ -8,7 +8,7 @@
   },
   "main": "dist/lib.umd.js",
   "module": "dist/lib.es.js",
-  "types": "types/src/components/index.d.ts",
+  "types": "./dist/lib.es.d.ts",
   "homepage": "",
   "keywords": [
     "JSON Schema",
@@ -30,13 +30,6 @@
       "require": "./dist/lib.umd.js"
     }
   },
-  "typesVersions": {
-    "*": {
-      "*": [
-        "./dist/*.d.ts"
-      ]
-    }
-  },
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
@@ -44,7 +37,7 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.6",
-    "@hobby/curd-create": "^0.1.0",
+    "@hobby/curd-create": "link:lib",
     "@types/node": "^18.0.4",
     "@vueuse/core": "^9.1.0",
     "axios": "^0.27.2",
