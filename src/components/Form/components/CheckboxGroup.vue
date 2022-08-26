@@ -10,8 +10,8 @@
 
 <script lang="ts" setup>
 import type { CheckboxProps } from 'element-plus'
-import { ElCheckbox, ElCheckboxButton, ElCheckboxGroup } from 'element-plus'
-import { defineProps, useAttrs, computed } from 'vue'
+// import { ElCheckbox, ElCheckboxButton } from 'element-plus'
+// import { defineProps, useAttrs, computed } from 'vue'
 const props = defineProps({
   modelValue: {
     type: Array as PropType<(string | number | boolean)[]>

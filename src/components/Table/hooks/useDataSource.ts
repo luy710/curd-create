@@ -1,6 +1,7 @@
 import type { BasicTableProps, FetchParams, SorterResult } from '../types/table'
 import type { PaginationProps } from 'element-plus'
-import { ref, unref, ComputedRef, computed, onMounted, watch, reactive, Ref, watchEffect } from 'vue'
+import type { ComputedRef, Ref } from 'vue'
+// import { ref, unref, ComputedRef, computed, onMounted, watch, reactive, Ref, watchEffect } from 'vue'
 import { useTimeoutFn } from '@/components/utils/useTimeout'
 import { buildUUID } from '@/components/utils/uuid'
 import { isFunction, isBoolean } from '@/components/utils/is'

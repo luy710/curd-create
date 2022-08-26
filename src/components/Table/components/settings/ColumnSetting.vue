@@ -76,7 +76,7 @@
 </template>
 <script lang="ts">
 import type { BasicColumn, ColumnChangeParam } from '../../types/table'
-import { defineComponent, ref, reactive, toRefs, watchEffect, nextTick, unref, computed } from 'vue'
+// import { defineComponent, ref, reactive, toRefs, watchEffect, nextTick, unref, computed } from 'vue'
 import { ElTooltip, ElPopover, ElCheckbox, ElDivider, ElIcon, ElScrollbar, ElButton } from 'element-plus'
 
 import { Setting, Rank, ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue'

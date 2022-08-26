@@ -13,7 +13,7 @@
 <script lang="ts">
 import type { PropType } from 'vue'
 import type { BasicColumn } from '../types/table'
-import { defineComponent, computed } from 'vue'
+// import { defineComponent, computed } from 'vue'
 import BasicHelp from '@/components/Basic/src/BasicHelp.vue'
 import EditTableHeaderCell from './EditTableHeaderIcon.vue'
 
