@@ -21,7 +21,7 @@
       </template>
     </component>
 
-    <el-table
+    <ElTable
       ref="tableRef"
       v-loading="getBindValues.loading"
       v-bind="getBindValues"
@@ -34,16 +34,16 @@
         <slot :name="item" v-bind="data || {}"></slot>
       </template>
       <!-- 操控性列 需固定在表格左侧，顺序为 展开/多选/序号 -->
-      <el-table-column v-if="getProps?.showExpandColumn" type="expand" v-bind="getExpandColumnProps">
+      <ElTableColumn v-if="getProps?.showExpandColumn" type="expand" v-bind="getExpandColumnProps">
         <template #header="props">
           <slot :name="getExpandColumnProps.slots?.headerSlot || 'expandedRowHender'" v-bind="props" />
         </template>
         <template #default="props">
           <slot :name="getExpandColumnProps.slots?.cellSlot || 'expandedRowRender'" v-bind="props" />
         </template>
-      </el-table-column>
-      <el-table-column v-if="getProps?.showSelectionColumn" type="selection" v-bind="getSelectColumnProps" />
-      <el-table-column
+      </ElTableColumn>
+      <ElTableColumn v-if="getProps?.showSelectionColumn" type="selection" v-bind="getSelectColumnProps" />
+      <ElTableColumn
         v-if="getProps?.showIndexColumn && !getProps.isTreeTable"
         type="index"
         v-bind="getInndexColumnProps"
@@ -51,7 +51,7 @@
 
       <!-- column -->
       <InnerTableColumn :columns="getViewColumns" :slots="slots" />
-    </el-table>
+    </ElTable>
     <TablePagination
       v-if="!!getPaginationInfo"
       v-bind="isBoolean(getPaginationInfo) ? {} : getPaginationInfo"
@@ -83,7 +83,7 @@ import { useTableHeader } from './hooks/useTableHeader'
 import { createTableContext } from './hooks/useTableContext'
 import { useColumns } from './hooks/useColumns'
 import { useTableHeight } from './hooks/useTableHeight'
-
+import { ElTable, ElTableColumn } from 'element-plus'
 // 定义emit事件
 const emit = defineEmits([
   'fetch-success',
@@ -193,7 +193,7 @@ const { getFormProps, replaceFormSlotKey, getFormSlotKeys, handleSearchInfoChang
   fetch,
   getLoading
 )
-const getBindValues = computed(() => {
+const getBindValues = computed<any>(() => {
   const dataSource = unref(getDataSourceRef)
   let propsData: Partial<BasicTableProps> = {
     ...attrs,

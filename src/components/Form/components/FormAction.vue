@@ -73,7 +73,7 @@ const props = defineProps({
 
 const emit = defineEmits(['toggle-advanced', 'reset', 'submit'])
 
-const actionColOpt = computed(() => {
+const actionColOpt = computed<any>(() => {
   const { showAdvancedButton, actionSpan: span, actionColOptions } = props
 
   const actionSpan = 24 - span
