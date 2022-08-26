@@ -77,7 +77,7 @@
 <script lang="ts">
 import type { BasicColumn, ColumnChangeParam } from '../../types/table'
 // import { defineComponent, ref, reactive, toRefs, watchEffect, nextTick, unref, computed } from 'vue'
-import { ElTooltip, ElPopover, ElCheckbox, ElDivider, ElIcon, ElScrollbar, ElButton } from 'element-plus'
+import { ElTooltip, ElPopover, ElCheckbox, ElDivider, ElIcon, ElScrollbar, ElButton,ElCheckboxGroup } from 'element-plus'
 
 import { Setting, Rank, ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue'
 import { useTableContext } from '../../hooks/useTableContext'
@@ -107,7 +107,7 @@ export default defineComponent({
     ElPopover,
     ElTooltip,
     ElCheckbox,
-    ElCheckboxGroup: ElCheckbox.Group,
+    ElCheckboxGroup,
     ElDivider,
     Setting,
     ElIcon,
@@ -227,7 +227,7 @@ export default defineComponent({
     })
 
     // Trigger when check/uncheck a column
-    function onChange(checkedList: string[]) {
+    function onChange(checkedList: any[]) {
       const len = plainSortOptions.value.length
       state.checkAll = checkedList.length === len
       const sortList = unref(plainSortOptions).map((item: any) => item.value)

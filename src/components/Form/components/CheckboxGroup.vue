@@ -10,7 +10,7 @@
 
 <script lang="ts" setup>
 import type { CheckboxProps } from 'element-plus'
-// import { ElCheckbox, ElCheckboxButton } from 'element-plus'
+import { ElCheckbox, ElCheckboxButton } from 'element-plus'
 // import { defineProps, useAttrs, computed } from 'vue'
 const props = defineProps({
   modelValue: {

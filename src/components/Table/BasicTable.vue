@@ -55,7 +55,7 @@
     <TablePagination
       v-if="!!getPaginationInfo"
       v-bind="isBoolean(getPaginationInfo) ? {} : getPaginationInfo"
-      @change="(pagination) => handlePaginationChange(pagination)"
+      @change="(pagination:any) => handlePaginationChange(pagination)"
     />
   </div>
 </template>
@@ -83,7 +83,8 @@ import { useTableHeader } from './hooks/useTableHeader'
 import { createTableContext } from './hooks/useTableContext'
 import { useColumns } from './hooks/useColumns'
 import { useTableHeight } from './hooks/useTableHeight'
-import { ElTable, ElTableColumn } from 'element-plus'
+import { ElTable, ElTableColumn, ElLoadingDirective as vLoading } from 'element-plus'
+
 // 定义emit事件
 const emit = defineEmits([
   'fetch-success',
