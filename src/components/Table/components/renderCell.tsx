@@ -2,6 +2,10 @@ import type { Slots } from 'vue'
 import { BasicColumn } from '../types/table'
 import TableHeaderCell from './HeaderCell.vue'
 import { renderEditCell } from './editable/index'
+import { isFunction } from '../../utils/is'
+
+import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults'
+
 export interface CI {
   column: BasicColumn
   $index: number
@@ -30,6 +34,10 @@ export const renderCell = ({ row, column, $index }: CellRenderParams, propsSlots
 
   if (edit || editRow) {
     return renderEditCell({ text: row[column.prop as string], row, $index }, column)
+  }
+  
+  if (column.formatter && isFunction(column.formatter)) {
+    return <span>{column.formatter(row, column as TableColumnCtx<Recordable>, row[prop as string], $index)}</span>
   }
 
   return <span>{row[prop as string]}</span>
