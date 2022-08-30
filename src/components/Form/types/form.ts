@@ -203,4 +203,6 @@ export interface HelpComponentProps {
   absolute: boolean
   // Positioning
   position: any
+  
+  placement: string
 }
