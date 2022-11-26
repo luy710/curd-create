@@ -1,6 +1,6 @@
 {
   "name": "@hobby/curd-create",
-  "version": "0.1.2",
+  "version": "1.2.3",
   "license": "MIT",
   "author": {
     "name": "makai",
@@ -37,12 +37,12 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.6",
-    "@hobby/curd-create": "^0.1.4",
+    "@hobby/curd-create": "^1.2.3",
     "@types/node": "^18.0.4",
     "@vueuse/core": "^9.1.0",
     "axios": "^0.27.2",
     "dayjs": "^1.11.3",
-    "element-plus": "^2.2.11",
+    "element-plus": "^2.2.25",
     "lodash-es": "^4.17.21",
     "vue": "^3.2.25",
     "vue-router": "^4.1.2"
