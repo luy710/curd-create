@@ -23,13 +23,13 @@
               勾选列
             </ElCheckbox>
 
-            <ElButton size="small" link @click="reset"> 重置 </ElButton>
+            <ElButton type="primary" link @click="reset"> 重置 </ElButton>
           </div>
-          <ElScrollbar>
+          <ElScrollbar :max-height="540">
             <ElCheckboxGroup v-model="checkedList" @change="onChange" ref="columnListRef">
               <template v-for="item in plainOptions" :key="item.value">
                 <div :class="`${prefixCls}__check-item`" v-if="!('ifShow' in item && !item.ifShow)">
-                  <el-icon class="table-column-drag-icon"><Rank /></el-icon>
+                  <!-- <el-icon class="table-column-drag-icon"><Rank /></el-icon> -->
                   <ElCheckbox :label="item.value">
                     {{ item.label }}
                   </ElCheckbox>
@@ -76,8 +76,16 @@
 </template>
 <script lang="ts">
 import type { BasicColumn, ColumnChangeParam } from '../../types/table'
-// import { defineComponent, ref, reactive, toRefs, watchEffect, nextTick, unref, computed } from 'vue'
-import { ElTooltip, ElPopover, ElCheckbox, ElDivider, ElIcon, ElScrollbar, ElButton,ElCheckboxGroup } from 'element-plus'
+import {
+  ElTooltip,
+  ElPopover,
+  ElCheckbox,
+  ElDivider,
+  ElIcon,
+  ElScrollbar,
+  ElButton,
+  ElCheckboxGroup
+} from 'element-plus'
 
 import { Setting, Rank, ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue'
 import { useTableContext } from '../../hooks/useTableContext'
@@ -192,10 +200,6 @@ export default defineComponent({
         cachePlainOptions.value = columns
         state.defaultCheckList = checkList
       } else {
-        // const fixedColumns = columns.filter((item) =>
-        //   Reflect.has(item, 'fixed')
-        // ) as BasicColumn[];
-
         unref(plainOptions).forEach((item: BasicColumn) => {
           const findItem = columns.find((col: BasicColumn) => col.prop === item.prop)
           if (findItem) {
@@ -371,6 +375,9 @@ export default defineComponent({
     display: flex;
     align-items: center;
     justify-content: space-between;
+    .el-checkbox {
+      margin-right: 10px;
+    }
   }
 
   &__check-item {

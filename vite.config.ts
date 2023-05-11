@@ -67,16 +67,14 @@ export default ({ command }: ConfigEnv): UserConfig => {
         output: {
           globals: {
             vue: 'Vue',
-            'element-plus': 'element-plus',
-            dayjs: 'dayjs',
-            'lodash-es': 'lodash-es'
+            'element-plus': 'element-plus'
           }
         }
       },
       lib: {
         entry: pathResolve('./src/components/index.ts'),
         name: 'lib',
-        // formats: ['es', 'cjs', 'umd', 'iife'],
+        formats: ['es', 'umd'],
         fileName: (format) => `lib.${format}.js`
       }
     }

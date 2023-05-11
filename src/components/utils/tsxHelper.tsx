@@ -1,4 +1,4 @@
-import { Slots } from 'vue';
+import { Slots, Slot } from 'vue';
 import { isFunction } from '@/components/utils/is';
 
 /**
