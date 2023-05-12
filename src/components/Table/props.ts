@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'vue'
+import type { CSSProperties, PropType } from 'vue'
 import type { TreeNode } from 'element-plus/es/components/table/src/table/defaults'
 import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults'
 import type { PaginationProps } from 'element-plus'

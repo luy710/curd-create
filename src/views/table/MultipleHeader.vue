@@ -24,7 +24,7 @@ export default defineComponent({
 <template>
   <div class="p-4">
     <BasicTable @register="registerTable">
-      <template #beginTime="{ column, $index }">
+      <template #beginTime="{ column }">
         <el-button>{{ column.label }}</el-button>
       </template>
     </BasicTable>

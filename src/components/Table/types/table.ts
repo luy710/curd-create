@@ -22,7 +22,6 @@ export interface GetColumnsParams {
 }
 
 export interface TableRowSelection<T> {}
-export interface BasicTableProps {}
 export interface SorterResult {
   column: BasicColumn
   order: SortOrder

@@ -126,8 +126,8 @@ const schemas: FormSchema[] = [
     componentProps: {
       formatter: (value: any) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
       parser: (value: any) => value.replace(/\$\s?|(,*)/g, ''),
-      // prefixIcon: 'AlarmClock',
-      // suffixIcon: 'AlarmClock',
+      prefixIcon: AlarmClock,
+      suffixIcon: AlarmClock,
       onChange: (e: any) => {
         console.log(e)
       },
@@ -521,7 +521,7 @@ const schemas: FormSchema[] = [
         onChange: (e: any) => {
           // console.log(e)
           let citiesOptions
-            = e == 1
+            = e === 1
               ? (citiesOptionsData as Recordable)[provincesOptions[0].id]
               : (citiesOptionsData as Recordable)[provincesOptions[1].id]
           // console.log(citiesOptions)

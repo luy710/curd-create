@@ -6,6 +6,7 @@ import Components from 'unplugin-vue-components/vite'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import { viteMockServe } from 'vite-plugin-mock'
+import visualizer from 'rollup-plugin-visualizer'
 import dts from 'vite-plugin-dts'
 import { VitePluginStyleInject } from './vite-plugin-style-inject'
 
@@ -51,6 +52,13 @@ export default ({ command }: ConfigEnv): UserConfig => {
         resolvers: isBuild ? [] : [ElementPlusResolver()],
       }),
       isBuild && VitePluginStyleInject('curd-create'),
+
+      visualizer({
+        filename: './node_modules/.cache/visualizer/stats.html',
+        open: true,
+        gzipSize: true,
+        brotliSize: true
+      }),
       dts({
         insertTypesEntry: true,
         exclude: [],
@@ -59,11 +67,12 @@ export default ({ command }: ConfigEnv): UserConfig => {
     build: {
       cssCodeSplit: false,
       rollupOptions: {
-        external: ['vue', 'element-plus'],
+        external: ['vue', 'element-plus', 'lodash-es'],
         output: {
           globals: {
             'vue': 'Vue',
             'element-plus': 'element-plus',
+            'lodash-es': 'lodash-es'
           },
         },
       },

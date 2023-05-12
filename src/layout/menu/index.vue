@@ -1,7 +1,6 @@
 <script lang='ts' setup>
 import MenuItem from './menuItem.vue'
 import BasicRoutes from '@/routes/basic'
-
 </script>
 
 <template>

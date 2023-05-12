@@ -104,7 +104,7 @@ export default defineComponent({
         <el-button @click="() => handleDelete(record)">
           点击了删除
         </el-button>
-        <!-- <TableAction
+        <TableAction
           stopButtonPropagation
           :actions="[
             {
@@ -122,7 +122,7 @@ export default defineComponent({
               }
             }
           ]"
-        /> -->
+        />
       </template>
     </BasicTable>
   </div>
