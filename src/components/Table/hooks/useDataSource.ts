@@ -1,12 +1,13 @@
-import type { BasicTableProps, FetchParams, SorterResult } from '../types/table'
 import type { PaginationProps } from 'element-plus'
 import type { ComputedRef, Ref } from 'vue'
+import { cloneDeep, get, merge, omit } from 'lodash-es'
+import type { BasicTableProps, FetchParams, SorterResult } from '../types/table'
+
 // import { ref, unref, ComputedRef, computed, onMounted, watch, reactive, Ref, watchEffect } from 'vue'
+import { FETCH_SETTING, PAGE_SIZE, ROW_KEY } from '../constant'
 import { useTimeoutFn } from '@/components/utils/useTimeout'
 import { buildUUID } from '@/components/utils/uuid'
-import { isFunction, isBoolean } from '@/components/utils/is'
-import { get, cloneDeep, merge, omit } from 'lodash-es'
-import { FETCH_SETTING, ROW_KEY, PAGE_SIZE } from '../constant'
+import { isBoolean, isFunction } from '@/components/utils/is'
 
 interface ActionType {
   getPaginationInfo: ComputedRef<boolean | Partial<PaginationProps>>
@@ -25,12 +26,12 @@ interface SearchState {
 export function useDataSource(
   propsRef: ComputedRef<BasicTableProps>,
   { getPaginationInfo, setPagination, setLoading, getFieldsValue, clearSelectedRowKeys, tableData }: ActionType,
-  emit: EmitType
+  emit: EmitType,
 ) {
   // 排序 过滤信息
   const searchState = reactive<SearchState>({
     sortInfo: {},
-    filterInfo: {}
+    filterInfo: {},
   })
   const dataSourceRef = ref<Recordable[]>([])
   const rawDataSourceRef = ref<Recordable>({})
@@ -60,21 +61,23 @@ export function useDataSource(
         if (!isBoolean(getPaginationInfo)) {
           pickPageData()
           setPagination({
-            total: data?.length
+            total: data?.length,
           })
-        } else {
+        }
+        else {
           dataSourceRef.value = data
         }
       }
     },
     {
-      immediate: true
-    }
+      immediate: true,
+    },
   )
 
   const resetPage = () => {
     const { data, api } = unref(propsRef)
-    if (!api && data) pickPageData()
+    if (!api && data)
+      pickPageData()
     else fetch()
   }
 
@@ -84,25 +87,28 @@ export function useDataSource(
     if (isFunction(filterFn)) {
       const filterInfo = filterFn(filter)
       searchState.filterInfo = Object.assign(searchState.filterInfo, filterInfo)
-    } else {
+    }
+    else {
       searchState.filterInfo = Object.assign(searchState.filterInfo, filter)
     }
     emit('filter-change', searchState.filterInfo)
     handleChange()
-    if (!filterFetchImmediate) return
+    if (!filterFetchImmediate)
+      return
     fetch()
   }
 
   const handleClearFilters = (columnKeys?: string[]) => {
     const { filterFetchImmediate } = unref(propsRef)
-    if (!columnKeys) {
+    if (!columnKeys)
       searchState.filterInfo = {}
-    } else {
+    else
       searchState.filterInfo = omit(searchState.filterInfo, columnKeys)
-    }
+
     emit('filter-change', searchState.filterInfo)
     handleChange()
-    if (!filterFetchImmediate) return
+    if (!filterFetchImmediate)
+      return
     fetch()
   }
 
@@ -111,12 +117,14 @@ export function useDataSource(
     if (isFunction(sortFn)) {
       const sortInfo = sortFn(sort)
       searchState.sortInfo = sortInfo
-    } else {
+    }
+    else {
       searchState.sortInfo = sort
     }
     emit('sort-change', searchState.sortInfo)
     handleChange()
-    if (!sortFetchImmediate) return
+    if (!sortFetchImmediate)
+      return
     fetch()
   }
 
@@ -125,7 +133,8 @@ export function useDataSource(
     searchState.sortInfo = {}
     emit('sort-change', {})
     handleChange()
-    if (!sortFetchImmediate) return
+    if (!sortFetchImmediate)
+      return
     fetch()
   }
 
@@ -139,9 +148,9 @@ export function useDataSource(
   // 分页数据变化设置
   const handlePaginationChange = (pagination: PaginationProps) => {
     const { clearSelectOnPageChange } = unref(propsRef)
-    if (clearSelectOnPageChange) {
+    if (clearSelectOnPageChange)
       clearSelectedRowKeys()
-    }
+
     setPagination(pagination)
     resetPage()
     handleChange()
@@ -149,14 +158,14 @@ export function useDataSource(
 
   // 设置每一条数据的唯一值，默认是column-key
   function setTableKey(items: any[]) {
-    if (!items || !Array.isArray(items)) return
+    if (!items || !Array.isArray(items))
+      return
     items.forEach((item) => {
-      if (!item[ROW_KEY]) {
+      if (!item[ROW_KEY])
         item[ROW_KEY] = buildUUID()
-      }
-      if (item.children && item.children.length) {
+
+      if (item.children && item.children.length)
         setTableKey(item.children)
-      }
     })
   }
 
@@ -173,9 +182,9 @@ export function useDataSource(
   // 获取数据源
   const getDataSourceRef = computed(() => {
     const dataSource = unref(dataSourceRef)
-    if (!dataSource || dataSource.length === 0) {
+    if (!dataSource || dataSource.length === 0)
       return unref(dataSourceRef)
-    }
+
     if (unref(getAutoCreateKey)) {
       const firstItem = dataSource[0]
       const lastItem = dataSource[dataSource.length - 1]
@@ -184,12 +193,11 @@ export function useDataSource(
         if (!firstItem[ROW_KEY] || !lastItem[ROW_KEY]) {
           const data = cloneDeep(unref(dataSourceRef))
           data.forEach((item) => {
-            if (!item[ROW_KEY]) {
+            if (!item[ROW_KEY])
               item[ROW_KEY] = buildUUID()
-            }
-            if (item.children && item.children.length) {
+
+            if (item.children && item.children.length)
               setTableKey(item.children)
-            }
           })
           dataSourceRef.value = data
         }
@@ -200,9 +208,9 @@ export function useDataSource(
   // 更新某一条数据，完整替换
   async function updateTableData(index: number, key: string, value: any) {
     const record = dataSourceRef.value[index]
-    if (record) {
+    if (record)
       dataSourceRef.value[index][key] = value
-    }
+
     return dataSourceRef.value[index]
   }
   // 更新数据某个值
@@ -211,27 +219,31 @@ export function useDataSource(
 
     if (row) {
       for (const field in row) {
-        if (Reflect.has(record, field)) row[field] = record[field]
+        if (Reflect.has(record, field))
+          row[field] = record[field]
       }
+
       return row
     }
   }
 
   function deleteTableDataRecord(rowKey: string | number | string[] | number[]) {
-    if (!dataSourceRef.value || dataSourceRef.value.length == 0) return
+    if (!dataSourceRef.value || dataSourceRef.value.length == 0)
+      return
     const rowKeyName = unref(getRowKey)
-    if (!rowKeyName) return
+    if (!rowKeyName)
+      return
     const rowKeys = !Array.isArray(rowKey) ? [rowKey] : rowKey
     // 根据rowkey 找到要删除的数据
     for (const key of rowKeys) {
       // 删除本地数据
       let index: number | undefined = dataSourceRef.value.findIndex((row) => {
         let targetKeyName: string
-        if (typeof rowKeyName === 'function') {
+        if (typeof rowKeyName === 'function')
           targetKeyName = rowKeyName(row) as string
-        } else {
+        else
           targetKeyName = rowKeyName as string
-        }
+
         return row[targetKeyName] === key
       })
       if (index >= 0) {
@@ -241,19 +253,20 @@ export function useDataSource(
       // 删除源数据
       index = unref(propsRef).data?.findIndex((row) => {
         let targetKeyName: string
-        if (typeof rowKeyName === 'function') {
+        if (typeof rowKeyName === 'function')
           targetKeyName = rowKeyName(row) as string
-        } else {
+        else
           targetKeyName = rowKeyName as string
-        }
+
         return row[targetKeyName] === key
       })
-      if (typeof index !== 'undefined' && index !== -1) unref(propsRef).data?.splice(index, 1)
+      if (typeof index !== 'undefined' && index !== -1)
+        unref(propsRef).data?.splice(index, 1)
     }
 
     // 数据变化后重新更正分页器长度， 需要整改
     setPagination({
-      total: unref(propsRef).data?.length
+      total: unref(propsRef).data?.length,
     })
   }
 
@@ -267,10 +280,12 @@ export function useDataSource(
 
   // 查找数据
   function findTableDataRecord(rowKey: string | number) {
-    if (!dataSourceRef.value || dataSourceRef.value.length == 0) return
+    if (!dataSourceRef.value || dataSourceRef.value.length == 0)
+      return
 
     const rowKeyName = unref(getRowKey)
-    if (!rowKeyName) return
+    if (!rowKeyName)
+      return
 
     const children = unref(propsRef).treeProps?.children || 'children'
 
@@ -282,7 +297,8 @@ export function useDataSource(
             ret = r
             return true
           }
-        } else {
+        }
+        else {
           if (Reflect.has(r, rowKeyName) && r[rowKeyName] === rowKey) {
             ret = r
             return true
@@ -296,9 +312,10 @@ export function useDataSource(
   }
 
   async function fetch(opt?: FetchParams): Promise<any> {
-    const { api, searchInfo, defaultSort, fetchSetting, beforeFetch, afterFetch, useSearchForm, pagination } =
-      unref(propsRef)
-    if (!api || !isFunction(api)) return
+    const { api, searchInfo, defaultSort, fetchSetting, beforeFetch, afterFetch, useSearchForm, pagination }
+      = unref(propsRef)
+    if (!api || !isFunction(api))
+      return
     try {
       setLoading(true)
       // 整合配置参数
@@ -309,7 +326,8 @@ export function useDataSource(
       // 如果配置了pagination
       if ((isBoolean(pagination) && !pagination) || isBoolean(getPaginationInfo)) {
         pageParams = {}
-      } else {
+      }
+      else {
         pageParams[pageField] = (opt && opt.page) || currentPage
         pageParams[sizeField] = pageSize
       }
@@ -325,12 +343,11 @@ export function useDataSource(
         sortInfo,
         filterInfo,
         opt?.sortInfo ?? {},
-        opt?.filterInfo ?? {}
+        opt?.filterInfo ?? {},
       )
       // 请求前处理数据
-      if (beforeFetch && isFunction(beforeFetch)) {
+      if (beforeFetch && isFunction(beforeFetch))
         params = (await beforeFetch(params)) || params
-      }
 
       const res = await api(params)
       rawDataSourceRef.value = res
@@ -345,36 +362,38 @@ export function useDataSource(
         const currentTotalPage = Math.ceil(resultTotal / pageSize)
         if (currentPage > currentTotalPage) {
           setPagination({
-            currentPage: currentTotalPage
+            currentPage: currentTotalPage,
           })
           return await fetch(opt)
         }
       }
 
-      if (afterFetch && isFunction(afterFetch)) {
+      if (afterFetch && isFunction(afterFetch))
         resultItems = (await afterFetch(resultItems)) || resultItems
-      }
+
       dataSourceRef.value = resultItems
       setPagination({
-        total: resultTotal || 0
+        total: resultTotal || 0,
       })
       if (opt && opt.page) {
         setPagination({
-          currentPage: opt.page || 1
+          currentPage: opt.page || 1,
         })
       }
       emit('fetch-success', {
         items: unref(resultItems),
-        total: resultTotal
+        total: resultTotal,
       })
       return resultItems
-    } catch (error) {
+    }
+    catch (error) {
       emit('fetch-error', error)
       dataSourceRef.value = []
       setPagination({
-        total: 0
+        total: 0,
       })
-    } finally {
+    }
+    finally {
       setLoading(false)
     }
   }
@@ -397,9 +416,9 @@ export function useDataSource(
   }
 
   onMounted(() => {
-    if (propsRef.value.defaultSort) {
+    if (propsRef.value.defaultSort)
       searchState.sortInfo = propsRef.value.defaultSort
-    }
+
     useTimeoutFn(() => {
       unref(propsRef).immediate && fetch()
     }, 16)
@@ -423,6 +442,6 @@ export function useDataSource(
     handleSortChange,
     handlePaginationChange,
     handleClearFilters,
-    handleClearSort
+    handleClearSort,
   }
 }

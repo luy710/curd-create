@@ -1,24 +1,15 @@
-<template>
-  <div class="p-4">
-    <BasicTable
-      @register="registerTable"
-      @edit-end="handleEditEnd"
-      @edit-cancel="handleEditCancel"
-      :beforeEditSubmit="beforeEditSubmit"
-    />
-  </div>
-</template>
 <script lang="ts">
 import { defineComponent, h } from 'vue'
+
 //   import { BasicTable, useTable, BasicColumn } from '/@/components/Table';
+import { ElProgress } from 'element-plus'
 import { optionsListApi } from '@/api/demo/select'
-import { BasicColumn } from '@/components/Table/types/table'
-import { BasicTable, ColumnChangeParam, TableAction, useTable } from '@hobby/curd-create'
+import type { BasicColumn } from '@/components/Table/types/table'
+import { BasicTable, useTable } from '@/components'
 import { demoListApi } from '@/api/demo/table'
 import { treeOptionsListApi } from '@/api/demo/tree'
 
 // import { useMessage } from '/@/hooks/web/useMessage'
-import { ElProgress } from 'element-plus'
 const columns: BasicColumn[] = [
   {
     label: '输入框',
@@ -26,17 +17,17 @@ const columns: BasicColumn[] = [
     edit: true,
     editComponentProps: {
       slots: {
-        prefix: '$'
-      }
+        prefix: '$',
+      },
     },
-    width: 200
+    width: 200,
   },
   {
     label: '默认输入状态',
     prop: 'name7',
     edit: true,
     editable: true,
-    width: 200
+    width: 200,
   },
   {
     label: '输入框校验',
@@ -44,19 +35,19 @@ const columns: BasicColumn[] = [
     edit: true,
     // 默认必填校验
     editRule: true,
-    width: 200
+    width: 200,
   },
   {
     label: '输入框函数校验',
     prop: 'name2',
     edit: true,
     editRule: async (text) => {
-      if (text === '2') {
+      if (text === '2')
         return '不能输入该值'
-      }
+
       return ''
     },
-    width: 200
+    width: 200,
   },
   {
     label: '数字输入框',
@@ -68,12 +59,12 @@ const columns: BasicColumn[] = [
     editComponentProps: () => {
       return {
         max: 100,
-        min: 0
+        min: 0,
       }
     },
     editRender: ({ text }) => {
       return h(ElProgress, { percentage: Number(text) })
-    }
+    },
   },
   {
     label: '下拉框',
@@ -84,15 +75,15 @@ const columns: BasicColumn[] = [
       options: [
         {
           label: 'Option1',
-          value: '1'
+          value: '1',
         },
         {
           label: 'Option2',
-          value: '2'
-        }
-      ]
+          value: '2',
+        },
+      ],
     },
-    width: 200
+    width: 200,
   },
   {
     label: '远程下拉',
@@ -103,9 +94,9 @@ const columns: BasicColumn[] = [
       api: optionsListApi,
       resultField: 'list',
       labelField: 'name',
-      valueField: 'id'
+      valueField: 'id',
     },
-    width: 200
+    width: 200,
   },
   {
     label: '远程下拉树',
@@ -126,9 +117,9 @@ const columns: BasicColumn[] = [
         return params.list
       },
       multiple: true,
-      resultField: 'list'
+      resultField: 'list',
     },
-    width: 200
+    width: 200,
   },
   {
     label: '日期选择',
@@ -137,9 +128,9 @@ const columns: BasicColumn[] = [
     editComponent: 'DatePicker',
     editComponentProps: {
       valueFormat: 'YYYY-MM-DD',
-      format: 'YYYY-MM-DD'
+      format: 'YYYY-MM-DD',
     },
-    width: 200
+    width: 200,
   },
   {
     label: '时间选择',
@@ -148,9 +139,9 @@ const columns: BasicColumn[] = [
     editComponent: 'TimePicker',
     editComponentProps: {
       valueFormat: 'HH:mm',
-      format: 'HH:mm'
+      format: 'HH:mm',
     },
-    width: 200
+    width: 200,
   },
   {
     label: '勾选框',
@@ -160,7 +151,7 @@ const columns: BasicColumn[] = [
     editValueMap: (value) => {
       return value ? '是' : '否'
     },
-    width: 200
+    width: 200,
   },
   {
     label: '开关',
@@ -170,8 +161,8 @@ const columns: BasicColumn[] = [
     editValueMap: (value) => {
       return value ? '开' : '关'
     },
-    width: 200
-  }
+    width: 200,
+  },
 ]
 export default defineComponent({
   components: { BasicTable },
@@ -179,9 +170,9 @@ export default defineComponent({
     const [registerTable] = useTable({
       title: '可编辑单元格示例',
       api: demoListApi,
-      columns: columns,
+      columns,
       showIndexColumn: false,
-      border: true
+      border: true,
     })
 
     // const { createMessage } = useMessage()
@@ -207,7 +198,8 @@ export default defineComponent({
             //   duration: 2
             // })
             resolve(false)
-          } else {
+          }
+          else {
             // createMessage.success({
             //   content: `记录${id}的${key}已保存`,
             //   key: '_save_fake_data',
@@ -232,8 +224,19 @@ export default defineComponent({
       registerTable,
       handleEditEnd,
       handleEditCancel,
-      beforeEditSubmit
+      beforeEditSubmit,
     }
-  }
+  },
 })
 </script>
+
+<template>
+  <div class="p-4">
+    <BasicTable
+      :before-edit-submit="beforeEditSubmit"
+      @register="registerTable"
+      @edit-end="handleEditEnd"
+      @edit-cancel="handleEditCancel"
+    />
+  </div>
+</template>

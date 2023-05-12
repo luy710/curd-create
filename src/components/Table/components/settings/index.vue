@@ -1,20 +1,13 @@
-<template>
-  <div class="table-settings">
-    <RedoSetting v-if="getSetting.redo" />
-    <SizeSetting v-if="getSetting.size" />
-    <ColumnSetting v-if="getSetting.setting" @columns-change="handleColumnChange" />
-    <FullScreenSetting v-if="getSetting.fullScreen" />
-  </div>
-</template>
 <script lang="ts">
 import type { PropType } from 'vue'
-import type { TableSetting, ColumnChangeParam } from '../../types/table'
+import type { ColumnChangeParam, TableSetting } from '../../types/table'
+
 // import { defineComponent, computed } from 'vue'
+import { useTableContext } from '../../hooks/useTableContext'
 import ColumnSetting from './ColumnSetting.vue'
 import SizeSetting from './SizeSetting.vue'
 import RedoSetting from './RedoSetting.vue'
 import FullScreenSetting from './FullScreenSetting.vue'
-import { useTableContext } from '../../hooks/useTableContext'
 
 export default defineComponent({
   name: 'TableSetting',
@@ -22,13 +15,13 @@ export default defineComponent({
     ColumnSetting,
     SizeSetting,
     RedoSetting,
-    FullScreenSetting
+    FullScreenSetting,
   },
   props: {
     setting: {
       type: Object as PropType<TableSetting>,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   emits: ['columns-change'],
   setup(props, { emit }) {
@@ -40,7 +33,7 @@ export default defineComponent({
         size: true,
         setting: true,
         fullScreen: true,
-        ...props.setting
+        ...props.setting,
       }
     })
 
@@ -49,9 +42,19 @@ export default defineComponent({
     }
 
     return { getSetting, handleColumnChange }
-  }
+  },
 })
 </script>
+
+<template>
+  <div class="table-settings">
+    <RedoSetting v-if="getSetting.redo" />
+    <SizeSetting v-if="getSetting.size" />
+    <ColumnSetting v-if="getSetting.setting" @columns-change="handleColumnChange" />
+    <FullScreenSetting v-if="getSetting.fullScreen" />
+  </div>
+</template>
+
 <style lang="scss">
 .table-settings {
   display: flex;

@@ -1,8 +1,3 @@
-<template>
-  <BasicTitle :class="prefixCls" v-if="getTitle" :helpMessage="helpMessage">
-    {{ getTitle }}
-  </BasicTitle>
-</template>
 <script lang="ts">
 // import { computed, defineComponent, PropType } from 'vue'
 import BasicTitle from '@/components/Basic/src/BasicTitle.vue'
@@ -13,14 +8,14 @@ export default defineComponent({
   components: { BasicTitle },
   props: {
     title: {
-      type: [Function, String] as PropType<string | ((data: Recordable) => string)>
+      type: [Function, String] as PropType<string | ((data: Recordable) => string)>,
     },
     getSelectRows: {
-      type: Function as PropType<() => Recordable[]>
+      type: Function as PropType<() => Recordable[]>,
     },
     helpMessage: {
-      type: [String, Array] as PropType<string | string[]>
-    }
+      type: [String, Array] as PropType<string | string[]>,
+    },
   },
   setup(props) {
     const prefixCls = 'basic-table-title'
@@ -31,16 +26,23 @@ export default defineComponent({
 
       if (isFunction(title)) {
         tit = title({
-          selectRows: getSelectRows()
+          selectRows: getSelectRows(),
         })
       }
       return tit
     })
 
     return { getTitle, prefixCls }
-  }
+  },
 })
 </script>
+
+<template>
+  <BasicTitle v-if="getTitle" :class="prefixCls" :help-message="helpMessage">
+    {{ getTitle }}
+  </BasicTitle>
+</template>
+
 <style lang="scss">
 .basic-table-title {
   display: flex;

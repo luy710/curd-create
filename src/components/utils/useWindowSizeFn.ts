@@ -1,5 +1,5 @@
 import { debounce } from 'lodash-es'
-import { onMounted, onBeforeUnmount } from 'vue'
+import { onBeforeUnmount, onMounted } from 'vue'
 
 interface WindowSizeOptions {
   once?: boolean
@@ -15,9 +15,9 @@ export function useWindowSizeFn<T>(fn: Fn<T>, wait = 150, options?: WindowSizeOp
   handler = handleSize
 
   const start = () => {
-    if (options && options.immediate) {
+    if (options && options.immediate)
       handler()
-    }
+
     window.addEventListener('resize', handler)
   }
 

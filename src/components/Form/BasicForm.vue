@@ -1,61 +1,27 @@
-<template>
-  <el-form v-bind="getBindValue" :class="getFormClass" ref="formElRef" :model="formModel">
-    <el-row v-bind="getRow">
-      <!-- form表单 header 插槽 -->
-      <slot name="formHeader" />
-      <template v-for="schema in getSchema" :key="schema.field">
-        <FormItem
-          :tableAction="tableAction"
-          :formActionType="formActionType"
-          :schema="schema"
-          :formProps="getProps"
-          :allDefaultValues="defaultValueRef"
-          :formModel="formModel"
-          :setFormModel="setFormModel"
-        >
-          <template #[item]="data" v-for="item in Object.keys($slots)">
-            <slot :name="item" v-bind="data || {}"></slot>
-          </template>
-        </FormItem>
-      </template>
-      <FormAction
-        v-bind="getFormActionBindProps"
-        @toggle-advanced="handleToggleAdvanced"
-        @reset="resetFields"
-        @submit="handleSubmit"
-      >
-        <template #[item]="data" v-for="item in ['resetBefore', 'submitBefore', 'advanceBefore', 'advanceAfter']">
-          <slot :name="item" v-bind="data || {}"></slot>
-        </template>
-      </FormAction>
-      <slot name="formFooter"></slot>
-    </el-row>
-  </el-form>
-</template>
-
 <script lang="ts" setup>
-import { basicProps } from './props'
-import { dateUtil } from '@/components/utils/dateUtil'
-import { FormProps, FormSchema, FormActionType } from './types/form'
-import { AdvanceState } from './types/hooks'
+import { cloneDeep, debounce, merge } from 'lodash-es'
+import { ElForm, ElRow } from 'element-plus'
+import type { Ref } from 'vue'
+import type { FormActionType, FormProps, FormSchema } from './types/form'
+import type { AdvanceState } from './types/hooks'
 import { dateItemType } from './helper'
-import { cloneDeep, merge, debounce } from 'lodash-es'
 import FormItem from './components/FormItem.vue'
 import FormAction from './components/FormAction.vue'
 import useAdvanced from './hooks/useAdvanced'
 import useFormValues from './hooks/useFormValues'
 import useAutoFocus from './hooks/useAutoFocus'
 import useFormEvents from './hooks/useFormEvents'
-import { ElForm, ElRow } from 'element-plus'
-import type { Ref } from 'vue'
+import { basicProps } from './props'
+import { dateUtil } from '@/components/utils/dateUtil'
+
 // import { reactive, computed, useAttrs, ref, unref, watch, nextTick, onMounted } from 'vue'
 // 获取props
 const props = defineProps(basicProps)
+const emit = defineEmits(['advanced-change', 'reset', 'submit', 'register', 'field-value-change'])
 // 定义表单对象
 const formModel = reactive<Recordable>({})
 // 表单默认值对象
 const defaultValueRef = ref<Recordable>({})
-const emit = defineEmits(['advanced-change', 'reset', 'submit', 'register', 'field-value-change'])
 // 是否已完成默认值初始化
 const isInitedDefaultRef = ref(false)
 // 用于存储 手动新增、修改的props
@@ -73,8 +39,8 @@ const getFormClass = computed(() => {
   return [
     prefixCls,
     {
-      [`${prefixCls}--compact`]: getProps.value?.compact
-    }
+      [`${prefixCls}--compact`]: getProps.value?.compact,
+    },
   ]
 })
 
@@ -83,7 +49,7 @@ const advanceState = reactive<AdvanceState>({
   isAdvanced: true,
   hideAdvanceBtn: false,
   isLoad: false,
-  actionSpan: 6
+  actionSpan: 6,
 })
 // 获取form 的基础配置
 const getProps = computed((): FormProps => ({ ...props, ...unref(propsRef) } as FormProps))
@@ -94,7 +60,7 @@ const getRow = computed(() => {
   const { baseRowStyle, rowProps } = getProps.value
   return {
     style: baseRowStyle,
-    ...rowProps
+    ...rowProps,
   }
 })
 
@@ -111,21 +77,21 @@ const getSchema = computed((): FormSchema[] => {
           def.push(dateUtil(item))
         })
         schema.defaultValue = def
-      } else {
+      }
+      else {
         schema.defaultValue = dateUtil(defaultValue)
       }
     }
   }
   // 如果显示操作按钮组
-  if (unref(getProps).showAdvancedButton) {
-    return cloneDeep(schemas.filter((schema) => schema.component !== 'Divider') as FormSchema[])
-  } else {
+  if (unref(getProps).showAdvancedButton)
+    return cloneDeep(schemas.filter(schema => schema.component !== 'Divider') as FormSchema[])
+  else
     return cloneDeep(schemas)
-  }
 })
 
 // 合并props
-const setProps = async (data: Partial<FormProps>): Promise<void> => {
+async function setProps(data: Partial<FormProps>): Promise<void> {
   propsRef.value = merge(unref(propsRef) || {}, data)
 }
 
@@ -136,7 +102,7 @@ const { handleToggleAdvanced } = useAdvanced({
   getProps,
   getSchema,
   formModel,
-  defaultValueRef
+  defaultValueRef,
 })
 
 // 初始化设置默认值，并返回预设时间格式化、修改数据方法
@@ -144,7 +110,7 @@ const { handleFormValues, initDefault } = useFormValues({
   defaultValueRef,
   getSchema,
   getProps,
-  formModel
+  formModel,
 })
 
 // 自动聚焦第一个input
@@ -152,7 +118,7 @@ useAutoFocus({
   getSchema,
   getProps,
   isInitedDefault: isInitedDefaultRef,
-  formElRef: formElRef as Ref<FormActionType>
+  formElRef: formElRef as Ref<FormActionType>,
 })
 
 const getFormActionBindProps = computed((): Recordable => ({ ...getProps.value, ...advanceState }))
@@ -170,7 +136,7 @@ const {
   appendSchemaByField,
   removeSchemaByFiled,
   resetFields,
-  scrollToField
+  scrollToField,
 } = useFormEvents({
   emit,
   getProps,
@@ -179,7 +145,7 @@ const {
   defaultValueRef,
   formElRef: formElRef as Ref<FormActionType>,
   schemaRef: schemaRef as Ref<FormSchema[]>,
-  handleFormValues
+  handleFormValues,
 })
 
 // 声明form 事件
@@ -196,29 +162,29 @@ const formActionType: FormActionType = {
   validateField,
   validate,
   submit: handleSubmit,
-  scrollToField: scrollToField
+  scrollToField,
 }
 
 // 手动设置formModel的value
-const setFormModel = (key: string, value: any) => {
+function setFormModel(key: string, value: any) {
   formModel[key] = value
   const { validateTrigger } = unref(getBindValue)
-  if (!validateTrigger || validateTrigger === 'change') {
+  if (!validateTrigger || validateTrigger === 'change')
     validateField([key])
-  }
+
   emit('field-value-change', key, value)
 }
 
 // 回车触发提交
-const handleEnterPress = (e: KeyboardEvent) => {
+function handleEnterPress(e: KeyboardEvent) {
   const { autoSubmitOnEnter } = unref(getProps)
-  if (!autoSubmitOnEnter) return
+  if (!autoSubmitOnEnter)
+    return
 
   if (e.key === 'Enter' && e.target && e.target instanceof HTMLElement) {
     const target = e.target
-    if (target && target.tagName && target.tagName.toLocaleLowerCase() === 'INPUT') {
+    if (target && target.tagName && target.tagName.toLocaleLowerCase() === 'INPUT')
       handleSubmit()
-    }
   }
 }
 
@@ -238,7 +204,7 @@ defineExpose({
   setFormModel,
   getFormClass,
   getFormActionBindProps,
-  ...formActionType
+  ...formActionType,
 })
 
 // 根据model 设置form表单的值
@@ -246,12 +212,13 @@ watch(
   () => unref(getProps).model,
   () => {
     const { model } = unref(getProps)
-    if (!model) return
+    if (!model)
+      return
     setFieldsValue(model)
   },
   {
-    immediate: true
-  }
+    immediate: true,
+  },
 )
 
 // 观测schema的变化重置
@@ -259,7 +226,7 @@ watch(
   () => unref(getProps).schemas,
   (schemas) => {
     resetSchema(schemas ?? [])
-  }
+  },
 )
 
 // 是否发生schema增删
@@ -271,13 +238,14 @@ watch(
     })
 
     // 如若已经初始化，则截断
-    if (isInitedDefaultRef.value) return
+    if (isInitedDefaultRef.value)
+      return
 
     if (schemas.length) {
       initDefault()
       isInitedDefaultRef.value = true
     }
-  }
+  },
 )
 
 // 观测formModel变化，如果设置了变化自动触发submit，则执行submit
@@ -286,7 +254,7 @@ watch(
   debounce(() => {
     unref(getProps).submitOnChange && handleSubmit()
   }, 300),
-  { deep: true }
+  { deep: true },
 )
 
 onMounted(() => {
@@ -294,6 +262,42 @@ onMounted(() => {
   emit('register', formActionType)
 })
 </script>
+
+<template>
+  <ElForm v-bind="getBindValue" ref="formElRef" :class="getFormClass" :model="formModel">
+    <ElRow v-bind="getRow">
+      <!-- form表单 header 插槽 -->
+      <slot name="formHeader" />
+      <template v-for="schema in getSchema" :key="schema.field">
+        <FormItem
+          :table-action="tableAction"
+          :form-action-type="formActionType"
+          :schema="schema"
+          :form-props="getProps"
+          :all-default-values="defaultValueRef"
+          :form-model="formModel"
+          :set-form-model="setFormModel"
+        >
+          <template v-for="item in Object.keys($slots)" #[item]="data">
+            <slot :name="item" v-bind="data || {}" />
+          </template>
+        </FormItem>
+      </template>
+      <FormAction
+        v-bind="getFormActionBindProps"
+        @toggle-advanced="handleToggleAdvanced"
+        @reset="resetFields"
+        @submit="handleSubmit"
+      >
+        <template v-for="item in ['resetBefore', 'submitBefore', 'advanceBefore', 'advanceAfter']" #[item]="data">
+          <slot :name="item" v-bind="data || {}" />
+        </template>
+      </FormAction>
+      <slot name="formFooter" />
+    </ElRow>
+  </ElForm>
+</template>
+
 <style lang="scss" scoped>
 .basic-form {
   &--compact {

@@ -1,10 +1,11 @@
 import type { ComputedRef, Ref } from 'vue'
-import type { FormProps, FormSchema, FormActionType } from '../types/form'
-import { isArray, isFunction, isObject, isString, isDef, isNullOrUnDef, isNumber } from '@/components/utils/is'
 import type { FormItemProp } from 'element-plus'
-import { cloneDeep, uniqBy, get, merge } from 'lodash-es'
-import { dateUtil } from '@/components/utils/dateUtil'
+import { cloneDeep, get, merge, uniqBy } from 'lodash-es'
+import type { FormActionType, FormProps, FormSchema } from '../types/form'
 import { dateItemType } from '../helper'
+import { isArray, isDef, isFunction, isNullOrUnDef, isNumber, isObject, isString } from '@/components/utils/is'
+import { dateUtil } from '@/components/utils/dateUtil'
+
 // import { unref, nextTick, toRaw } from 'vue'
 
 interface UseFormActionContext {
@@ -26,22 +27,22 @@ export default function useFormEvents({
   defaultValueRef,
   formElRef,
   schemaRef,
-  handleFormValues
+  handleFormValues,
 }: UseFormActionContext) {
   // 异步重置表单数据
   async function resetFields(): Promise<void> {
     // 获取重置回调函数以及重置之后是否立即触发submit
     const { resetFunc, submitOnReset } = unref(getProps)
 
-    if (resetFunc && isFunction(resetFunc)) {
+    if (resetFunc && isFunction(resetFunc))
       await resetFunc()
-    }
 
     const formEl = unref(formElRef)
-    if (!formEl) return
+    if (!formEl)
+      return
     // 重置之后恢复默认值
     Object.keys(formModel).forEach((key) => {
-      const schema = unref(getSchema).find((item) => item.field === key)
+      const schema = unref(getSchema).find(item => item.field === key)
       const isInput = schema?.component && schema.component.includes('Input')
 
       const defaultValue = cloneDeep(unref(defaultValueRef)[key])
@@ -62,16 +63,16 @@ export default function useFormEvents({
   const setFieldsValue = async (values: Recordable): Promise<void> => {
     // 获取所有的key
     const fields = unref(getSchema)
-      .map((item) => item.field)
+      .map(item => item.field)
       .filter(Boolean)
     // key 支持 a.b.c的写法
     const delimiter = '.'
-    const nestKeyArray = fields.filter((item) => item.indexOf(delimiter) >= 0)
+    const nestKeyArray = fields.filter(item => item.includes(delimiter))
     // 需要验证的key
     const validKeys: string[] = []
 
     Object.keys(values).forEach((key) => {
-      const schema = unref(getSchema).find((item) => item.field === key)
+      const schema = unref(getSchema).find(item => item.field === key)
       let value = values[key]
       // 判断有没有key, 因为可以设置a.b.c
       const hasKey = Reflect.has(values, key)
@@ -83,23 +84,26 @@ export default function useFormEvents({
         if (itemIsDateType(key)) {
           if (isArray(value)) {
             const arr = []
-            for (const item of value) {
+            for (const item of value)
               arr.push(item ? dateUtil(item) : null)
-            }
+
             formModel[key] = arr
-          } else {
+          }
+          else {
             const { componentProps } = schema || {}
             let _props = componentProps as any
-            if (typeof _props === 'function') {
+            if (typeof _props === 'function')
               _props = _props({ formModel })
-            }
+
             formModel[key] = value ? (_props?.valueFormat ? value : dateUtil(value)) : null
           }
-        } else {
+        }
+        else {
           formModel[key] = value
         }
         validKeys.push(key)
-      } else {
+      }
+      else {
         nestKeyArray.forEach((nestKey) => {
           try {
             const value = get(values, nestKey)
@@ -108,10 +112,10 @@ export default function useFormEvents({
               formModel[nestKey] = value
               validKeys.push(nestKey)
             }
-          } catch (error: any) {
-            if (isDef(unref(defaultValueRef)[nestKey])) {
+          }
+          catch (error: any) {
+            if (isDef(unref(defaultValueRef)[nestKey]))
               formModel[nestKey] = cloneDeep(defaultValueRef.value[nestKey])
-            }
           }
         })
       }
@@ -124,19 +128,19 @@ export default function useFormEvents({
   const removeSchemaByFiled = async (fields: string | string[]): Promise<any> => {
     const schemaList = cloneDeep(unref(getSchema))
 
-    if (!fields) return
-    let fieldList = isString(fields) ? [fields] : fields
+    if (!fields)
+      return
+    const fieldList = isString(fields) ? [fields] : fields
 
-    for (const field of fieldList) {
+    for (const field of fieldList)
       _removeSchemaByField(field, schemaList)
-    }
 
     schemaRef.value = schemaList
   }
 
   // 根据参数名称删除 formitem
   const _removeSchemaByField = (field: string, schemaList: FormSchema[]) => {
-    const index = schemaList.findIndex((item) => item.field === field)
+    const index = schemaList.findIndex(item => item.field === field)
     if (index > -1) {
       delete formModel[field]
       // 引用类型会改变=元数据
@@ -150,11 +154,11 @@ export default function useFormEvents({
 
     if (!prefixField) {
       first ? schemaList.unshift(schema) : schemaList.push(schema)
-    } else {
-      const index = schemaList.findIndex((item) => item.field === prefixField)
-      if (index > -1) {
+    }
+    else {
+      const index = schemaList.findIndex(item => item.field === prefixField)
+      if (index > -1)
         schemaList.splice(index + 1, 0, schema)
-      }
     }
 
     _setDefaultValue(schema)
@@ -164,26 +168,24 @@ export default function useFormEvents({
   // 新增form-item设置默认值
   const _setDefaultValue = (data: FormSchema | FormSchema[]) => {
     let schemas: FormSchema[] = []
-    if (isObject(data)) {
+    if (isObject(data))
       schemas.push(data as FormSchema)
-    }
-    if (isArray(data)) {
+
+    if (isArray(data))
       schemas = [...data]
-    }
 
     const obj: Recordable = {}
     const currentFieldsValue = getFieldsValue()
 
     schemas.forEach((schema) => {
       if (
-        schema.component !== 'Divider' &&
-        Reflect.has(schema, 'field') &&
-        schema.field &&
-        isNullOrUnDef(schema.defaultValue) &&
-        !(schema.field in currentFieldsValue)
-      ) {
+        schema.component !== 'Divider'
+        && Reflect.has(schema, 'field')
+        && schema.field
+        && isNullOrUnDef(schema.defaultValue)
+        && !(schema.field in currentFieldsValue)
+      )
         obj[schema.field] = schema.defaultValue
-      }
     })
 
     setFieldsValue(obj)
@@ -192,7 +194,8 @@ export default function useFormEvents({
   // 获取表单值
   const getFieldsValue = (): Recordable => {
     const formEl = unref(formElRef)
-    if (!formEl) return {}
+    if (!formEl)
+      return {}
     return handleFormValues(toRaw(unref(formModel)))
   }
 
@@ -203,46 +206,40 @@ export default function useFormEvents({
 
   // 重置表单item, 一个或者多个
   const resetSchema = async (data: Partial<FormSchema> | Partial<FormSchema>[]): Promise<void> => {
-    let updateData: Partial<FormSchema>[] = []
+    const updateData: Partial<FormSchema>[] = []
 
-    if (isObject(data)) {
+    if (isObject(data))
       updateData.push(data as Partial<FormSchema>)
-    }
 
-    if (isArray(data)) {
+    if (isArray(data))
       updateData.push(...data)
-    }
 
     const hasField = updateData.every(
-      (item) => item.component === 'Divider' || (Reflect.has(item, 'field') && item.field)
+      item => item.component === 'Divider' || (Reflect.has(item, 'field') && item.field),
     )
 
-    if (!hasField) {
+    if (!hasField)
       throw new Error('所有需要更新的 Schema 数组的子表单必须包含 `field` 字段')
-    }
 
     schemaRef.value = updateData as FormSchema[]
   }
 
   // 更新一个或者多个schema
   const updateSchema = async (data: Partial<FormSchema> | Partial<FormSchema>[]): Promise<void> => {
-    let updateData: Partial<FormSchema>[] = []
+    const updateData: Partial<FormSchema>[] = []
 
-    if (isObject(data)) {
+    if (isObject(data))
       updateData.push(data as Partial<FormSchema>)
-    }
 
-    if (isArray(data)) {
+    if (isArray(data))
       updateData.push(...data)
-    }
 
     const hasField = updateData.every(
-      (item) => item.component === 'Divider' || (Reflect.has(item, 'field') && item.field)
+      item => item.component === 'Divider' || (Reflect.has(item, 'field') && item.field),
     )
 
-    if (!hasField) {
+    if (!hasField)
       throw new Error('所有需要更新的 Schema 数组的子表单必须包含 `field` 字段')
-    }
 
     const schemas: FormSchema[] = []
 
@@ -251,7 +248,8 @@ export default function useFormEvents({
         if (val.field === item.field) {
           const newSchema = merge(val, item)
           schemas.push(newSchema)
-        } else {
+        }
+        else {
           schemas.push(val)
         }
       })
@@ -282,7 +280,7 @@ export default function useFormEvents({
           const res = handleFormValues(getFieldsValue())
           resolve(res)
         })
-        .catch((error) => reject(error))
+        .catch(error => reject(error))
     })
   }
   // 滚动到某一个表单的验证信息
@@ -302,11 +300,13 @@ export default function useFormEvents({
 
     // 首先需要执行表单验证，之后交给表单参数处理 最后emit submit事件
     const formEl = unref(formElRef)
-    if (!formEl) return
+    if (!formEl)
+      return
     try {
       const res = await validate()
       emit('submit', res)
-    } catch (error: any) {
+    }
+    catch (error: any) {
       throw new Error(error)
     }
   }
@@ -323,6 +323,6 @@ export default function useFormEvents({
     removeSchemaByFiled,
     resetFields,
     setFieldsValue,
-    scrollToField
+    scrollToField,
   }
 }

@@ -6,7 +6,7 @@ export function resultSuccess<T = Recordable>(result: T, { message = 'ok' } = {}
     code: ResultEnum.SUCCESS,
     result,
     message,
-    type: 'success'
+    type: 'success',
   }
 }
 
@@ -16,9 +16,9 @@ export function resultPageSuccess<T = any>(page: number, pageSize: number, list:
   return {
     ...resultSuccess({
       items: pageData,
-      total: list.length
+      total: list.length,
     }),
-    message
+    message,
   }
 }
 
@@ -27,7 +27,7 @@ export function resultError(message = 'Request failed', { code = ResultEnum.ERRO
     code,
     result,
     message,
-    type: 'error'
+    type: 'error',
   }
 }
 

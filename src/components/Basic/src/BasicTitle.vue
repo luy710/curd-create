@@ -1,13 +1,9 @@
-<template>
-  <span :class="getClass">
-    <slot></slot>
-    <BasicHelp :class="`${prefixCls}-help`" v-if="helpMessage" :text="helpMessage" />
-  </span>
-</template>
 <script lang="ts" setup>
 import type { PropType } from 'vue'
+
 // import { useSlots, computed, defineProps } from 'vue'
 import BasicHelp from './BasicHelp.vue'
+
 const props = defineProps({
   /**
    * Help text list or string
@@ -15,7 +11,7 @@ const props = defineProps({
    */
   helpMessage: {
     type: [String, Array] as PropType<string | string[]>,
-    default: ''
+    default: '',
   },
   /**
    * Whether the color block on the left side of the title
@@ -26,7 +22,7 @@ const props = defineProps({
    * Whether to default the text, that is, not bold
    * @default: false
    */
-  normal: { type: Boolean }
+  normal: { type: Boolean },
 })
 
 const prefixCls = 'basic-title'
@@ -34,9 +30,17 @@ const slots = useSlots()
 const getClass = computed(() => [
   prefixCls,
   { [`${prefixCls}-show-span`]: props.span && slots.default },
-  { [`${prefixCls}-normal`]: props.normal }
+  { [`${prefixCls}-normal`]: props.normal },
 ])
 </script>
+
+<template>
+  <span :class="getClass">
+    <slot />
+    <BasicHelp v-if="helpMessage" :class="`${prefixCls}-help`" :text="helpMessage" />
+  </span>
+</template>
+
 <style lang="scss" scoped>
 .basic-title {
   position: relative;

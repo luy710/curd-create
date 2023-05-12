@@ -1,23 +1,23 @@
-import { BasicPageParams, BasicFetchResult } from '@/api/model/baseModel'
+import type { BasicFetchResult, BasicPageParams } from '@/api/model/baseModel'
 
 export type AccountParams = BasicPageParams & {
   account?: string
   nickname?: string
 }
 
-export type RoleParams = {
+export interface RoleParams {
   roleName?: string
   status?: string
 }
 
 export type RolePageParams = BasicPageParams & RoleParams
 
-export type DeptParams = {
+export interface DeptParams {
   deptName?: string
   status?: string
 }
 
-export type MenuParams = {
+export interface MenuParams {
   menuName?: string
   status?: string
 }

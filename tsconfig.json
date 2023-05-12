@@ -20,7 +20,8 @@
     }
   },
   "vueCompilerOptions": {
-    "target": 3,
+    "target": 3
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "types/**/*.d.ts", "types/**/*.ts", "mock/**/*.ts",]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "types/**/*.d.ts", "types/**/*.ts", "mock/**/*.ts"],
+  "exclude": ["README.md", "table.md", "form.md", "dist/lib"]
 }

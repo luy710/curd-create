@@ -2,7 +2,7 @@ import axios from '@/request/axios'
 
 enum Api {
   // The address does not exist
-  Error = '/error'
+  Error = '/error',
 }
 
 /**

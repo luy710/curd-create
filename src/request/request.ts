@@ -1,4 +1,5 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
+import type { AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios from 'axios'
 
 export interface PendingType {
   url?: string
@@ -15,9 +16,9 @@ const instance = axios.create({
   baseURL,
   data: {},
   headers: {
-    ContentType: 'application/json;charset=UTF-8'
+    ContentType: 'application/json;charset=UTF-8',
   },
-  responseType: 'json'
+  responseType: 'json',
 })
 
 // 添加请求拦截器
@@ -27,7 +28,7 @@ instance.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error)
-  }
+  },
 )
 
 // 添加相应拦截器
@@ -36,12 +37,11 @@ instance.interceptors.response.use(
     return response
   },
   (error) => {
-    if (!error || !error.response) {
-      return Promise.reject('请求出错')
-    }
+    if (!error || !error.response)
+      return Promise.reject(new Error('请求出错'))
 
     return Promise.reject(error?.response)
-  }
+  },
 )
 
 export default instance

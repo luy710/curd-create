@@ -1,23 +1,7 @@
-<template>
-  <div title="动态表单示例">
-    <div class="mb-4">
-      <el-button @click="changeLabel3" class="mr-2 mb-5"> 更改字段3label </el-button>
-      <el-button @click="changeLabel34" class="mr-2 mb-5"> 同时更改字段3,4label </el-button>
-      <el-button @click="appendField" class="mr-2 mb-5"> 往字段3后面插入字段10 </el-button>
-      <el-button @click="deleteField" class="mr-2 mb-5"> 删除字段11 </el-button>
-    </div>
-    <el-card class="mb-5" title="动态表单示例,动态根据表单内其他值改变">
-      <BasicForm @register="register" @submit="submitHandler" />
-    </el-card>
-
-    <el-card class="mt-5" title="componentProps动态改变">
-      <BasicForm @register="register1" />
-    </el-card>
-  </div>
-</template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { BasicForm, FormSchema, useForm } from '@hobby/curd-create'
+import type { FormSchema } from '@/components'
+import { BasicForm, useForm } from '@/components'
 
 const schemas: FormSchema[] = [
   {
@@ -25,40 +9,40 @@ const schemas: FormSchema[] = [
     component: 'Input',
     label: '字段1',
     colProps: {
-      span: 8
+      span: 8,
     },
     show: ({ values }) => {
       return !!values.field5
-    }
+    },
   },
   {
     field: 'field2',
     component: 'Input',
     label: '字段2',
     colProps: {
-      span: 8
+      span: 8,
     },
     ifShow: ({ values }) => {
       return !!values.field6
-    }
+    },
   },
   {
     field: 'field3',
     component: 'DatePicker',
     label: '字段3',
     colProps: {
-      span: 8
+      span: 8,
     },
     dynamicDisabled: ({ values }) => {
       return !!values.field7
-    }
+    },
   },
   {
     field: 'field4',
     component: 'Select',
     label: '字段4',
     colProps: {
-      span: 8
+      span: 8,
     },
     dynamicRules: ({ values }) => {
       return values.field8 ? [{ required: true, message: '字段4必填' }] : []
@@ -68,60 +52,60 @@ const schemas: FormSchema[] = [
         {
           label: '选项1',
           value: '1',
-          key: '1'
+          key: '1',
         },
         {
           label: '选项2',
           value: '2',
-          key: '2'
-        }
-      ]
-    }
+          key: '2',
+        },
+      ],
+    },
   },
   {
     field: 'field11',
     component: 'DatePicker',
     label: '字段11',
     colProps: {
-      span: 8
-    }
+      span: 8,
+    },
   },
   {
     field: 'field5',
     component: 'Switch',
     label: '是否显示字段1(css控制)',
     colProps: {
-      span: 8
+      span: 8,
     },
-    labelWidth: 200
+    labelWidth: 200,
   },
   {
     field: 'field6',
     component: 'Switch',
     label: '是否显示字段2(dom控制)',
     colProps: {
-      span: 8
+      span: 8,
     },
-    labelWidth: 200
+    labelWidth: 200,
   },
   {
     field: 'field7',
     component: 'Switch',
     label: '是否禁用字段3',
     colProps: {
-      span: 8
+      span: 8,
     },
-    labelWidth: 200
+    labelWidth: 200,
   },
   {
     field: 'field8',
     component: 'Switch',
     label: '字段4是否必填',
     colProps: {
-      span: 8
+      span: 8,
     },
-    labelWidth: 200
-  }
+    labelWidth: 200,
+  },
 ]
 
 const schemas1: FormSchema[] = [
@@ -130,7 +114,7 @@ const schemas1: FormSchema[] = [
     component: 'Input',
     label: 'F1',
     colProps: {
-      span: 12
+      span: 12,
     },
     labelWidth: 200,
     componentProps: ({ formModel }) => {
@@ -138,29 +122,29 @@ const schemas1: FormSchema[] = [
         placeholder: '同步f2的值为f1',
         onChange: (value: any) => {
           formModel.f2 = value
-        }
+        },
       }
-    }
+    },
   },
   {
     field: 'f2',
     component: 'Input',
     label: 'F2',
     colProps: {
-      span: 12
+      span: 12,
     },
     labelWidth: 200,
-    componentProps: { disabled: true }
+    componentProps: { disabled: true },
   },
   {
     field: 'f3',
     component: 'Input',
     label: 'F3',
     colProps: {
-      span: 12
+      span: 12,
     },
     labelWidth: 200,
-    // @ts-ignore
+    // @ts-expect-error
     componentProps: ({ formActionType }) => {
       return {
         placeholder: '值改变时执行查询,查看控制台',
@@ -170,10 +154,10 @@ const schemas1: FormSchema[] = [
           // const { reload } = tableAction;
           const res = await validate()
           console.log(res)
-        }
+        },
       }
-    }
-  }
+    },
+  },
 ]
 
 export default defineComponent({
@@ -183,32 +167,32 @@ export default defineComponent({
       labelWidth: 150,
       schemas,
       actionColOptions: {
-        span: 24
-      }
+        span: 24,
+      },
     })
     const [register1] = useForm({
       labelWidth: 120,
       schemas: schemas1,
       actionColOptions: {
-        span: 24
-      }
+        span: 24,
+      },
     })
     function changeLabel3() {
       updateSchema({
         field: 'field3',
-        label: '字段3 New'
+        label: '字段3 New',
       })
     }
     function changeLabel34() {
       updateSchema([
         {
           field: 'field3',
-          label: '字段3 New++'
+          label: '字段3 New++',
         },
         {
           field: 'field4',
-          label: '字段4 New++'
-        }
+          label: '字段4 New++',
+        },
       ])
     }
 
@@ -219,10 +203,10 @@ export default defineComponent({
           label: '字段10',
           component: 'Input',
           colProps: {
-            span: 8
-          }
+            span: 8,
+          },
         },
-        'field3'
+        'field3',
       )
     }
     function deleteField() {
@@ -240,8 +224,34 @@ export default defineComponent({
       changeLabel3,
       changeLabel34,
       appendField,
-      deleteField
+      deleteField,
     }
-  }
+  },
 })
 </script>
+
+<template>
+  <div title="动态表单示例">
+    <div class="mb-4">
+      <el-button class="mr-2 mb-5" @click="changeLabel3">
+        更改字段3label
+      </el-button>
+      <el-button class="mr-2 mb-5" @click="changeLabel34">
+        同时更改字段3,4label
+      </el-button>
+      <el-button class="mr-2 mb-5" @click="appendField">
+        往字段3后面插入字段10
+      </el-button>
+      <el-button class="mr-2 mb-5" @click="deleteField">
+        删除字段11
+      </el-button>
+    </div>
+    <el-card class="mb-5" title="动态表单示例,动态根据表单内其他值改变">
+      <BasicForm @register="register" @submit="submitHandler" />
+    </el-card>
+
+    <el-card class="mt-5" title="componentProps动态改变">
+      <BasicForm @register="register1" />
+    </el-card>
+  </div>
+</template>

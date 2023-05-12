@@ -1,9 +1,9 @@
-import { MockMethod } from 'vite-plugin-mock'
+import type { MockMethod } from 'vite-plugin-mock'
 import { resultSuccess } from '../_util'
 
-const demoTreeList = (keyword: string) => {
+function demoTreeList(keyword: string) {
   const result = {
-    list: [] as Recordable[]
+    list: [] as Recordable[],
   }
   for (let index = 0; index < 5; index++) {
     const children: Recordable[] = []
@@ -11,14 +11,14 @@ const demoTreeList = (keyword: string) => {
       children.push({
         title: `${keyword ?? ''}选项${index}-${j}`,
         value: `${index}-${j}`,
-        key: `${index}-${j}`
+        key: `${index}-${j}`,
       })
     }
     result.list.push({
       title: `${keyword ?? ''}选项${index}`,
       value: `${index}`,
       key: `${index}`,
-      children
+      children,
     })
   }
   return result
@@ -33,6 +33,6 @@ export default [
       const { keyword } = query
       console.log(keyword)
       return resultSuccess(demoTreeList(keyword))
-    }
-  }
+    },
+  },
 ] as MockMethod[]

@@ -8,22 +8,11 @@
 > 通过useForm创建表单，并通过useForm hooks快速调用内部方法
 
 ```vue
-<template>
-  <el-card title="UseForm操作示例">
-    <div class="mb-4">
-      <el-button @click="setProps({ labelWidth: 150 })" class="mr-2"> 更改labelWidth </el-button>
-      <el-button @click="setProps({ labelWidth: 120 })" class="mr-2"> 还原labelWidth </el-button>
-    </div>
-    <el-card title="useForm示例">
-      <BasicForm @register="register" @submit="handleSubmit" />
-    </el-card>
-  </el-card>
-</template>
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { ElMessage } from 'element-plus'
 import { BasicForm, FormSchema, useForm } from '@/components/index'
 import { areaRecord } from '@/api/demo/cascader'
-import { ElMessage } from 'element-plus'
 
 const schemas: FormSchema[] = [
   {
@@ -102,7 +91,7 @@ export default defineComponent({
       register,
       schemas,
       handleSubmit: (values: Recordable) => {
-        ElMessage.success('click search,values:' + JSON.stringify(values))
+        ElMessage.success(`click search,values:${JSON.stringify(values)}`)
       },
       setProps,
       handleLoad
@@ -110,48 +99,68 @@ export default defineComponent({
   }
 })
 </script>
+
+<template>
+  <el-card title="UseForm操作示例">
+    <div class="mb-4">
+      <el-button class="mr-2" @click="setProps({ labelWidth: 150 })">
+        更改labelWidth
+      </el-button>
+      <el-button class="mr-2" @click="setProps({ labelWidth: 120 })">
+        还原labelWidth
+      </el-button>
+    </div>
+    <el-card title="useForm示例">
+      <BasicForm @register="register" @submit="handleSubmit" />
+    </el-card>
+  </el-card>
+</template>
 ```
 ### 2. template
 ```vue
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
+import { BasicForm, FormActionType, FormProps, FormSchema } from '@/components/index'
+
+const schemas: FormSchema[] = [
+]
+
+export default defineComponent({
+  components: { BasicForm },
+  setup() {
+    const formElRef = ref<Nullable<FormActionType>>(null)
+    return {
+      formElRef,
+      schemas,
+      setProps(props: FormProps) {
+        const formEl = formElRef.value
+        if (!formEl)
+          return
+        formEl.setProps(props)
+      },
+    }
+  },
+})
+</script>
+
 <template>
   <div class="m-4">
-      <BasicForm
-        :schemas="schemas"
-        ref="formElRef"
-        :labelWidth="100"
-        @submit="handleSubmit"
-        :actionColOptions="{ span: 24 }"
-      />
-  <div>
+    <BasicForm
+      ref="formElRef"
+      :schemas="schemas"
+      :label-width="100"
+      :action-col-options="{ span: 24 }"
+      @submit="handleSubmit"
+    />
+    <div />
+  </div>
 </template>
-<script lang="ts">
-  import { defineComponent, ref } from 'vue';
-  import { BasicForm, FormSchema, FormActionType, FormProps } from '@/components/index';
-  const schemas: FormSchema[] = [
-  ];
-
-  export default defineComponent({
-    components: { BasicForm },
-    setup() {
-      const formElRef = ref<Nullable<FormActionType>>(null);
-      return {
-        formElRef,
-        schemas,
-        setProps(props: FormProps) {
-          const formEl = formElRef.value;
-          if (!formEl) return;
-          formEl.setProps(props);
-        },
-      };
-    },
-  });
-</script>
 ```
 
 ### 参数介绍
 
 ```ts
-const [register, methods] = useForm(props);
+const [register, methods] = useForm(props)
 ```
 
 **参数 props 内的值可以是 computed 或者 ref 类型**
@@ -187,7 +196,6 @@ updateSchema([
   { field: 'filed', componentProps: { disabled: true } },
   { field: 'filed1', componentProps: { disabled: false } },
 ])
-
 ```
 
 ### BasicForm 属性
@@ -251,7 +259,6 @@ export interface ColEx {
   xl?: { span: ColSpanType; offset: ColSpanType } | ColSpanType
   xxl?: { span: ColSpanType; offset: ColSpanType } | ColSpanType
 }
-
 ```
 
 **fieldMapToTime**
@@ -262,7 +269,6 @@ export interface ColEx {
 类型： 
 ```ts
 export type FieldMapToTime = [string, [string, string], string?][]
-
 ```
 使用示例
 
@@ -291,6 +297,7 @@ useForm({
 **ButtonOptions**
 ```ts
 import type { ButtonProps } from 'element-plus'
+
 export type ButtonOptions = Partial<ButtonProps> & { innerTxt?: string }
 ```
 
@@ -373,19 +380,19 @@ export interface RenderCallbackParams {
 
 ```ts
 export interface HelpComponentProps {
-  maxWidth: string;
+  maxWidth: string
   // 是否显示序号
-  showIndex: boolean;
+  showIndex: boolean
   // 文本列表
-  text: any;
+  text: any
   // 颜色
-  color: string;
+  color: string
   // 字体大小
-  fontSize: string;
-  icon: string;
-  absolute: boolean;
+  fontSize: string
+  icon: string
+  absolute: boolean
   // 定位
-  position: any;
+  position: any
 }
 ```
 
@@ -415,7 +422,6 @@ export type ComponentType =
   | 'Tree'
   | 'Transfer'
   | 'AutoComplete'
-
 ```
 
 ### Divider schema说明
@@ -429,19 +435,10 @@ export type ComponentType =
 ### 自定义内容渲染 （render & renderComponentContent & slot）
 
 ```vue
-<template>
-  <el-card title="自定义表单">
-    <BasicForm @register="register" @submit="handleSubmit">
-      <template #f3="{ model, field }">
-        <el-input v-model="model[field]" placeholder="自定义slot" />
-      </template>
-    </BasicForm>
-  </el-card>
-</template>
 <script lang="ts">
 import { defineComponent, h } from 'vue'
-import { BasicForm, FormSchema, useForm } from '@/components/index'
 import { ElInput, ElMessage } from 'element-plus'
+import { BasicForm, FormSchema, useForm } from '@/components/index'
 
 const schemas: FormSchema[] = [
   {
@@ -501,7 +498,7 @@ export default defineComponent({
       register,
       schemas,
       handleSubmit: (values: any) => {
-        ElMessage.success('click search,values:' + JSON.stringify(values))
+        ElMessage.success(`click search,values:${JSON.stringify(values)}`)
       },
       setProps
     }
@@ -509,6 +506,15 @@ export default defineComponent({
 })
 </script>
 
+<template>
+  <el-card title="自定义表单">
+    <BasicForm @register="register" @submit="handleSubmit">
+      <template #f3="{ model, field }">
+        <el-input v-model="model[field]" placeholder="自定义slot" />
+      </template>
+    </BasicForm>
+  </el-card>
+</template>
 ```
 
 ### ifShow/show/dynamicDisabled
@@ -516,69 +522,70 @@ export default defineComponent({
 自定义显示/禁用
 
 ```vue
+<script lang="ts">
+import { defineComponent } from 'vue'
+import { BasicForm, FormSchema, useForm } from '@/components/index'
+
+const schemas: FormSchema[] = [
+  {
+    field: 'field1',
+    component: 'Input',
+    label: '字段1',
+    colProps: {
+      span: 8,
+    },
+    show: ({ values }) => {
+      return !!values.field5
+    },
+  },
+  {
+    field: 'field2',
+    component: 'Input',
+    label: '字段2',
+    colProps: {
+      span: 8,
+    },
+    ifShow: ({ values }) => {
+      return !!values.field6
+    },
+  },
+  {
+    field: 'field3',
+    component: 'DatePicker',
+    label: '字段3',
+    colProps: {
+      span: 8,
+    },
+    dynamicDisabled: ({ values }) => {
+      return !!values.field7
+    },
+  },
+]
+
+export default defineComponent({
+  components: { BasicForm },
+  setup() {
+    const [register, { setProps }] = useForm({
+      labelWidth: 120,
+      schemas,
+      actionColOptions: {
+        span: 24,
+      },
+    })
+    return {
+      register,
+      schemas,
+      setProps,
+    }
+  },
+})
+</script>
+
 <template>
   <div class="m-4">
     <BasicForm @register="register" />
   </div>
 </template>
-<script lang="ts">
-  import { defineComponent } from 'vue';
-  import { BasicForm, FormSchema, useForm } from '@/components/index';
-
-  const schemas: FormSchema[] = [
-    {
-      field: 'field1',
-      component: 'Input',
-      label: '字段1',
-      colProps: {
-        span: 8,
-      },
-      show: ({ values }) => {
-        return !!values.field5;
-      },
-    },
-    {
-      field: 'field2',
-      component: 'Input',
-      label: '字段2',
-      colProps: {
-        span: 8,
-      },
-      ifShow: ({ values }) => {
-        return !!values.field6;
-      },
-    },
-    {
-      field: 'field3',
-      component: 'DatePicker',
-      label: '字段3',
-      colProps: {
-        span: 8,
-      },
-      dynamicDisabled: ({ values }) => {
-        return !!values.field7;
-      },
-    },
-  ];
-
-  export default defineComponent({
-    components: { BasicForm },
-    setup() {
-      const [register, { setProps }] = useForm({
-        labelWidth: 120,
-        schemas,
-        actionColOptions: {
-          span: 24,
-        },
-      });
-      return {
-        register,
-        schemas,
-        setProps,
-      };
-    },
-  });
-</script>
 ```
 
 ### BasicForm插槽
@@ -658,30 +665,30 @@ export default defineComponent({
 ### 使用示例
 
 ```vue
-<template >
-  <CheckboxGroup 
-    modelValue="value" 
-    :isBtn="true" 
-    :options='[
+<script lang="ts" setup>
+import CheckboxGroup from '@/components/Form/components/CheckboxGroup.vue'
+
+const value = ref([])
+</script>
+
+<template>
+  <CheckboxGroup
+    model-value="value"
+    :is-btn="true"
+    :options="[
       {
-        label: '选项1',
-        value: '1',
-        key: '1'
-      },
-      {
-        label: '选项2',
-        value: '2',
-        key: '2'
-      }
+        label: "选项1',
+    value: '1',
+    key: '1'
+    },
+    {
+    label: '选项2',
+    value: '2',
+    key: '2'
+    }
     ]'
   />
-
 </template>
-<script lang="ts" setup>
-  import CheckboxGroup from '@/components/Form/components/CheckboxGroup.vue'
-  const value = ref([])
-
-</script>
 ```
 
 ### Props
@@ -699,30 +706,30 @@ export default defineComponent({
 ### 使用示例
 
 ```vue
-<template >
-  <RadioGroup 
-    modelValue="value" 
-    :isBtn="true" 
-    :options='[
+<script lang="ts" setup>
+import RadioGroup from '@/components/Form/components/RadioGroup.vue'
+
+const value = ref([])
+</script>
+
+<template>
+  <RadioGroup
+    model-value="value"
+    :is-btn="true"
+    :options="[
       {
-        label: '选项1',
-        value: '1',
-        key: '1'
-      },
-      {
-        label: '选项2',
-        value: '2',
-        key: '2'
-      }
+        label: "选项1',
+    value: '1',
+    key: '1'
+    },
+    {
+    label: '选项2',
+    value: '2',
+    key: '2'
+    }
     ]'
   />
-
 </template>
-<script lang="ts" setup>
-  import RadioGroup from '@/components/Form/components/RadioGroup.vue'
-  const value = ref([])
-
-</script>
 ```
 
 ### Props

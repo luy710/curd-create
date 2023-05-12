@@ -1,20 +1,19 @@
 <script lang="tsx">
 import type { CSSProperties, PropType } from 'vue'
+
 // import { computed, defineComponent, nextTick, ref, toRaw, unref, watchEffect } from 'vue'
-import type { BasicColumn } from '../../types/table'
-import type { EditRecordRow } from './index'
 import { Check, Close, Edit } from '@element-plus/icons-vue'
-import { ElLoadingDirective, ElIcon } from 'element-plus'
-
-import { CellComponent } from './CellComponent'
-
+import { ElIcon, ElLoadingDirective } from 'element-plus'
+import { pick, set } from 'lodash-es'
+import type { BasicColumn } from '../../types/table'
 import { useTableContext } from '../../hooks/useTableContext'
+import { CellComponent } from './CellComponent'
+import { createPlaceholderMessage } from './helper'
+import type { EditRecordRow } from './index'
 
 import clickOutside from '@/directives/clickOutside'
 
 import { isArray, isBoolean, isFunction, isNumber, isString } from '@/components/utils/is'
-import { createPlaceholderMessage } from './helper'
-import { pick, set } from 'lodash-es'
 import { treeToList } from '@/components/utils/treeHelper'
 
 export default defineComponent({
@@ -22,24 +21,24 @@ export default defineComponent({
   components: { Edit, Close, Check, CellComponent, ElIcon },
   directives: {
     clickOutside,
-    loading: ElLoadingDirective
+    loading: ElLoadingDirective,
   },
   props: {
     value: {
       type: [String, Number, Boolean, Object] as PropType<string | number | boolean | Recordable>,
-      default: ''
+      default: '',
     },
     record: {
-      type: Object as PropType<EditRecordRow>
+      type: Object as PropType<EditRecordRow>,
     },
     column: {
       type: Object as PropType<BasicColumn>,
-      default: () => ({})
+      default: () => ({}),
     },
     index: {
       type: Number,
-      default: -1
-    }
+      default: -1,
+    },
   },
   setup(props) {
     const table = useTableContext()
@@ -78,14 +77,13 @@ export default defineComponent({
 
       const { record, column, index } = props
 
-      if (isFunction(compProps)) {
+      if (isFunction(compProps))
         compProps = compProps({ text: val, record, column, index }) ?? {}
-      }
+
       const component = unref(getComponent)
       const apiSelectProps: Recordable = {}
-      if (component === 'Select') {
+      if (component === 'Select')
         apiSelectProps.cache = true
-      }
 
       upEditDynamicDisabled(record, column, value)
 
@@ -95,50 +93,49 @@ export default defineComponent({
         ...apiSelectProps,
         ...compProps,
         [valueField]: value,
-        disabled: unref(getDisable)
+        disabled: unref(getDisable),
       } as any
     })
 
     const getComponentEvent = computed(() => {
-      let eventProp: string = 'onChange'
-      if (['Input', 'InputNumber'].includes(getComponent.value)) {
+      let eventProp = 'onChange'
+      if (['Input', 'InputNumber'].includes(getComponent.value))
         eventProp = 'onInput'
-      }
 
-      if (['DatePicker', 'TimePicker'].includes(getComponent.value)) {
+      if (['DatePicker', 'TimePicker'].includes(getComponent.value))
         eventProp = 'onUpdate:modelValue'
-      }
 
       return {
-        [eventProp]: handleChange
+        [eventProp]: handleChange,
       }
     })
     function upEditDynamicDisabled(record: any, column: any, value: any) {
       const { editDynamicChange } = props.column
       let dynamicChange = false
-      if (isBoolean(editDynamicChange)) {
+      if (isBoolean(editDynamicChange))
         dynamicChange = editDynamicChange
-      }
+
       if (isFunction(editDynamicChange)) {
         const { record } = props
         dynamicChange = editDynamicChange({ record })
       }
-      if (!dynamicChange) {
+      if (!dynamicChange)
         return
-      }
 
-      if (!record) return false
+      if (!record)
+        return false
       const { columnKey, prop } = column
-      if (!columnKey && !prop) return
+      if (!columnKey && !prop)
+        return
       const dataKey = (prop || columnKey) as string
       set(record, dataKey, value)
     }
     const getDisable = computed(() => {
       const { editDynamicDisabled } = props.column
       let disabled = false
-      if (isBoolean(editDynamicDisabled)) {
+      if (isBoolean(editDynamicDisabled))
         disabled = editDynamicDisabled
-      }
+
       if (isFunction(editDynamicDisabled)) {
         const { record } = props
         disabled = editDynamicDisabled({ record })
@@ -150,28 +147,26 @@ export default defineComponent({
 
       const value = unref(currentValueRef)
 
-      if (editValueMap && isFunction(editValueMap)) {
+      if (editValueMap && isFunction(editValueMap))
         return editValueMap(value)
-      }
 
       const component = unref(getComponent)
-      if (!component.includes('Select')) {
+      if (!component.includes('Select'))
         return value
-      }
 
       const options: LabelValueOptions = unref(getComponentProps)?.options ?? (unref(optionsRef) || [])
-      const option = options.find((item) => `${item.value}` === `${value}`)
+      const option = options.find(item => `${item.value}` === `${value}`)
 
       return option?.label ?? value
     })
 
     const getWrapperStyle = computed((): CSSProperties => {
-      if (unref(getIsCheckComp) || unref(getRowEditable)) {
+      if (unref(getIsCheckComp) || unref(getRowEditable))
         return {}
-      }
+
       return {
         // width: 'calc(100% - 48px)',
-        width: '100%'
+        width: '100%',
       }
     })
 
@@ -192,13 +187,13 @@ export default defineComponent({
 
     watchEffect(() => {
       const { editable } = props.column
-      if (isBoolean(editable) || unref(getRowEditable)) {
+      if (isBoolean(editable) || unref(getRowEditable))
         isEdit.value = !!editable || unref(getRowEditable)
-      }
     })
 
     function handleEdit() {
-      if (unref(getRowEditable) || unref(props.column?.editRow)) return
+      if (unref(getRowEditable) || unref(props.column?.editRow))
+        return
       ruleMessage.value = ''
       isEdit.value = true
       nextTick(() => {
@@ -209,24 +204,25 @@ export default defineComponent({
 
     async function handleChange(e: any) {
       const component = unref(getComponent)
-      if (!e) {
+      if (!e)
         currentValueRef.value = e
-      } else if (component === 'Checkbox') {
+      else if (component === 'Checkbox')
         currentValueRef.value = e
-      } else if (component === 'Switch') {
+      else if (component === 'Switch')
         currentValueRef.value = e
-      } else if (e?.target && Reflect.has(e.target, 'value')) {
+      else if (e?.target && Reflect.has(e.target, 'value'))
         currentValueRef.value = (e as ChangeEvent).target.value
-      } else if (isString(e) || isBoolean(e) || isNumber(e) || isArray(e)) {
+      else if (isString(e) || isBoolean(e) || isNumber(e) || isArray(e))
         currentValueRef.value = e
-      }
+
       const onChange = unref(getComponentProps)?.onChange
-      if (onChange && isFunction(onChange)) onChange(...arguments)
+      if (onChange && isFunction(onChange))
+        onChange(...arguments)
 
       table.emit?.('edit-change', {
         column: props.column,
         value: unref(currentValueRef),
-        record: toRaw(props.record)
+        record: toRaw(props.record),
       })
       handleSubmitRule()
     }
@@ -245,11 +241,12 @@ export default defineComponent({
         }
         if (isFunction(editRule)) {
           const res = await editRule(currentValue, record as Recordable)
-          if (!!res) {
+          if (res) {
             ruleMessage.value = res
             ruleVisible.value = true
             return false
-          } else {
+          }
+          else {
             ruleMessage.value = ''
             return true
           }
@@ -262,14 +259,17 @@ export default defineComponent({
     async function handleSubmit(needEmit = true, valid = true) {
       if (valid) {
         const isPass = await handleSubmitRule()
-        if (!isPass) return false
+        if (!isPass)
+          return false
       }
 
       const { column, index, record } = props
-      if (!record) return false
+      if (!record)
+        return false
       const { columnKey, prop } = column
       const value = unref(currentValueRef)
-      if (!columnKey && !prop) return
+      if (!columnKey && !prop)
+        return
 
       const dataKey = (prop || columnKey) as string
 
@@ -280,36 +280,37 @@ export default defineComponent({
 
         if (beforeEditSubmit && isFunction(beforeEditSubmit)) {
           spinning.value = true
-          const keys: string[] = columns.map((_column) => _column.prop).filter((field) => !!field) as string[]
+          const keys: string[] = columns.map(_column => _column.prop).filter(field => !!field) as string[]
           let result: any = true
           try {
             result = await beforeEditSubmit({
               record: pick(record, keys),
               index,
               key: dataKey as string,
-              value
+              value,
             })
-          } catch (e) {
+          }
+          catch (e) {
             result = false
-          } finally {
+          }
+          finally {
             spinning.value = false
           }
-          if (result === false) {
+          if (result === false)
             return
-          }
         }
       }
 
       set(record, dataKey, value)
-      //const record = await table.updateTableData(index, dataKey, value);
+      // const record = await table.updateTableData(index, dataKey, value);
       needEmit && table.emit?.('edit-end', { record, index, key: dataKey, value })
       isEdit.value = false
     }
 
     async function handleEnter() {
-      if (props.column?.editRow) {
+      if (props.column?.editRow)
         return
-      }
+
       handleSubmit()
     }
 
@@ -326,19 +327,18 @@ export default defineComponent({
         record,
         index,
         key: prop || columnKey,
-        value: unref(currentValueRef)
+        value: unref(currentValueRef),
       })
     }
 
     function onClickOutside() {
-      if (props.column?.editable || unref(getRowEditable)) {
+      if (props.column?.editable || unref(getRowEditable))
         return
-      }
+
       const component = unref(getComponent)
 
-      if (component.includes('Input')) {
+      if (component.includes('Input'))
         handleCancel()
-      }
     }
 
     // only ApiSelect or TreeSelect
@@ -351,11 +351,12 @@ export default defineComponent({
         listOptions = listOptions.map((item) => {
           return {
             label: item[title],
-            value: item[value]
+            value: item[value],
           }
         })
         optionsRef.value = listOptions as LabelValueOptions
-      } else {
+      }
+      else {
         optionsRef.value = options
       }
     }

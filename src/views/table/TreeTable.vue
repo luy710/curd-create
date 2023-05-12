@@ -1,19 +1,7 @@
-<template>
-  <div class="p-4">
-    <BasicTable @register="register">
-      <template #toolbar>
-        <el-button size="small" type="primary" @click="() => toggleRowExpand(true)">展开第一行</el-button>
-        <el-button size="small" type="primary" @click="() => toggleRowExpand(false)">收起第一行</el-button>
-        <el-button size="small" type="primary" @click="expandAll">展开全部</el-button>
-        <el-button size="small" type="primary" @click="collapseAll">折叠全部</el-button>
-      </template>
-    </BasicTable>
-  </div>
-</template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { BasicTable, useTable } from '@hobby/curd-create'
 import { getBasicColumns, getTreeTableData } from './tableData'
+import { BasicTable, useTable } from '@/components'
 
 export default defineComponent({
   components: { BasicTable },
@@ -28,12 +16,33 @@ export default defineComponent({
       indent: 10,
       border: true,
       stripe: true,
-      rowKey: 'id'
+      rowKey: 'id',
     })
     const toggleRowExpand = (expanded: boolean) => {
       toggleRowExpansion(getDataSource()[0], expanded)
     }
     return { register, expandAll, collapseAll, toggleRowExpand }
-  }
+  },
 })
 </script>
+
+<template>
+  <div class="p-4">
+    <BasicTable @register="register">
+      <template #toolbar>
+        <el-button size="small" type="primary" @click="() => toggleRowExpand(true)">
+          展开第一行
+        </el-button>
+        <el-button size="small" type="primary" @click="() => toggleRowExpand(false)">
+          收起第一行
+        </el-button>
+        <el-button size="small" type="primary" @click="expandAll">
+          展开全部
+        </el-button>
+        <el-button size="small" type="primary" @click="collapseAll">
+          折叠全部
+        </el-button>
+      </template>
+    </BasicTable>
+  </div>
+</template>

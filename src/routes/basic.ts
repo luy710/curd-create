@@ -9,7 +9,7 @@ export default [
     redirect: '/welcome',
     meta: {
       title: 'Root',
-      hide: true
+      hide: true,
     },
     component: Layout,
     children: [
@@ -18,11 +18,11 @@ export default [
         name: '首页',
         meta: {
           title: '首页',
-          hide: true
+          hide: true,
         },
-        component: () => import('@/layout/welcome.vue')
-      }
-    ]
+        component: () => import('@/layout/welcome.vue'),
+      },
+    ],
   },
-  CompRoute
+  CompRoute,
 ]

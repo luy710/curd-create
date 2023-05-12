@@ -1,9 +1,10 @@
-import type { BasicTableProps, TableActionType, FetchParams, BasicColumn } from '../types/table'
 import type { PaginationProps } from 'element-plus'
+import type { WatchStopHandle } from 'vue'
+import type { BasicColumn, BasicTableProps, FetchParams, TableActionType } from '../types/table'
 import type { DynamicProps } from '#/utils'
 import type { FormActionType } from '@/components/Form/types/form'
-import type { WatchStopHandle } from 'vue'
 import { getDynamicProps } from '@/components/utils'
+
 // import { ref, onUnmounted, unref, watch, toRaw } from 'vue'
 
 type Props = Partial<DynamicProps<BasicTableProps>>
@@ -16,7 +17,7 @@ export function useTable(tableProps?: Props): [
   (instance: TableActionType, formInstance: UseTableMethod) => void,
   TableActionType & {
     getForm: () => FormActionType
-  }
+  },
 ] {
   const tableRef = ref<Nullable<TableActionType>>(null)
   const loadedRef = ref<Nullable<boolean>>(false)
@@ -30,7 +31,8 @@ export function useTable(tableProps?: Props): [
       loadedRef.value = null
     })
 
-    if (unref(loadedRef) && instance === unref(tableRef)) return
+    if (unref(loadedRef) && instance === unref(tableRef))
+      return
 
     tableRef.value = instance
     formRef.value = formInstance
@@ -46,8 +48,8 @@ export function useTable(tableProps?: Props): [
       },
       {
         immediate: true,
-        deep: true
-      }
+        deep: true,
+      },
     )
   }
 
@@ -55,7 +57,7 @@ export function useTable(tableProps?: Props): [
     const table = unref(tableRef)
     if (!table) {
       console.error(
-        'The table instance has not been obtained yet, please make sure the table is presented when performing the table operation!'
+        'The table instance has not been obtained yet, please make sure the table is presented when performing the table operation!',
       )
     }
     return table as TableActionType
@@ -84,7 +86,7 @@ export function useTable(tableProps?: Props): [
       const columns = getTableInstance().getColumns({ ignoreIndex }) || []
       return toRaw(columns)
     },
-    // @ts-ignore
+    // @ts-expect-error
     setColumns: (columns: BasicColumn[]) => {
       getTableInstance().setColumns(columns)
     },
@@ -187,7 +189,7 @@ export function useTable(tableProps?: Props): [
     // 根据rowkey设置选中
     setSelectedRowKeys: (keys: (string | number)[]) => {
       getTableInstance().setSelectedRowKeys(keys)
-    }
+    },
   }
 
   return [register, methods]

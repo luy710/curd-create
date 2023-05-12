@@ -1,8 +1,8 @@
 import axios from '@/request/axios'
-import { AreaParams } from '@/api/demo/model/areaModel'
+import type { AreaParams } from '@/api/demo/model/areaModel'
 
 enum Api {
-  AREA_RECORD = '/cascader/getAreaRecord'
+  AREA_RECORD = '/cascader/getAreaRecord',
 }
 
 export const areaRecord = (data: AreaParams) => axios.post({ url: Api.AREA_RECORD, data })

@@ -1,5 +1,6 @@
 import BasicForm from './Form/BasicForm.vue'
-export { /*BasicArrow, BasicTitle*/ BasicHelp } from './Basic/index'
+
+export { /* BasicArrow, BasicTitle */ BasicHelp } from './Basic/index'
 
 export * from './Form/types/form'
 export * from './Form/types/formItem'

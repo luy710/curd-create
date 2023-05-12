@@ -1,21 +1,16 @@
-<template>
-  <ElTooltip content="刷新">
-    <el-icon @click="redo" :size="16" style="cursor: pointer"><RefreshRight /></el-icon>
-  </ElTooltip>
-</template>
 <script lang="ts">
 // import { defineComponent } from 'vue'
 import { ElTooltip } from 'element-plus'
 import { RefreshRight } from '@element-plus/icons-vue'
-import { useTableContext } from '../../hooks/useTableContext'
 import { ElIcon } from 'element-plus'
+import { useTableContext } from '../../hooks/useTableContext'
 
 export default defineComponent({
   name: 'RedoSetting',
   components: {
     RefreshRight,
     ElTooltip,
-    ElIcon
+    ElIcon,
   },
   setup() {
     const table = useTableContext()
@@ -25,6 +20,14 @@ export default defineComponent({
     }
 
     return { redo }
-  }
+  },
 })
 </script>
+
+<template>
+  <ElTooltip content="刷新">
+    <ElIcon :size="16" style="cursor: pointer" @click="redo">
+      <RefreshRight />
+    </ElIcon>
+  </ElTooltip>
+</template>

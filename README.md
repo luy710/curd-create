@@ -25,22 +25,11 @@ yarn add @hobby/curd-create
 > 通过 useForm 创建表单，并通过 useForm hooks 快速调用内部方法
 
 ```vue
-<template>
-  <el-card title="UseForm操作示例">
-    <div class="mb-4">
-      <el-button @click="setProps({ labelWidth: 150 })" class="mr-2"> 更改labelWidth </el-button>
-      <el-button @click="setProps({ labelWidth: 120 })" class="mr-2"> 还原labelWidth </el-button>
-    </div>
-    <el-card title="useForm示例">
-      <BasicForm @register="register" @submit="handleSubmit" />
-    </el-card>
-  </el-card>
-</template>
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { ElMessage } from 'element-plus'
 import { BasicForm, FormSchema, useForm } from '@/components/index'
 import { areaRecord } from '@/api/demo/cascader'
-import { ElMessage } from 'element-plus'
 
 const schemas: FormSchema[] = [
   {
@@ -119,7 +108,7 @@ export default defineComponent({
       register,
       schemas,
       handleSubmit: (values: Recordable) => {
-        ElMessage.success('click search,values:' + JSON.stringify(values))
+        ElMessage.success(`click search,values:${JSON.stringify(values)}`)
       },
       setProps,
       handleLoad
@@ -127,44 +116,64 @@ export default defineComponent({
   }
 })
 </script>
+
+<template>
+  <el-card title="UseForm操作示例">
+    <div class="mb-4">
+      <el-button class="mr-2" @click="setProps({ labelWidth: 150 })">
+        更改labelWidth
+      </el-button>
+      <el-button class="mr-2" @click="setProps({ labelWidth: 120 })">
+        还原labelWidth
+      </el-button>
+    </div>
+    <el-card title="useForm示例">
+      <BasicForm @register="register" @submit="handleSubmit" />
+    </el-card>
+  </el-card>
+</template>
 ```
 
 ### 2. template
 
 ```vue
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
+import { BasicForm, FormActionType, FormProps, FormSchema } from '@/components/index'
+
+const schemas: FormSchema[] = [
+]
+
+export default defineComponent({
+  components: { BasicForm },
+  setup() {
+    const formElRef = ref<Nullable<FormActionType>>(null)
+    return {
+      formElRef,
+      schemas,
+      setProps(props: FormProps) {
+        const formEl = formElRef.value
+        if (!formEl)
+          return
+        formEl.setProps(props)
+      },
+    }
+  },
+})
+</script>
+
 <template>
   <div class="m-4">
-      <BasicForm
-        :schemas="schemas"
-        ref="formElRef"
-        :labelWidth="100"
-        @submit="handleSubmit"
-        :actionColOptions="{ span: 24 }"
-      />
-  <div>
+    <BasicForm
+      ref="formElRef"
+      :schemas="schemas"
+      :label-width="100"
+      :action-col-options="{ span: 24 }"
+      @submit="handleSubmit"
+    />
+    <div />
+  </div>
 </template>
-<script lang="ts">
-  import { defineComponent, ref } from 'vue';
-  import { BasicForm, FormSchema, FormActionType, FormProps } from '@/components/index';
-  const schemas: FormSchema[] = [
-  ];
-
-  export default defineComponent({
-    components: { BasicForm },
-    setup() {
-      const formElRef = ref<Nullable<FormActionType>>(null);
-      return {
-        formElRef,
-        schemas,
-        setProps(props: FormProps) {
-          const formEl = formElRef.value;
-          if (!formEl) return;
-          formEl.setProps(props);
-        },
-      };
-    },
-  });
-</script>
 ```
 
 ### 参数介绍
@@ -313,6 +322,7 @@ useForm({
 
 ```ts
 import type { ButtonProps } from 'element-plus'
+
 export type ButtonOptions = Partial<ButtonProps> & { innerTxt?: string }
 ```
 
@@ -451,19 +461,10 @@ export type ComponentType =
 ### 自定义内容渲染 （render & renderComponentContent & slot）
 
 ```vue
-<template>
-  <el-card title="自定义表单">
-    <BasicForm @register="register" @submit="handleSubmit">
-      <template #f3="{ model, field }">
-        <el-input v-model="model[field]" placeholder="自定义slot" />
-      </template>
-    </BasicForm>
-  </el-card>
-</template>
 <script lang="ts">
 import { defineComponent, h } from 'vue'
-import { BasicForm, FormSchema, useForm } from '@/components/index'
 import { ElInput, ElMessage } from 'element-plus'
+import { BasicForm, FormSchema, useForm } from '@/components/index'
 
 const schemas: FormSchema[] = [
   {
@@ -523,13 +524,23 @@ export default defineComponent({
       register,
       schemas,
       handleSubmit: (values: any) => {
-        ElMessage.success('click search,values:' + JSON.stringify(values))
+        ElMessage.success(`click search,values:${JSON.stringify(values)}`)
       },
       setProps
     }
   }
 })
 </script>
+
+<template>
+  <el-card title="自定义表单">
+    <BasicForm @register="register" @submit="handleSubmit">
+      <template #f3="{ model, field }">
+        <el-input v-model="model[field]" placeholder="自定义slot" />
+      </template>
+    </BasicForm>
+  </el-card>
+</template>
 ```
 
 ### ifShow/show/dynamicDisabled
@@ -537,11 +548,6 @@ export default defineComponent({
 自定义显示/禁用
 
 ```vue
-<template>
-  <div class="m-4">
-    <BasicForm @register="register" />
-  </div>
-</template>
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { BasicForm, FormSchema, useForm } from '@/components/index'
@@ -600,6 +606,12 @@ export default defineComponent({
   }
 })
 </script>
+
+<template>
+  <div class="m-4">
+    <BasicForm @register="register" />
+  </div>
+</template>
 ```
 
 ### BasicForm 插槽
@@ -683,14 +695,18 @@ export default defineComponent({
 ### 使用示例
 
 ```vue
-<template>
-  <CheckboxGroup modelValue="value" :isBtn="true" :options='[ { label: '选项1', value: '1', key: '1' }, { label:
-  '选项2', value: '2', key: '2' } ]' />
-</template>
 <script lang="ts" setup>
 import CheckboxGroup from '@/components/Form/components/CheckboxGroup.vue'
+
 const value = ref([])
 </script>
+
+<template>
+  <CheckboxGroup
+    model-value="value" :is-btn="true" :options="[ { label: "选项1', value: '1', key: '1' }, { label:
+    '选项2', value: '2', key: '2' } ]'
+  />
+</template>
 ```
 
 ### Props
@@ -708,14 +724,18 @@ const value = ref([])
 ### 使用示例
 
 ```vue
-<template>
-  <RadioGroup modelValue="value" :isBtn="true" :options='[ { label: '选项1', value: '1', key: '1' }, { label: '选项2',
-  value: '2', key: '2' } ]' />
-</template>
 <script lang="ts" setup>
 import RadioGroup from '@/components/Form/components/RadioGroup.vue'
+
 const value = ref([])
 </script>
+
+<template>
+  <RadioGroup
+    model-value="value" :is-btn="true" :options="[ { label: "选项1', value: '1', key: '1' }, { label: '选项2',
+    value: '2', key: '2' } ]'
+  />
+</template>
 ```
 
 ### Props
@@ -741,29 +761,10 @@ const value = ref([])
 **基础使用**
 
 ```vue
-<template>
-  <div class="p-4">
-    <BasicTable
-      title="基础示例"
-      titleHelpMessage="温馨提醒"
-      :columns="columns"
-      :data="data"
-      :canResize="canResize"
-      :loading="loading"
-      :stripe="striped"
-      :border="border"
-      :pagination="{ pageSize: 20 }"
-    >
-      <template #toolbar>
-        <a-button type="primary"> 操作按钮 </a-button>
-      </template>
-    </BasicTable>
-  </div>
-</template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { BasicTable } from '@/components/index'
 import { getBasicColumns, getBasicData } from './tableData'
+import { BasicTable } from '@/components/index'
 
 export default defineComponent({
   components: { BasicTable },
@@ -775,6 +776,28 @@ export default defineComponent({
   }
 })
 </script>
+
+<template>
+  <div class="p-4">
+    <BasicTable
+      title="基础示例"
+      title-help-message="温馨提醒"
+      :columns="columns"
+      :data="data"
+      :can-resize="canResize"
+      :loading="loading"
+      :stripe="striped"
+      :border="border"
+      :pagination="{ pageSize: 20 }"
+    >
+      <template #toolbar>
+        <a-button type="primary">
+          操作按钮
+        </a-button>
+      </template>
+    </BasicTable>
+  </div>
+</template>
 ```
 
 **使用 API 调用接口**
@@ -782,26 +805,12 @@ export default defineComponent({
 `Methods`使用，所有 methods 见下方：
 
 ```vue
-<template>
-  <div class="p-4">
-    <BasicTable
-      :canResize="false"
-      title="RefTable示例"
-      titleHelpMessage="使用Ref调用表格内方法"
-      ref="tableRef"
-      :api="api"
-      :columns="columns"
-      :beforeFetch="beforeFetch"
-      :afterFetch="afterFetch"
-      rowKey="id"
-    />
-  </div>
-</template>
 <script lang="ts">
 import { defineComponent, ref, unref } from 'vue'
-import { BasicTable, TableActionType } from '@/components/index'
 import { getBasicColumns, getBasicShortColumns } from './tableData'
+import { BasicTable, TableActionType } from '@/components/index'
 import { demoListApi } from '@/api/demo/table'
+
 export default defineComponent({
   components: { BasicTable },
   setup() {
@@ -809,9 +818,9 @@ export default defineComponent({
 
     function getTableAction() {
       const tableAction = unref(tableRef)
-      if (!tableAction) {
+      if (!tableAction)
         throw new Error('tableAction is null')
-      }
+
       return tableAction
     }
     function changeLoading() {
@@ -831,105 +840,33 @@ export default defineComponent({
   }
 })
 </script>
+
+<template>
+  <div class="p-4">
+    <BasicTable
+      ref="tableRef"
+      :can-resize="false"
+      title="RefTable示例"
+      title-help-message="使用Ref调用表格内方法"
+      :api="api"
+      :columns="columns"
+      :before-fetch="beforeFetch"
+      :after-fetch="afterFetch"
+      row-key="id"
+    />
+  </div>
+</template>
 ```
 
 ### BasicColumn 和 tableAction 通过权限和业务控制显示隐藏的示例
 
 ```vue
-<template>
-  <div class="p-4">
-    <BasicTable
-      title="基础示例"
-      titleHelpMessage="温馨提醒"
-      :columns="columns"
-      :data="data"
-      :canResize="canResize"
-      :loading="loading"
-      :stripe="striped"
-      :border="border"
-      showTableSetting
-      :pagination="pagination"
-      @columns-change="handleColumnChange"
-    >
-      <template #toolbar>
-        <el-button size="small" type="primary" @click="toggleCanResize">
-          {{ !canResize ? '自适应高度' : '取消自适应' }}
-        </el-button>
-        <el-button size="small" type="primary" @click="toggleBorder">
-          {{ !border ? '显示边框' : '隐藏边框' }}
-        </el-button>
-        <el-button size="small" type="primary" @click="toggleLoading"> 开启loading </el-button>
-        <el-button size="small" type="primary" @click="toggleStriped">
-          {{ !striped ? '显示斑马纹' : '隐藏斑马纹' }}
-        </el-button>
-        <el-button size="small" type="primary" @click="togglePagination">
-          {{ pagination ? '关闭分页' : '开启分页' }}
-        </el-button>
-      </template>
-      <template #action="scope">
-        <TableAction
-          :actions="[
-            {
-              label: '编辑',
-              onClick: () => {},
-              icon: inconFun,
-              popConfirm: {
-                title: '是否启用？',
-                confirm: configTest
-              }
-            },
-            {
-              label: '删除',
-              color: 'error',
-              popConfirm: {
-                title: '是否确认删除',
-                placement: 'left',
-                confirm: () => {}
-              }
-            }
-          ]"
-          :dropDownActions="[
-            {
-              label: '启用',
-              popConfirm: {
-                title: '是否启用？',
-                confirm: () => {}
-              },
-              ifShow: () => {
-                return scope.row.status !== 'enable'
-              }
-            },
-            {
-              label: '禁用',
-              popConfirm: {
-                title: '是否禁用？',
-                confirm: () => {}
-              },
-              ifShow: () => {
-                return scope.row.status === 'enable'
-              }
-            },
-            {
-              label: '同时控制',
-              popConfirm: {
-                title: '是否动态显示？',
-                confirm: () => {}
-              },
-              ifShow: () => {
-                return true
-              }
-            }
-          ]"
-        />
-      </template>
-    </BasicTable>
-  </div>
-</template>
 <script lang="ts">
-import { defineComponent, ref, h } from 'vue'
-import { BasicTable, ColumnChangeParam, TableAction } from '@/components/index'
-import { getBasicColumns, getBasicData } from './tableData'
+import { defineComponent, h, ref } from 'vue'
 import { Edit } from '@element-plus/icons-vue'
+import { getBasicColumns, getBasicData } from './tableData'
+import { BasicTable, ColumnChangeParam, TableAction } from '@/components/index'
+
 export default defineComponent({
   components: { BasicTable, TableAction, Edit },
   setup() {
@@ -990,6 +927,98 @@ export default defineComponent({
   }
 })
 </script>
+
+<template>
+  <div class="p-4">
+    <BasicTable
+      title="基础示例"
+      title-help-message="温馨提醒"
+      :columns="columns"
+      :data="data"
+      :can-resize="canResize"
+      :loading="loading"
+      :stripe="striped"
+      :border="border"
+      show-table-setting
+      :pagination="pagination"
+      @columns-change="handleColumnChange"
+    >
+      <template #toolbar>
+        <el-button size="small" type="primary" @click="toggleCanResize">
+          {{ !canResize ? '自适应高度' : '取消自适应' }}
+        </el-button>
+        <el-button size="small" type="primary" @click="toggleBorder">
+          {{ !border ? '显示边框' : '隐藏边框' }}
+        </el-button>
+        <el-button size="small" type="primary" @click="toggleLoading">
+          开启loading
+        </el-button>
+        <el-button size="small" type="primary" @click="toggleStriped">
+          {{ !striped ? '显示斑马纹' : '隐藏斑马纹' }}
+        </el-button>
+        <el-button size="small" type="primary" @click="togglePagination">
+          {{ pagination ? '关闭分页' : '开启分页' }}
+        </el-button>
+      </template>
+      <template #action="scope">
+        <TableAction
+          :actions="[
+            {
+              label: '编辑',
+              onClick: () => {},
+              icon: inconFun,
+              popConfirm: {
+                title: '是否启用？',
+                confirm: configTest,
+              },
+            },
+            {
+              label: '删除',
+              color: 'error',
+              popConfirm: {
+                title: '是否确认删除',
+                placement: 'left',
+                confirm: () => {},
+              },
+            },
+          ]"
+          :drop-down-actions="[
+            {
+              label: '启用',
+              popConfirm: {
+                title: '是否启用？',
+                confirm: () => {},
+              },
+              ifShow: () => {
+                return scope.row.status !== 'enable'
+              },
+            },
+            {
+              label: '禁用',
+              popConfirm: {
+                title: '是否禁用？',
+                confirm: () => {},
+              },
+              ifShow: () => {
+                return scope.row.status === 'enable'
+              },
+            },
+            {
+              label: '同时控制',
+              popConfirm: {
+                title: '是否动态显示？',
+                confirm: () => {},
+              },
+              ifShow: () => {
+                return true
+              },
+            },
+          ]"
+        />
+      </template>
+    </BasicTable>
+  </div>
+</template>
 ```
 
 ## useTable
@@ -999,14 +1028,12 @@ export default defineComponent({
 下面是一个使用简单表格的示例，
 
 ```vue
-<template>
-  <BasicTable @register="registerTable" />
-</template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { BasicTable, useTable } from '@/components/index'
 import { getBasicColumns, getBasicShortColumns } from './tableData'
+import { BasicTable, useTable } from '@/components/index'
 import { demoListApi } from '@/api/demo/table'
+
 export default defineComponent({
   components: { BasicTable },
   setup() {
@@ -1029,6 +1056,10 @@ export default defineComponent({
   }
 })
 </script>
+
+<template>
+  <BasicTable @register="registerTable" />
+</template>
 ```
 
 ### Usage
@@ -1045,9 +1076,6 @@ const [register, methods] = useTable(props)
 register 用于注册 useTable，如果需要使用`useTable`提供的 api，必须将 register 传入组件的 onRegister
 
 ```vue
-<template>
-  <BasicTable @register="register" />
-</template>
 <script>
 export default defineComponent({
   components: { BasicForm },
@@ -1057,6 +1085,10 @@ export default defineComponent({
   }
 })
 </script>
+
+<template>
+  <BasicTable @register="register" />
+</template>
 ```
 
 ## BasicTable 方法
@@ -1161,7 +1193,7 @@ export default defineComponent({
 **DEFAULT_SORT_FN**
 
 ```ts
-;(sortInfo: SorterResult) => {
+(sortInfo: SorterResult) => {
   const { prop, order } = sortInfo
   if (prop && order) {
     return {
@@ -1170,7 +1202,8 @@ export default defineComponent({
       // Sorting method passed to the background asc/desc
       order
     }
-  } else {
+  }
+  else {
     return {}
   }
 }

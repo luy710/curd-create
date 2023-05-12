@@ -1,14 +1,13 @@
-import type { UserConfig, ConfigEnv } from 'vite'
+import { resolve } from 'node:path'
+import type { ConfigEnv, UserConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
-import { VitePluginStyleInject } from './vite-plugin-style-inject'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import { viteMockServe } from 'vite-plugin-mock'
-import { resolve } from 'path'
-import visualizer from 'rollup-plugin-visualizer'
 import dts from 'vite-plugin-dts'
+import { VitePluginStyleInject } from './vite-plugin-style-inject'
 
 function pathResolve(dir: string) {
   return resolve(process.cwd(), '.', dir)
@@ -22,18 +21,15 @@ export default ({ command }: ConfigEnv): UserConfig => {
       alias: {
         '@views': pathResolve('./src/views'),
         '@': pathResolve('./src'),
-        '#': pathResolve('./types')
-      }
+        '#': pathResolve('./types'),
+      },
+    },
+    server: {
+      port: 5177,
     },
     plugins: [
       vue(),
       vueJsx(),
-      visualizer({
-        filename: './node_modules/.cache/visualizer/stats.html',
-        open: true,
-        gzipSize: true,
-        brotliSize: true
-      }),
       viteMockServe({
         ignore: /^\_/,
         mockPath: './mock',
@@ -42,41 +38,41 @@ export default ({ command }: ConfigEnv): UserConfig => {
           import { setupProdMockServer } from '../mock/_createProductionServer';
     
           setupProdMockServer();
-          `
+          `,
       }),
       AutoImport({
         imports: ['vue'],
         dts: './types/auto-imports.d.ts',
-        resolvers: isBuild ? [] : [ElementPlusResolver()]
+        resolvers: isBuild ? [] : [ElementPlusResolver()],
       }),
 
       Components({
         dts: './types/components.d.ts',
-        resolvers: isBuild ? [] : [ElementPlusResolver()]
+        resolvers: isBuild ? [] : [ElementPlusResolver()],
       }),
       isBuild && VitePluginStyleInject('curd-create'),
       dts({
         insertTypesEntry: true,
-        exclude: []
-      })
+        exclude: [],
+      }),
     ],
     build: {
       cssCodeSplit: false,
       rollupOptions: {
-        external: ['vue', 'element-plus', 'dayjs', 'lodash-es'],
+        external: ['vue', 'element-plus'],
         output: {
           globals: {
-            vue: 'Vue',
-            'element-plus': 'element-plus'
-          }
-        }
+            'vue': 'Vue',
+            'element-plus': 'element-plus',
+          },
+        },
       },
       lib: {
         entry: pathResolve('./src/components/index.ts'),
         name: 'lib',
         formats: ['es', 'umd'],
-        fileName: (format) => `lib.${format}.js`
-      }
-    }
+        fileName: format => `lib.${format}.js`,
+      },
+    },
   }
 }

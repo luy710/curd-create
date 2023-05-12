@@ -1,19 +1,10 @@
-<template>
-  <div class="p-4">
-    <BasicTable @register="registerTable" @edit-change="onEditChange">
-      <template #action="scope">
-        <TableAction :actions="createActions(scope.row, scope.column)" />
-      </template>
-    </BasicTable>
-  </div>
-</template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import type { ActionItem, EditRecordRow } from '@hobby/curd-create'
 import { cloneDeep } from 'lodash-es'
+import type { ActionItem, EditRecordRow } from '@/components'
 import { optionsListApi } from '@/api/demo/select'
-import { BasicColumn } from '@/components/Table/types/table'
-import { BasicTable, ColumnChangeParam, TableAction, useTable } from '@hobby/curd-create'
+import type { BasicColumn } from '@/components/Table/types/table'
+import { BasicTable, TableAction, useTable } from '@/components'
 import { demoListApi } from '@/api/demo/table'
 import { treeOptionsListApi } from '@/api/demo/tree'
 
@@ -24,13 +15,13 @@ const columns: BasicColumn[] = [
     prop: 'name',
     editRow: true,
     editComponentProps: {},
-    width: 150
+    width: 150,
   },
   {
     label: '默认输入状态',
     prop: 'name7',
     editRow: true,
-    width: 150
+    width: 150,
   },
   {
     label: '输入框校验',
@@ -39,7 +30,7 @@ const columns: BasicColumn[] = [
     align: 'left',
     // 默认必填校验
     editRule: true,
-    width: 150
+    width: 150,
   },
   {
     label: '输入框函数校验',
@@ -47,11 +38,11 @@ const columns: BasicColumn[] = [
     editRow: true,
     align: 'right',
     editRule: async (text) => {
-      if (text === '2') {
+      if (text === '2')
         return '不能输入该值'
-      }
+
       return ''
-    }
+    },
   },
   {
     label: '数字输入框',
@@ -59,7 +50,7 @@ const columns: BasicColumn[] = [
     editRow: true,
     editRule: true,
     editComponent: 'InputNumber',
-    width: 150
+    width: 150,
   },
   {
     label: '下拉框',
@@ -70,19 +61,19 @@ const columns: BasicColumn[] = [
       options: [
         {
           label: 'Option1',
-          value: '1'
+          value: '1',
         },
         {
           label: 'Option2',
-          value: '2'
+          value: '2',
         },
         {
           label: 'Option3',
-          value: '3'
-        }
-      ]
+          value: '3',
+        },
+      ],
     },
-    width: 200
+    width: 200,
   },
   {
     label: '远程下拉',
@@ -93,9 +84,9 @@ const columns: BasicColumn[] = [
       api: optionsListApi,
       resultField: 'list',
       labelField: 'name',
-      valueField: 'id'
+      valueField: 'id',
     },
-    width: 200
+    width: 200,
   },
   {
     label: '远程下拉树',
@@ -105,9 +96,9 @@ const columns: BasicColumn[] = [
     editRule: false,
     editComponentProps: {
       api: treeOptionsListApi,
-      resultField: 'list'
+      resultField: 'list',
     },
-    width: 200
+    width: 200,
   },
   {
     label: '日期选择',
@@ -116,9 +107,9 @@ const columns: BasicColumn[] = [
     editComponent: 'DatePicker',
     editComponentProps: {
       valueFormat: 'YYYY-MM-DD',
-      format: 'YYYY-MM-DD'
+      format: 'YYYY-MM-DD',
     },
-    width: 150
+    width: 150,
   },
   {
     label: '时间选择',
@@ -127,9 +118,9 @@ const columns: BasicColumn[] = [
     editComponent: 'TimePicker',
     editComponentProps: {
       valueFormat: 'HH:mm',
-      format: 'HH:mm'
+      format: 'HH:mm',
     },
-    width: 100
+    width: 100,
   },
   {
     label: '勾选框',
@@ -140,7 +131,7 @@ const columns: BasicColumn[] = [
     editValueMap: (value) => {
       return value ? '是' : '否'
     },
-    width: 100
+    width: 100,
   },
   {
     label: '开关',
@@ -150,8 +141,8 @@ const columns: BasicColumn[] = [
     editValueMap: (value) => {
       return value ? '开' : '关'
     },
-    width: 100
-  }
+    width: 100,
+  },
 ]
 
 export default defineComponent({
@@ -163,7 +154,7 @@ export default defineComponent({
       title: '可编辑行示例',
       titleHelpMessage: ['本例中修改[数字输入框]这一列时，同一行的[远程下拉]列的当前编辑数据也会同步发生改变'],
       api: demoListApi,
-      columns: columns,
+      columns,
       showIndexColumn: false,
       showTableSetting: true,
       tableSetting: { fullScreen: true },
@@ -171,8 +162,8 @@ export default defineComponent({
         width: 160,
         label: 'Action',
         prop: 'action',
-        slots: { cellSlot: 'action' }
-      }
+        slots: { cellSlot: 'action' },
+      },
     })
 
     function handleEdit(record: EditRecordRow) {
@@ -196,14 +187,16 @@ export default defineComponent({
           // ...
           // 保存之后提交编辑状态
           const pass = await record.onEdit?.(false, false)
-          if (pass) {
+          if (pass)
             currentEditKeyRef.value = ''
-          }
+
           // msg.success({ content: '数据已保存', key: 'saving' });
-        } catch (error) {
+        }
+        catch (error) {
           // msg.error({ content: '保存失败', key: 'saving' });
         }
-      } else {
+      }
+      else {
         // msg.error({ content: '请填写正确的数据', key: 'saving' });
       }
     }
@@ -214,30 +207,30 @@ export default defineComponent({
           {
             label: '编辑',
             disabled: currentEditKeyRef.value ? currentEditKeyRef.value !== record.key : false,
-            onClick: handleEdit.bind(null, record)
-          }
+            onClick: handleEdit.bind(null, record),
+          },
         ]
       }
       return [
         {
           label: '保存',
-          onClick: handleSave.bind(null, record, column)
+          onClick: handleSave.bind(null, record, column),
         },
         {
           label: '取消',
           popConfirm: {
             title: '是否取消编辑',
-            confirm: handleCancel.bind(null, record, column)
-          }
-        }
+            confirm: handleCancel.bind(null, record, column),
+          },
+        },
       ]
     }
 
     function onEditChange({ column, value, record }: any) {
       // 本例
-      if (column.prop === 'id') {
+      if (column.prop === 'id')
         record.editValueRefs.name4.value = `${value}`
-      }
+
       console.log(column, value, record)
     }
 
@@ -245,8 +238,18 @@ export default defineComponent({
       registerTable,
       handleEdit,
       createActions,
-      onEditChange
+      onEditChange,
     }
-  }
+  },
 })
 </script>
+
+<template>
+  <div class="p-4">
+    <BasicTable @register="registerTable" @edit-change="onEditChange">
+      <template #action="scope">
+        <TableAction :actions="createActions(scope.row, scope.column)" />
+      </template>
+    </BasicTable>
+  </div>
+</template>

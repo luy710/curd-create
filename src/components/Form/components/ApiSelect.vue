@@ -1,22 +1,10 @@
-<template>
-  <el-select v-model="state" :loading="loading" v-bind="getProps" :options="getOptions" @visible-change="handleFetch">
-    <template v-if="!isGroup">
-      <el-option v-for="item in getOptions" :key="item.value" :label="item.label" :value="item.value" />
-    </template>
-    <template v-else>
-      <el-option-group v-for="group in getOptions" :key="group.label" :label="group.label">
-        <el-option v-for="item in group.options" :key="item.value" :label="item.label" :value="item.value" />
-      </el-option-group>
-    </template>
-  </el-select>
-</template>
-
 <script lang="ts" setup>
-import { ElSelect, ElOption, ElOptionGroup } from 'element-plus'
-import { isFunction, isArray } from '@/components/utils/is'
+import { ElOption, ElOptionGroup, ElSelect } from 'element-plus'
 import { get, omit } from 'lodash-es'
+import { isArray, isFunction } from '@/components/utils/is'
+
 // import { computed, useAttrs, ref, unref, watchEffect, watch } from 'vue'
-type OptionsItem = { label: string; value: string; disabled?: boolean }
+interface OptionsItem { label: string; value: string; disabled?: boolean }
 const props = defineProps({
   modelValue: [Array, String, Number, Boolean, Object] as PropType<
     any[] | string | number | boolean | Record<string, any> | any
@@ -24,54 +12,54 @@ const props = defineProps({
   // value数字转换为字符串
   numberToString: {
     type: Boolean,
-    default: false
+    default: false,
   },
   api: {
     type: Function as PropType<(args?: Recordable) => Promise<OptionsItem>>,
-    default: null
+    default: null,
   },
   // 请求参数
   params: {
     type: Object as PropType<Recordable>,
-    default: () => ({})
+    default: () => ({}),
   },
   // support xxx.xxx.xx
   resultField: {
     type: String,
-    default: ''
+    default: '',
   },
   labelField: {
     type: String,
-    default: 'label'
+    default: 'label',
   },
   valueField: {
     type: String,
-    default: 'value'
+    default: 'value',
   },
   groupField: {
     type: String,
-    default: 'options'
+    default: 'options',
   },
   immediate: {
     type: Boolean,
-    default: false
+    default: false,
   },
   alwaysLoad: {
     type: Boolean,
-    default: false
+    default: false,
   },
   isGroup: {
     type: Boolean,
-    default: false
+    default: false,
   },
   options: {
     type: Array as PropType<Recordable[]>,
-    default: () => []
+    default: () => [],
   },
   // 调用接口返回数据处理
   afterFetch: { type: Function as PropType<Fn> },
   // 请求前的参数处理
-  beforeFetch: { type: Function as PropType<Fn> }
+  beforeFetch: { type: Function as PropType<Fn> },
 })
 
 const emit = defineEmits(['update:modelValue', 'options-change', 'change'])
@@ -81,7 +69,7 @@ const state = computed({
     emit('change', val)
     emit('update:modelValue', val)
   },
-  get: () => props.modelValue
+  get: () => props.modelValue,
 })
 
 const attrs = useAttrs()
@@ -98,7 +86,7 @@ const getOptions = computed(() => {
         ...omit(next, [labelField, valueField, groupField]),
         label: next[labelField],
         options: next[groupField] || null,
-        value: numberToString ? `${value}` : value
+        value: numberToString ? `${value}` : value,
       })
     }
     return prev
@@ -108,9 +96,10 @@ const getOptions = computed(() => {
 })
 
 // 调用初次查询接口数据，搜索查询使用remoteMethod
-const fetch = async (params?: Recordable) => {
+async function fetch(params?: Recordable) {
   const api = props.api
-  if (!api || !isFunction(api)) return
+  if (!api || !isFunction(api))
+    return
   let result = null
   try {
     loading.value = true
@@ -120,49 +109,52 @@ const fetch = async (params?: Recordable) => {
     result = await api(params || props.params)
 
     // 处理参数
-    if (props.afterFetch && isFunction(props.afterFetch)) {
+    if (props.afterFetch && isFunction(props.afterFetch))
       result = props.afterFetch(result)
-    }
-    if (!result) return
+
+    if (!result)
+      return
     // 如果是数组则说明需要通过指定的resultField拿
-    if (!isArray(result)) {
+    if (!isArray(result))
       result = get(result, props.resultField)
-    }
+
     optionsList.value = (result as Recordable[]) || []
     isFirstLoad.value = false
 
     emit('options-change', getOptions.value)
-  } catch (error) {
+  }
+  catch (error) {
     console.error(error)
-  } finally {
+  }
+  finally {
     loading.value = false
   }
 }
 
 // 远程搜索
-const remoteMethod = (query: string) => {
+function remoteMethod(query: string) {
   let params = Object.assign(props.params, { query })
-  if (props.beforeFetch && isFunction(props.beforeFetch)) {
+  if (props.beforeFetch && isFunction(props.beforeFetch))
     params = props.beforeFetch(params)
-  }
+
   fetch(params)
 }
 
 const getProps = computed(() => {
-  let obj: Recordable = {}
-  if (attrs.filterable && attrs.remote && (!attrs.remoteMethod || !isFunction(attrs.remoteMethod))) {
-    obj['remoteMethod'] = remoteMethod
-  }
+  const obj: Recordable = {}
+  if (attrs.filterable && attrs.remote && (!attrs.remoteMethod || !isFunction(attrs.remoteMethod)))
+    obj.remoteMethod = remoteMethod
 
   return Object.assign(obj, attrs)
 })
 
 // 每次显示popover自动重新查询一下数据
-const handleFetch = async (visible: boolean) => {
+async function handleFetch(visible: boolean) {
   if (visible) {
     if (props.alwaysLoad) {
       await fetch()
-    } else if (!props.immediate && unref(isFirstLoad)) {
+    }
+    else if (!props.immediate && unref(isFirstLoad)) {
       await fetch()
       isFirstLoad.value = false
     }
@@ -178,8 +170,21 @@ watch(
   () => {
     !unref(isFirstLoad) && fetch()
   },
-  { deep: true }
+  { deep: true },
 )
 </script>
+
+<template>
+  <ElSelect v-model="state" :loading="loading" v-bind="getProps" :options="getOptions" @visible-change="handleFetch">
+    <template v-if="!isGroup">
+      <ElOption v-for="item in getOptions" :key="item.value" :label="item.label" :value="item.value" />
+    </template>
+    <template v-else>
+      <ElOptionGroup v-for="group in getOptions" :key="group.label" :label="group.label">
+        <ElOption v-for="item in group.options" :key="item.value" :label="item.label" :value="item.value" />
+      </ElOptionGroup>
+    </template>
+  </ElSelect>
+</template>
 
 <style lang="scss" scoped></style>

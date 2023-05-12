@@ -1,16 +1,16 @@
+<script setup lang="ts">
+import Menus from './menu/index.vue'
+</script>
+
 <template>
-  <el-container>
-    <el-aside width="200px">
-      <Menus />
-    </el-aside>
+  <el-container class="out-wrapper">
+    <Menus />
     <el-main>
       <router-view />
     </el-main>
   </el-container>
 </template>
-<script setup lang="ts">
-import Menus from './menus.vue'
-</script>
+
 <style lang="scss" scoped>
 .el-container,
 .el-main {
@@ -18,5 +18,8 @@ import Menus from './menus.vue'
   padding: 10px;
   box-sizing: border-box;
   overflow: hidden;
+}
+.out-wrapper {
+  padding: 0;
 }
 </style>

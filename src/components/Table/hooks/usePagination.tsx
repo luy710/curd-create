@@ -1,14 +1,13 @@
-import type { BasicTableProps } from '../types/table';
 // import { computed, unref, ref, ComputedRef, watch } from 'vue';
 import type { ComputedRef } from 'vue'
-import { isBoolean } from '@/components/utils/is';
-import { PaginationProps } from 'element-plus'
-import { PAGE_SIZE, PAGE_SIZE_OPTIONS } from '../constant';
+import type { PaginationProps } from 'element-plus'
+import type { BasicTableProps } from '../types/table'
+import { PAGE_SIZE, PAGE_SIZE_OPTIONS } from '../constant'
+import { isBoolean } from '@/components/utils/is'
 
 export function usePagination(refProps: ComputedRef<BasicTableProps>) {
-
-  const configRef = ref<Partial<PaginationProps>>({});
-  const show = ref(true);
+  const configRef = ref<Partial<PaginationProps>>({})
+  const show = ref(true)
 
   watch(
     () => unref(refProps).pagination,
@@ -17,17 +16,16 @@ export function usePagination(refProps: ComputedRef<BasicTableProps>) {
         configRef.value = {
           ...unref(configRef),
           ...(pagination ?? {}),
-        };
+        }
       }
     },
-  );
+  )
 
   const getPaginationInfo = computed((): Partial<PaginationProps> | boolean => {
-    const { pagination } = unref(refProps);
+    const { pagination } = unref(refProps)
 
-    if (!unref(show) || (isBoolean(pagination) && !pagination)) {
-      return false;
-    }
+    if (!unref(show) || (isBoolean(pagination) && !pagination))
+      return false
 
     return {
       currentPage: 1,
@@ -38,29 +36,28 @@ export function usePagination(refProps: ComputedRef<BasicTableProps>) {
       pageSizes: PAGE_SIZE_OPTIONS,
       ...(isBoolean(pagination) ? {} : pagination),
       ...unref(configRef),
-    };
-  });
-
+    }
+  })
 
   function setPagination(info: Partial<PaginationProps>) {
-    const paginationInfo = unref(getPaginationInfo);
+    const paginationInfo = unref(getPaginationInfo)
     configRef.value = {
       ...(!isBoolean(paginationInfo) ? paginationInfo : {}),
       ...info,
-    };
+    }
   }
 
   function getPagination() {
-    return unref(getPaginationInfo);
+    return unref(getPaginationInfo)
   }
 
   function getShowPagination() {
-    return unref(show);
+    return unref(show)
   }
 
   async function setShowPagination(flag: boolean) {
-    show.value = flag;
+    show.value = flag
   }
 
-  return { getPagination, getPaginationInfo, setShowPagination, getShowPagination, setPagination };
+  return { getPagination, getPaginationInfo, setShowPagination, getShowPagination, setPagination }
 }

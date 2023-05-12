@@ -1,17 +1,6 @@
-<template>
-  <el-card title="表单增删">
-    <BasicForm @register="register" @submit="handleSubmit">
-      <template #add="data">
-        <el-button v-if="Number(data.field) === 0" @click="add">+ </el-button>
-        <el-button v-if="data.field > 0" @click="del(data.field)">-</el-button>
-      </template>
-    </BasicForm>
-  </el-card>
-</template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { BasicForm, useForm } from '@hobby/curd-create'
-import { ElInput as Input } from 'element-plus'
+import { BasicForm, useForm } from '@/components'
 
 export default defineComponent({
   components: { BasicForm },
@@ -23,38 +12,39 @@ export default defineComponent({
           component: 'Input',
           label: '字段0',
           colProps: {
-            span: 8
+            span: 8,
           },
-          required: true
+          required: true,
         },
         {
           field: 'field0b',
           component: 'Input',
           label: '字段0',
           colProps: {
-            span: 8
+            span: 8,
           },
-          required: true
+          required: true,
         },
         {
           field: '0',
           component: 'Input',
           label: '',
           colProps: {
-            span: 8
+            span: 8,
           },
-          slot: 'add'
-        }
+          slot: 'add',
+        },
       ],
       labelWidth: 100,
-      actionColOptions: { span: 24 }
+      actionColOptions: { span: 24 },
     })
 
     async function handleSubmit() {
       try {
         const data = await validate()
         console.log(data)
-      } catch (e) {
+      }
+      catch (e) {
         console.log(e)
       }
     }
@@ -66,25 +56,25 @@ export default defineComponent({
         {
           field: `field${n.value}a`,
           component: 'Input',
-          label: '字段' + n.value,
+          label: `字段${n.value}`,
           colProps: {
-            span: 8
+            span: 8,
           },
-          required: true
+          required: true,
         },
-        ''
+        '',
       )
       appendSchemaByField(
         {
           field: `field${n.value}b`,
           component: 'Input',
-          label: '字段' + n.value,
+          label: `字段${n.value}`,
           colProps: {
-            span: 8
+            span: 8,
           },
-          required: true
+          required: true,
         },
-        ''
+        '',
       )
 
       appendSchemaByField(
@@ -93,11 +83,11 @@ export default defineComponent({
           component: 'Input',
           label: ' ',
           colProps: {
-            span: 8
+            span: 8,
           },
-          slot: 'add'
+          slot: 'add',
         },
-        ''
+        '',
       )
       n.value++
     }
@@ -108,6 +98,21 @@ export default defineComponent({
     }
 
     return { register, handleSubmit, add, del }
-  }
+  },
 })
 </script>
+
+<template>
+  <el-card title="表单增删">
+    <BasicForm @register="register" @submit="handleSubmit">
+      <template #add="data">
+        <el-button v-if="Number(data.field) === 0" @click="add">
+          +
+        </el-button>
+        <el-button v-if="data.field > 0" @click="del(data.field)">
+          -
+        </el-button>
+      </template>
+    </BasicForm>
+  </el-card>
+</template>

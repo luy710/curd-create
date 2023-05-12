@@ -1,31 +1,7 @@
-<template>
-  <BasicTable @register="registerTable" @selectionChange="onSelectChange">
-    <template #form-custom> custom-slot </template>
-    <template #headerTop>
-      <el-alert type="info" show-icon :closable="false">
-        <template #title>
-          <template v-if="checkedKeys.length > 0">
-            <span>已选中{{ checkedKeys.length }}条记录(可跨页)</span>
-            <el-button link type="primary" @click="clearAllSelection" size="small">清空</el-button>
-          </template>
-          <template v-else>
-            <span>未选中任何项目</span>
-          </template>
-        </template>
-      </el-alert>
-    </template>
-    <template #selectSlot>
-      <span>asdads</span>
-    </template>
-    <template #toolbar>
-      <el-button type="primary" size="small" @click="getFormValues">获取表单数据</el-button>
-    </template>
-  </BasicTable>
-</template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { BasicTable, useTable } from '@hobby/curd-create'
 import { getBasicColumns, getFormConfig } from './tableData'
+import { BasicTable, useTable } from '@/components'
 
 import { demoListApi } from '@/api/demo/table'
 
@@ -47,8 +23,8 @@ export default defineComponent({
       rowKey: 'id',
       defaultSort: {
         prop: 'no',
-        order: 'ascending'
-      }
+        order: 'ascending',
+      },
     })
 
     function getFormValues() {
@@ -67,8 +43,39 @@ export default defineComponent({
       getFormValues,
       checkedKeys,
       onSelectChange,
-      clearAllSelection
+      clearAllSelection,
     }
-  }
+  },
 })
 </script>
+
+<template>
+  <BasicTable @register="registerTable" @selectionChange="onSelectChange">
+    <template #form-custom>
+      custom-slot
+    </template>
+    <template #headerTop>
+      <el-alert type="info" show-icon :closable="false">
+        <template #title>
+          <template v-if="checkedKeys.length > 0">
+            <span>已选中{{ checkedKeys.length }}条记录(可跨页)</span>
+            <el-button link type="primary" size="small" @click="clearAllSelection">
+              清空
+            </el-button>
+          </template>
+          <template v-else>
+            <span>未选中任何项目</span>
+          </template>
+        </template>
+      </el-alert>
+    </template>
+    <template #selectSlot>
+      <span>asdads</span>
+    </template>
+    <template #toolbar>
+      <el-button type="primary" size="small" @click="getFormValues">
+        获取表单数据
+      </el-button>
+    </template>
+  </BasicTable>
+</template>

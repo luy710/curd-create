@@ -1,24 +1,26 @@
-import type { BasicColumn, BasicTableProps, CellFormat, GetColumnsParams } from '../types/table'
 import type { ComputedRef, Ref } from 'vue'
-// import { computed, ref, reactive, toRaw, unref, watch } from 'vue'
-import { isArray, isBoolean, isFunction, isMap, isString } from '@/components/utils/is'
 import { cloneDeep, isEqual, omit } from 'lodash-es'
+import type { BasicColumn, BasicTableProps, CellFormat, GetColumnsParams } from '../types/table'
+
+// import { computed, ref, reactive, toRaw, unref, watch } from 'vue'
+import { ACTION_COLUMN_FLAG } from '../constant'
+import { isArray, isBoolean, isFunction, isMap, isString } from '@/components/utils/is'
 import { buildUUID } from '@/components/utils/uuid'
 import { formatToDate } from '@/components/utils/dateUtil'
-import { ACTION_COLUMN_FLAG } from '../constant'
 
 // 二次处理action 列
 function handleActionColumn(propsRef: ComputedRef<BasicTableProps>, columns: BasicColumn[]) {
   const { actionColumn } = unref(propsRef)
-  if (!actionColumn) return
+  if (!actionColumn)
+    return
 
-  const hasIndex = columns.findIndex((column) => column.flag === ACTION_COLUMN_FLAG)
+  const hasIndex = columns.findIndex(column => column.flag === ACTION_COLUMN_FLAG)
   if (hasIndex === -1) {
     columns.push({
       ...columns[hasIndex],
       ...{ fixed: 'right' },
       ...actionColumn,
-      flag: ACTION_COLUMN_FLAG
+      flag: ACTION_COLUMN_FLAG,
     })
   }
 }
@@ -30,9 +32,9 @@ export function useColumns(propsRef: ComputedRef<BasicTableProps>) {
   const getColumnsRef = computed(() => {
     const columns = cloneDeep(unref(columnsRef))
     handleActionColumn(propsRef, columns)
-    if (!columns) {
+    if (!columns)
       return []
-    }
+
     return columns
   })
   // 是否显示该列
@@ -41,12 +43,12 @@ export function useColumns(propsRef: ComputedRef<BasicTableProps>) {
 
     let isIfShow = true
 
-    if (isBoolean(ifShow)) {
+    if (isBoolean(ifShow))
       isIfShow = ifShow
-    }
-    if (isFunction(ifShow)) {
+
+    if (isFunction(ifShow))
       isIfShow = ifShow(column)
-    }
+
     return isIfShow
   }
   // 获取可显示的列
@@ -59,9 +61,9 @@ export function useColumns(propsRef: ComputedRef<BasicTableProps>) {
         return isIfShow(column) && !['expand', 'selection', 'index'].includes(column.type || '')
       })
       .map((column) => {
-        if (!column['columnKey']) {
-          column['columnKey'] = column.prop || buildUUID()
-        }
+        if (!column.columnKey)
+          column.columnKey = column.prop || buildUUID()
+
         return reactive(column)
       })
   })
@@ -69,7 +71,7 @@ export function useColumns(propsRef: ComputedRef<BasicTableProps>) {
   // 获取展开收起配置
   const getExpandColumnProps = computed(() => {
     const { expandColumnProps, columns } = unref(propsRef)
-    const expandCol = columns.find((col) => col.type === 'expand') ?? {}
+    const expandCol = columns.find(col => col.type === 'expand') ?? {}
     return omit(
       {
         width: 40,
@@ -77,15 +79,15 @@ export function useColumns(propsRef: ComputedRef<BasicTableProps>) {
         fixed: 'left',
         label: '',
         ...expandCol,
-        ...expandColumnProps
+        ...expandColumnProps,
       },
-      ['type']
+      ['type'],
     )
   })
   // 获取索引列配置
   const getInndexColumnProps = computed(() => {
     const { indexColumnProps, columns } = unref(propsRef)
-    const indexCol = columns.find((col) => col.type === 'index') ?? {}
+    const indexCol = columns.find(col => col.type === 'index') ?? {}
     return omit(
       {
         width: 60,
@@ -93,44 +95,42 @@ export function useColumns(propsRef: ComputedRef<BasicTableProps>) {
         align: 'center',
         fixed: 'left',
         ...indexCol,
-        ...indexColumnProps
+        ...indexColumnProps,
       },
-      ['type']
+      ['type'],
     )
   })
 
   // 获取多选列配置
   const getSelectColumnProps = computed(() => {
     const { selectionColumnProps, columns } = unref(propsRef)
-    const selectionCol = columns.find((col) => col.type === 'selection') ?? {}
+    const selectionCol = columns.find(col => col.type === 'selection') ?? {}
     return omit(
       {
         width: 60,
         align: 'center',
         fixed: 'left',
         ...selectionCol,
-        ...selectionColumnProps
+        ...selectionColumnProps,
       },
-      ['type']
+      ['type'],
     )
   })
   watch(
     () => unref(propsRef).columns,
     (columns) => {
       columnsRef.value = columns
-      cacheColumns = columns?.filter((item) => !item.type) ?? []
-    }
+      cacheColumns = columns?.filter(item => !item.type) ?? []
+    },
   )
 
   function setCacheColumnsByField(prop: string | undefined, value: Partial<BasicColumn>) {
-    if (!prop || !value) {
+    if (!prop || !value)
       return
-    }
+
     cacheColumns.forEach((item) => {
-      if (item.prop === prop) {
+      if (item.prop === prop)
         Object.assign(item, value)
-        return
-      }
     })
   }
 
@@ -140,7 +140,8 @@ export function useColumns(propsRef: ComputedRef<BasicTableProps>) {
    */
   function setColumns(columnList: Partial<BasicColumn>[] | (string | string[])[]) {
     const columns = cloneDeep(columnList)
-    if (!isArray(columns)) return
+    if (!isArray(columns))
+      return
 
     if (columns.length <= 0) {
       columnsRef.value = []
@@ -149,17 +150,18 @@ export function useColumns(propsRef: ComputedRef<BasicTableProps>) {
 
     const firstColumn = columns[0]
 
-    const cacheKeys = cacheColumns.map((item) => item.prop)
+    const cacheKeys = cacheColumns.map(item => item.prop)
 
     if (!isString(firstColumn) && !isArray(firstColumn)) {
       columnsRef.value = columns as BasicColumn[]
-    } else {
-      const columnKeys = (columns as (string | string[])[]).map((m) => m.toString())
+    }
+    else {
+      const columnKeys = (columns as (string | string[])[]).map(m => m.toString())
       const newColumns: BasicColumn[] = []
       cacheColumns.forEach((item) => {
         newColumns.push({
           ...item,
-          defaultHidden: !columnKeys.includes(item.prop?.toString() || (item.columnKey as string))
+          defaultHidden: !columnKeys.includes(item.prop?.toString() || (item.columnKey as string)),
         })
       })
       // Sort according to another array
@@ -177,23 +179,20 @@ export function useColumns(propsRef: ComputedRef<BasicTableProps>) {
   function getColumns(opt?: GetColumnsParams) {
     const { ignoreIndex, ignoreAction, ignoreSelection, sort, ignoreExpand } = opt || {}
     let columns = toRaw(unref(getColumnsRef))
-    if (ignoreIndex) {
-      columns = columns.filter((item) => item.type !== 'index')
-    }
-    if (ignoreAction) {
-      columns = columns.filter((item) => item.flag !== ACTION_COLUMN_FLAG)
-    }
-    if (ignoreSelection) {
-      columns = columns.filter((item) => item.type !== 'selection')
-    }
+    if (ignoreIndex)
+      columns = columns.filter(item => item.type !== 'index')
 
-    if (ignoreExpand) {
-      columns = columns.filter((item) => item.type !== 'expand')
-    }
+    if (ignoreAction)
+      columns = columns.filter(item => item.flag !== ACTION_COLUMN_FLAG)
 
-    if (sort) {
+    if (ignoreSelection)
+      columns = columns.filter(item => item.type !== 'selection')
+
+    if (ignoreExpand)
+      columns = columns.filter(item => item.type !== 'expand')
+
+    if (sort)
       columns = sortFixedColumn(columns)
-    }
 
     return columns
   }
@@ -210,7 +209,7 @@ export function useColumns(propsRef: ComputedRef<BasicTableProps>) {
     getColumns,
     setColumns,
     getViewColumns,
-    setCacheColumnsByField
+    setCacheColumnsByField,
   }
 }
 
@@ -229,19 +228,17 @@ function sortFixedColumn(columns: BasicColumn[]) {
     }
     defColumns.push(column)
   }
-  return [...fixedLeftColumns, ...defColumns, ...fixedRightColumns].filter((item) => !item.defaultHidden)
+  return [...fixedLeftColumns, ...defColumns, ...fixedRightColumns].filter(item => !item.defaultHidden)
 }
 
 // format cell
 export function formatCell(text: string, format: CellFormat, record: Recordable, index: number) {
-  if (!format) {
+  if (!format)
     return text
-  }
 
   // custom function
-  if (isFunction(format)) {
+  if (isFunction(format))
     return format(text, record, index)
-  }
 
   try {
     // date type
@@ -249,17 +246,17 @@ export function formatCell(text: string, format: CellFormat, record: Recordable,
     if (isString(format) && format.startsWith(DATE_FORMAT_PREFIX) && text) {
       const dateFormat = format.replace(DATE_FORMAT_PREFIX, '')
 
-      if (!dateFormat) {
+      if (!dateFormat)
         return text
-      }
+
       return formatToDate(text as any, dateFormat)
     }
 
     // Map
-    if (isMap(format)) {
+    if (isMap(format))
       return format.get(text)
-    }
-  } catch (error) {
+  }
+  catch (error) {
     return text
   }
 }

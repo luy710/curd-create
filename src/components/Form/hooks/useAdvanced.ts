@@ -1,10 +1,11 @@
+import type { ComputedRef, Ref } from 'vue'
+import { debounce } from 'lodash-es'
 import type { ColEx } from '../types'
 import type { AdvanceState } from '../types/hooks'
-import type { ComputedRef, Ref } from 'vue'
-import { FormProps, FormSchema } from '../types/form'
+import type { FormProps, FormSchema } from '../types/form'
 import { isBoolean, isFunction, isNumber, isObject } from '@/components/utils/is'
-import { debounce } from 'lodash-es'
-import { screenEnum, sizeEnum, screenMap } from '@/components/enums/breakpointEnum'
+import { screenEnum, screenMap, sizeEnum } from '@/components/enums/breakpointEnum'
+
 // import { getCurrentInstance, ref, onBeforeUnmount, computed, unref, watch } from 'vue'
 const BASIC_COL_LEN = 24
 
@@ -31,17 +32,17 @@ export default function ({ advanceState, emit, getProps, getSchema, formModel, d
     const md = screenMap.get(sizeEnum.MD)!
     const lg = screenMap.get(sizeEnum.LG)!
     const xl = screenMap.get(sizeEnum.XL)!
-    if (width < xs) {
+    if (width < xs)
       screenRef.value = sizeEnum.XS
-    } else if (width < sm) {
+    else if (width < sm)
       screenRef.value = sizeEnum.SM
-    } else if (width < md) {
+    else if (width < md)
       screenRef.value = sizeEnum.MD
-    } else if (width < lg) {
+    else if (width < lg)
       screenRef.value = sizeEnum.LG
-    } else if (width < xl) {
+    else if (width < xl)
       screenRef.value = sizeEnum.XL
-    }
+
     realWidth.value = width
   }
 
@@ -50,13 +51,13 @@ export default function ({ advanceState, emit, getProps, getSchema, formModel, d
   })
 
   const getEmptySpan = computed(() => {
-    if (!advanceState.isAdvanced) return 0
+    if (!advanceState.isAdvanced)
+      return 0
 
     const emptySpan = unref(getProps).emptySpan || 0
 
-    if (isNumber(emptySpan)) {
+    if (isNumber(emptySpan))
       return emptySpan
-    }
 
     if (isObject(emptySpan)) {
       const { span = 0 } = emptySpan
@@ -76,23 +77,22 @@ export default function ({ advanceState, emit, getProps, getSchema, formModel, d
   const getAdvanced = (itemCol: Partial<ColEx>, itemColSum = 0, isLastAction = false) => {
     const width = unref(realWidth)
     // 中等可是宽度下的等分数
-    const md =
-      parseInt(itemCol.md as string) ||
-      parseInt(itemCol.xs as string) ||
-      parseInt(itemCol.sm as string) ||
-      (itemCol.span as number) ||
-      BASIC_COL_LEN
+    const md
+      = parseInt(itemCol.md as string)
+      || parseInt(itemCol.xs as string)
+      || parseInt(itemCol.sm as string)
+      || (itemCol.span as number)
+      || BASIC_COL_LEN
 
     // 较长宽度下的等分数
     const lg = parseInt(itemCol.lg as string) || md
     // 超宽下的等分
     const xl = parseInt(itemCol.xl as string) || lg
 
-    if (width <= screenEnum.LG) {
+    if (width <= screenEnum.LG)
       itemColSum += md
-    } else if (width < screenEnum.XL) {
+    else if (width < screenEnum.XL)
       itemColSum += lg
-    }
 
     if (isLastAction) {
       advanceState.hideAdvanceBtn = false
@@ -101,23 +101,24 @@ export default function ({ advanceState, emit, getProps, getSchema, formModel, d
         // 不超过两行，不显示展开收起按钮
         advanceState.hideAdvanceBtn = true
         advanceState.isAdvanced = true
-      } else if (
-        itemColSum > BASIC_COL_LEN * 2 &&
-        itemColSum <= BASIC_COL_LEN * (unref(getProps).autoAdvancedLine || 3)
+      }
+      else if (
+        itemColSum > BASIC_COL_LEN * 2
+        && itemColSum <= BASIC_COL_LEN * (unref(getProps).autoAdvancedLine || 3)
       ) {
         advanceState.hideAdvanceBtn = false
-      } else if (!advanceState.isLoad) {
+      }
+      else if (!advanceState.isLoad) {
         advanceState.isLoad = true
         advanceState.isAdvanced = !advanceState.isAdvanced
       }
 
       return { isAdvanced: advanceState.isAdvanced, itemColSum }
     }
-    if (itemColSum > BASIC_COL_LEN * (unref(getProps).alwaysShowLines || 1)) {
+    if (itemColSum > BASIC_COL_LEN * (unref(getProps).alwaysShowLines || 1))
       return { isAdvanced: advanceState.isAdvanced, itemColSum }
-    } else {
+    else
       return { isAdvanced: true, itemColSum }
-    }
   }
 
   const updateAdvanced = () => {
@@ -128,9 +129,8 @@ export default function ({ advanceState, emit, getProps, getSchema, formModel, d
     for (const schema of unref(getSchema)) {
       const { show, colProps } = schema
       let isShow = true
-      if (isBoolean(show)) {
+      if (isBoolean(show))
         isShow = show
-      }
 
       if (isFunction(show)) {
         isShow = show({
@@ -139,8 +139,8 @@ export default function ({ advanceState, emit, getProps, getSchema, formModel, d
           field: schema.field,
           values: {
             ...unref(defaultValueRef),
-            ...formModel
-          }
+            ...formModel,
+          },
         })
       }
 
@@ -149,9 +149,8 @@ export default function ({ advanceState, emit, getProps, getSchema, formModel, d
 
         itemColSum = sum || 0
         // 如果是展开 &
-        if (isAdvanced) {
+        if (isAdvanced)
           realItemColSum = itemColSum
-        }
 
         schema.isAdvanced = isAdvanced
       }
@@ -171,11 +170,10 @@ export default function ({ advanceState, emit, getProps, getSchema, formModel, d
     [() => unref(getSchema), () => advanceState.isAdvanced, () => unref(realWidth)],
     () => {
       const { showAdvancedButton } = unref(getProps)
-      if (showAdvancedButton) {
+      if (showAdvancedButton)
         debounceUpdateAdvanced()
-      }
     },
-    { immediate: true }
+    { immediate: true },
   )
 
   return { handleToggleAdvanced }

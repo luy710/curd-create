@@ -1,4 +1,4 @@
-import { AccountParams, DeptListItem, MenuParams, RoleParams, RolePageParams } from './model/systemModel'
+import type { AccountParams, DeptListItem, MenuParams, RolePageParams, RoleParams } from './model/systemModel'
 import axios from '@/request/axios'
 
 enum Api {
@@ -8,7 +8,7 @@ enum Api {
   setRoleStatus = '/system/setRoleStatus',
   MenuList = '/system/getMenuList',
   RolePageList = '/system/getRoleListByPage',
-  GetAllRoleList = '/system/getAllRoleList'
+  GetAllRoleList = '/system/getAllRoleList',
 }
 
 export const getAccountList = (params: AccountParams) => axios.get({ url: Api.AccountList, params })
@@ -21,7 +21,8 @@ export const getRoleListByPage = (params?: RolePageParams) => axios.get({ url: A
 
 export const getAllRoleList = (params?: RoleParams) => axios.get({ url: Api.GetAllRoleList, params })
 
-export const setRoleStatus = (id: number, status: string) =>
-  axios.post({ url: Api.setRoleStatus, params: { id, status } })
+export function setRoleStatus(id: number, status: string) {
+  return axios.post({ url: Api.setRoleStatus, params: { id, status } })
+}
 
 export const isAccountExist = (account: string) => axios.post({ url: Api.IsAccountExist, data: { account } })

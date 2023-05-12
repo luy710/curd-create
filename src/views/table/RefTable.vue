@@ -1,38 +1,11 @@
-<template>
-  <div class="p-4">
-    <el-button class="mr-2" size="small" type="primary" @click="reloadTable"> 还原 </el-button>
-    <el-button class="mr-2" size="small" type="primary" @click="changeLoading"> 开启loading </el-button>
-    <el-button class="mr-2" size="small" type="primary" @click="changeColumns"> 更改Columns </el-button>
-    <el-button class="mr-2" size="small" type="primary" @click="getColumn"> 获取Columns </el-button>
-    <el-button class="mr-2" size="small" type="primary" @click="getTableData"> 获取表格数据 </el-button>
-    <el-button class="mr-2" size="small" type="primary" @click="getTableRawData"> 获取接口原始数据 </el-button>
-    <el-button class="mr-2" size="small" type="primary" @click="setPaginationInfo"> 跳转到第2页 </el-button>
-
-    <el-button class="mr-2" size="small" type="primary" @click="getSelectRowList"> 获取选中行 </el-button>
-    <el-button class="mr-2" size="small" type="primary" @click="getSelectRowKeyList"> 获取选中行Key </el-button>
-    <el-button class="mr-2" size="small" type="primary" @click="setSelectedRowList"> 设置选中行 </el-button>
-    <el-button class="mr-2" size="small" type="primary" @click="clearSelect"> 清空选中行 </el-button>
-    <el-button class="mr-2" size="small" type="primary" @click="getPagination"> 获取分页信息 </el-button>
-
-    <BasicTable
-      :canResize="false"
-      title="RefTable示例"
-      titleHelpMessage="使用Ref调用表格内方法"
-      ref="tableRef"
-      :api="api"
-      :columns="columns"
-      rowKey="id"
-      :pagination="true"
-      :showSelectionColumn="true"
-    />
-  </div>
-</template>
 <script lang="ts">
 import { defineComponent, ref, unref } from 'vue'
-import { BasicTable, TableActionType } from '@hobby/curd-create'
-import { getBasicColumns, getBasicShortColumns } from './tableData'
-import { demoListApi } from '@/api/demo/table'
 import { ElMessage } from 'element-plus'
+import { getBasicColumns, getBasicShortColumns } from './tableData'
+import type { TableActionType } from '@/components'
+import { BasicTable } from '@/components'
+import { demoListApi } from '@/api/demo/table'
+
 export default defineComponent({
   components: { BasicTable },
   setup() {
@@ -40,9 +13,9 @@ export default defineComponent({
 
     function getTableAction() {
       const tableAction = unref(tableRef)
-      if (!tableAction) {
+      if (!tableAction)
         throw new Error('tableAction is null')
-      }
+
       return tableAction
     }
     function changeLoading() {
@@ -58,7 +31,7 @@ export default defineComponent({
       getTableAction().setColumns(getBasicColumns())
 
       getTableAction().reload({
-        page: 1
+        page: 1,
       })
     }
     function getColumn() {
@@ -82,7 +55,7 @@ export default defineComponent({
 
     function setPaginationInfo() {
       getTableAction().setPagination({
-        currentPage: 2
+        currentPage: 2,
       })
       getTableAction().reload()
     }
@@ -118,8 +91,62 @@ export default defineComponent({
       getSelectRowList,
       getSelectRowKeyList,
       setSelectedRowList,
-      clearSelect
+      clearSelect,
     }
-  }
+  },
 })
 </script>
+
+<template>
+  <div class="p-4">
+    <el-button class="mr-2" size="small" type="primary" @click="reloadTable">
+      还原
+    </el-button>
+    <el-button class="mr-2" size="small" type="primary" @click="changeLoading">
+      开启loading
+    </el-button>
+    <el-button class="mr-2" size="small" type="primary" @click="changeColumns">
+      更改Columns
+    </el-button>
+    <el-button class="mr-2" size="small" type="primary" @click="getColumn">
+      获取Columns
+    </el-button>
+    <el-button class="mr-2" size="small" type="primary" @click="getTableData">
+      获取表格数据
+    </el-button>
+    <el-button class="mr-2" size="small" type="primary" @click="getTableRawData">
+      获取接口原始数据
+    </el-button>
+    <el-button class="mr-2" size="small" type="primary" @click="setPaginationInfo">
+      跳转到第2页
+    </el-button>
+
+    <el-button class="mr-2" size="small" type="primary" @click="getSelectRowList">
+      获取选中行
+    </el-button>
+    <el-button class="mr-2" size="small" type="primary" @click="getSelectRowKeyList">
+      获取选中行Key
+    </el-button>
+    <el-button class="mr-2" size="small" type="primary" @click="setSelectedRowList">
+      设置选中行
+    </el-button>
+    <el-button class="mr-2" size="small" type="primary" @click="clearSelect">
+      清空选中行
+    </el-button>
+    <el-button class="mr-2" size="small" type="primary" @click="getPagination">
+      获取分页信息
+    </el-button>
+
+    <BasicTable
+      ref="tableRef"
+      :can-resize="false"
+      title="RefTable示例"
+      title-help-message="使用Ref调用表格内方法"
+      :api="api"
+      :columns="columns"
+      row-key="id"
+      :pagination="true"
+      :show-selection-column="true"
+    />
+  </div>
+</template>

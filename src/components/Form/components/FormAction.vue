@@ -1,27 +1,7 @@
-<template>
-  <el-col v-bind="actionColOpt" v-if="showActionButtonGroup">
-    <el-form-item style="width: 100%">
-      <slot name="resetBefore"></slot>
-      <el-button class="mr-2" v-if="showResetButton" v-bind="getResetButtonOptions" @click="reset">
-        {{ getResetButtonOptions.innerTxt }}
-      </el-button>
-      <slot name="submitBefore"></slot>
-      <el-button class="mr-2" v-if="showSubmitButton" type="primary" v-bind="getSubmitButtonOptions" @click="submit">
-        {{ getSubmitButtonOptions.innerTxt }}
-      </el-button>
-
-      <slot name="advanceBefore"></slot>
-      <el-button v-if="showAdvancedButton && !hideAdvanceBtn" type="primary" link size="small" @click="toggleAdvanced">
-        {{ isAdvanced ? '收起' : '展开' }}
-      </el-button>
-      <slot name="advanceAfter"></slot>
-    </el-form-item>
-  </el-col>
-</template>
-
 <script lang="ts" setup>
 import type { ColEx } from '../types/index'
 import type { ButtonOptions } from '../types/form'
+
 // import { defineProps, computed, defineEmits } from 'vue'
 // type xxx=x&{sex:string}
 // 可以实现接口和接口的交叉,但是只能赋值给type类型
@@ -31,44 +11,44 @@ import type { ButtonOptions } from '../types/form'
 const props = defineProps({
   showActionButtonGroup: {
     type: Boolean,
-    default: true
+    default: true,
   },
   showResetButton: {
     type: Boolean,
-    default: true
+    default: true,
   },
   showSubmitButton: {
     type: Boolean,
-    default: true
+    default: true,
   },
   showAdvancedButton: {
     type: Boolean,
-    default: true
+    default: true,
   },
   resetButtonOptions: {
     type: Object as PropType<ButtonOptions>,
-    default: () => ({})
+    default: () => ({}),
   },
   submitButtonOptions: {
     type: Object as PropType<ButtonOptions>,
-    default: () => ({})
+    default: () => ({}),
   },
   actionColOptions: {
     type: Object as PropType<Partial<ColEx>>,
-    default: () => ({})
+    default: () => ({}),
   },
   actionSpan: {
     type: Number,
-    default: 6
+    default: 6,
   },
   isAdvanced: {
     type: Boolean,
-    default: false
+    default: false,
   },
   hideAdvanceBtn: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 
 const emit = defineEmits(['toggle-advanced', 'reset', 'submit'])
@@ -83,7 +63,7 @@ const actionColOpt = computed<any>(() => {
   const actionColOpt: Partial<ColEx> = {
     span: showAdvancedButton ? 6 : 4,
     ...advancedSpanObj,
-    ...actionColOptions
+    ...actionColOptions,
   }
 
   return actionColOpt
@@ -97,18 +77,39 @@ const getSubmitButtonOptions = computed((): ButtonOptions => {
   return Object.assign({ innerTxt: '确认' }, props.submitButtonOptions)
 })
 
-const toggleAdvanced = () => {
+function toggleAdvanced() {
   emit('toggle-advanced')
 }
 
-const reset = () => {
+function reset() {
   emit('reset')
 }
 
-const submit = () => {
+function submit() {
   emit('submit')
 }
 </script>
+
+<template>
+  <el-col v-if="showActionButtonGroup" v-bind="actionColOpt">
+    <el-form-item style="width: 100%">
+      <slot name="resetBefore" />
+      <el-button v-if="showResetButton" class="mr-2" v-bind="getResetButtonOptions" @click="reset">
+        {{ getResetButtonOptions.innerTxt }}
+      </el-button>
+      <slot name="submitBefore" />
+      <el-button v-if="showSubmitButton" class="mr-2" type="primary" v-bind="getSubmitButtonOptions" @click="submit">
+        {{ getSubmitButtonOptions.innerTxt }}
+      </el-button>
+
+      <slot name="advanceBefore" />
+      <el-button v-if="showAdvancedButton && !hideAdvanceBtn" type="primary" link size="small" @click="toggleAdvanced">
+        {{ isAdvanced ? '收起' : '展开' }}
+      </el-button>
+      <slot name="advanceAfter" />
+    </el-form-item>
+  </el-col>
+</template>
 
 <style lang="scss" scoped>
 ::v-deep(.el-form-item__content) {

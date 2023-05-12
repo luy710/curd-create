@@ -1,5 +1,5 @@
 import instance from './request'
-import { AxiosRequest, CustomResponse } from './request.interface'
+import type { AxiosRequest, CustomResponse } from './request.interface'
 
 class Abstract {
   private apiAxios({ method, url, data, params, headers }: AxiosRequest): Promise<CustomResponse> {
@@ -9,22 +9,23 @@ class Abstract {
         url,
         params,
         data,
-        headers
+        headers,
       })
         .then((res) => {
           const { code, message, result } = res.data
-          if (code == 0) {
+          if (code === 0) {
             resolve(result)
-          } else {
+          }
+          else {
             reject({
               code,
               result,
-              message
+              message,
             })
           }
         })
         .catch((error) => {
-          reject(error)
+          reject(new Error(error))
         })
     })
   }

@@ -1,31 +1,7 @@
-<template>
-  <div class="h-full flex">
-    <div class="flex flex-col pr-4 w-1/2">
-      <div class="flex-1">
-        <BasicTable @register="registerTable" />
-      </div>
-      <div class="h-4"></div>
-      <div class="flex-1">
-        <BasicTable @register="registerTable" />
-      </div>
-    </div>
-    <div class="flex-1 flex flex-col w-1/2 h-full">
-      <div class="h-1/3 mb-4">
-        <BasicTable @register="registerTable" />
-      </div>
-      <div class="h-1/3 mb-4">
-        <BasicTable @register="registerTable2" />
-      </div>
-      <div class="h-1/3">
-        <BasicTable @register="registerTable1" />
-      </div>
-    </div>
-  </div>
-</template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { BasicTable, useTable } from '@hobby/curd-create'
 import { getBasicColumns, getFormConfig } from './tableData'
+import { BasicTable, useTable } from '@/components'
 
 import { demoListApi } from '@/api/demo/table'
 
@@ -43,7 +19,7 @@ export default defineComponent({
       showIndexColumn: false,
       isCanResizeParent: true,
       border: true,
-      rowKey: 'id'
+      rowKey: 'id',
     })
 
     const [registerTable1] = useTable({
@@ -57,7 +33,7 @@ export default defineComponent({
       useSearchForm: true,
       pagination: false,
       border: true,
-      rowKey: 'id'
+      rowKey: 'id',
     })
 
     const [registerTable2] = useTable({
@@ -71,17 +47,43 @@ export default defineComponent({
       useSearchForm: true,
       pagination: false,
       border: true,
-      rowKey: 'id'
+      rowKey: 'id',
     })
 
     return {
       registerTable,
       registerTable1,
-      registerTable2
+      registerTable2,
     }
-  }
+  },
 })
 </script>
+
+<template>
+  <div class="h-full flex">
+    <div class="flex flex-col pr-4 w-1/2">
+      <div class="flex-1">
+        <BasicTable @register="registerTable" />
+      </div>
+      <div class="h-4" />
+      <div class="flex-1">
+        <BasicTable @register="registerTable" />
+      </div>
+    </div>
+    <div class="flex-1 flex flex-col w-1/2 h-full">
+      <div class="h-1/3 mb-4">
+        <BasicTable @register="registerTable" />
+      </div>
+      <div class="h-1/3 mb-4">
+        <BasicTable @register="registerTable2" />
+      </div>
+      <div class="h-1/3">
+        <BasicTable @register="registerTable1" />
+      </div>
+    </div>
+  </div>
+</template>
+
 <style lang="scss" scoped>
 .h-full {
   height: 100%;

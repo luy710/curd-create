@@ -1,18 +1,19 @@
-import type { BasicTableProps } from '../types/table'
-import type { Ref, ComputedRef } from 'vue'
-// import { computed, unref, nextTick, watch, ref, onMounted, onActivated } from 'vue'
-import { isBoolean, isObject, isNumber, isString } from '@/components/utils/is'
-import { useWindowSizeFn } from '@/components/utils/useWindowSizeFn'
+import type { ComputedRef, Ref } from 'vue'
 import { debounce as useDebounceFn } from 'lodash-es'
+import type { PaginationProps } from 'element-plus'
+import type { BasicTableProps } from '../types/table'
+
+// import { computed, unref, nextTick, watch, ref, onMounted, onActivated } from 'vue'
+import { isBoolean, isNumber, isObject, isString } from '@/components/utils/is'
+import { useWindowSizeFn } from '@/components/utils/useWindowSizeFn'
 import { getViewportOffset } from '@/components/utils/domUtils'
-import { PaginationProps } from 'element-plus'
 
 export function useTableHeight(
   propsRef: ComputedRef<BasicTableProps>,
   tableElRef: Ref<ComponentRef>,
   wrapRef: Ref<HTMLElement | null>,
   formRef: Ref<ComponentRef>,
-  getPaginationInfo: Ref<boolean | Partial<PaginationProps>>
+  getPaginationInfo: Ref<boolean | Partial<PaginationProps>>,
 ) {
   const tableHeightRef: Ref<Nullable<number | string>> = ref(400)
 
@@ -22,7 +23,8 @@ export function useTableHeight(
   const getCanResize = computed(() => {
     const { canResize, height } = unref(propsRef)
     // table 自定义height的优先级 高于 自适应高度
-    if (height) return false
+    if (height)
+      return false
     return canResize
   })
 
@@ -32,17 +34,16 @@ export function useTableHeight(
       debounceRedoHeight()
     },
     {
-      flush: 'post'
-    }
+      flush: 'post',
+    },
   )
   watch(
     () => unref(getPaginationInfo),
     (val, oval) => {
       // 关闭分页 、 开启分页
-      if ((isBoolean(val) && !val && isObject(oval)) || (isBoolean(oval) && !oval && isObject(val))) {
+      if ((isBoolean(val) && !val && isObject(oval)) || (isBoolean(oval) && !oval && isObject(val)))
         redoHeight()
-      }
-    }
+    },
   )
 
   function redoHeight() {
@@ -62,24 +63,30 @@ export function useTableHeight(
   async function calcTableHeight() {
     const { maxHeight, useSearchForm, isCanResizeParent } = unref(propsRef)
     const pagination = unref(getPaginationInfo)
-    if (!unref(getCanResize)) return
+    if (!unref(getCanResize))
+      return
     const wrapEl = unref(wrapRef)
-    if (!wrapEl) return
+    if (!wrapEl)
+      return
     const table = unref(tableElRef)
-    if (!table) return
+    if (!table)
+      return
 
     const tableEl: Element = table.$el
-    if (!tableEl) return
+    if (!tableEl)
+      return
 
     if (!bodyEl) {
       bodyEl = tableEl.querySelector('.el-table__inner-wrapper')
-      if (!bodyEl) return
+      if (!bodyEl)
+        return
     }
 
     await nextTick()
     // table隐藏或者不存在则不需要计算
     const headEl = tableEl.querySelector('.el-table__header')
-    if (!headEl) return
+    if (!headEl)
+      return
 
     // BasicTable的padding高度
     let paddingHeight = 16
@@ -104,19 +111,19 @@ export function useTableHeight(
       const wrapHeight = unref(wrapRef)?.offsetHeight ?? 0
 
       let formHeight = unref(formRef)?.$el.offsetHeight ?? 0
-      if (formHeight) {
+      if (formHeight)
         formHeight += formMargin
-      }
-      if (isBoolean(useSearchForm) && !useSearchForm) {
+
+      if (isBoolean(useSearchForm) && !useSearchForm)
         paddingHeight = 0
-      }
 
       const headerCellHeight = (wrapEl.querySelector('.basic-table-header') as HTMLElement)?.offsetHeight ?? 0
-      if (!headerCellHeight) {
+      if (!headerCellHeight)
         headerMargin = 0
-      }
+
       bottomIncludeBody = wrapHeight - formHeight - headerCellHeight - paginationHeight - headerMargin
-    } else {
+    }
+    else {
       // Table height from bottom
       bottomIncludeBody = getViewportOffset(headEl).bottomIncludeBody
     }
@@ -148,9 +155,8 @@ export function useTableHeight(
     const { canResize, height } = unref(propsRef)
 
     if (height) {
-      if (isNumber(height) || (isString(height) && (height.indexOf('px') > -1 || /\d+$/.test(height)))) {
+      if (isNumber(height) || (isString(height) && (height.includes('px') || /\d+$/.test(height))))
         return parseInt(height)
-      }
     }
 
     return canResize ? tableHeight : 'auto'

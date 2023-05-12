@@ -1,27 +1,11 @@
-<template>
-  <div class="p-4">
-    <el-button class="mr-2" size="small" type="primary" @click="reloadTable"> 还原 </el-button>
-    <el-button class="mr-2" size="small" type="primary" @click="changeLoading"> 开启loading </el-button>
-    <el-button class="mr-2" size="small" type="primary" @click="changeColumns"> 更改Columns </el-button>
-    <el-button class="mr-2" size="small" type="primary" @click="getColumn"> 获取Columns </el-button>
-    <el-button class="mr-2" size="small" type="primary" @click="getTableData"> 获取表格数据 </el-button>
-    <el-button class="mr-2" size="small" type="primary" @click="getTableRawData"> 获取接口原始数据 </el-button>
-    <el-button class="mr-2" size="small" type="primary" @click="setPaginationInfo"> 跳转到第2页 </el-button>
-    <el-button class="mr-2" size="small" type="primary" @click="getSelectRowList"> 获取选中行 </el-button>
-    <el-button class="mr-2" size="small" type="primary" @click="getSelectRowKeyList"> 获取选中行Key </el-button>
-    <el-button class="mr-2" size="small" type="primary" @click="setSelectedRowKeyList"> 设置选中行 </el-button>
-    <el-button class="mr-2" size="small" type="primary" @click="clearSelect"> 清空选中行 </el-button>
-    <el-button class="mr-2" size="small" type="primary" @click="getPagination"> 获取分页信息 </el-button>
-
-    <BasicTable @register="registerTable" />
-  </div>
-</template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { BasicTable, ColumnChangeParam, useTable } from '@hobby/curd-create'
-import { getBasicColumns, getBasicShortColumns } from './tableData'
 import { ElMessage } from 'element-plus'
+import { getBasicColumns, getBasicShortColumns } from './tableData'
+import type { ColumnChangeParam } from '@/components'
+import { BasicTable, useTable } from '@/components'
 import { demoListApi } from '@/api/demo/table'
+
 export default defineComponent({
   components: { BasicTable },
   setup() {
@@ -39,8 +23,8 @@ export default defineComponent({
         getSelectionRows,
         getSelectRowKeys,
         setSelectedRowKeys,
-        clearSelection
-      }
+        clearSelection,
+      },
     ] = useTable({
       pagination: true,
       canResize: true,
@@ -52,7 +36,7 @@ export default defineComponent({
       columns: getBasicColumns(),
       defaultSort: {
         prop: 'no',
-        order: 'ascending'
+        order: 'ascending',
       },
       rowKey: 'id',
       showTableSetting: true,
@@ -61,7 +45,7 @@ export default defineComponent({
       },
       onColumnsChange: (data: ColumnChangeParam[]) => {
         console.log('ColumnsChanged', data)
-      }
+      },
     })
 
     function changeLoading() {
@@ -77,7 +61,7 @@ export default defineComponent({
       setColumns(getBasicColumns())
 
       reload({
-        page: 1
+        page: 1,
       })
     }
     function getColumn() {
@@ -102,7 +86,7 @@ export default defineComponent({
 
     function setPaginationInfo() {
       setPagination({
-        currentPage: 2
+        currentPage: 2,
       })
       reload()
     }
@@ -134,8 +118,51 @@ export default defineComponent({
       getSelectRowList,
       getSelectRowKeyList,
       setSelectedRowKeyList,
-      clearSelect
+      clearSelect,
     }
-  }
+  },
 })
 </script>
+
+<template>
+  <div class="p-4">
+    <el-button class="mr-2" size="small" type="primary" @click="reloadTable">
+      还原
+    </el-button>
+    <el-button class="mr-2" size="small" type="primary" @click="changeLoading">
+      开启loading
+    </el-button>
+    <el-button class="mr-2" size="small" type="primary" @click="changeColumns">
+      更改Columns
+    </el-button>
+    <el-button class="mr-2" size="small" type="primary" @click="getColumn">
+      获取Columns
+    </el-button>
+    <el-button class="mr-2" size="small" type="primary" @click="getTableData">
+      获取表格数据
+    </el-button>
+    <el-button class="mr-2" size="small" type="primary" @click="getTableRawData">
+      获取接口原始数据
+    </el-button>
+    <el-button class="mr-2" size="small" type="primary" @click="setPaginationInfo">
+      跳转到第2页
+    </el-button>
+    <el-button class="mr-2" size="small" type="primary" @click="getSelectRowList">
+      获取选中行
+    </el-button>
+    <el-button class="mr-2" size="small" type="primary" @click="getSelectRowKeyList">
+      获取选中行Key
+    </el-button>
+    <el-button class="mr-2" size="small" type="primary" @click="setSelectedRowKeyList">
+      设置选中行
+    </el-button>
+    <el-button class="mr-2" size="small" type="primary" @click="clearSelect">
+      清空选中行
+    </el-button>
+    <el-button class="mr-2" size="small" type="primary" @click="getPagination">
+      获取分页信息
+    </el-button>
+
+    <BasicTable @register="registerTable" />
+  </div>
+</template>

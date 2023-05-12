@@ -1,39 +1,16 @@
-<template>
-  <div class="p-4">
-    <BasicTable @register="registerTable">
-      <template #action="{ row }">
-        <TableAction
-          :actions="[
-            {
-              label: '删除',
-              onClick: handleDelete.bind(null, row)
-            }
-          ]"
-          :dropDownActions="[
-            {
-              label: '启用',
-              popConfirm: {
-                title: '是否启用？',
-                confirm: handleOpen.bind(null, row)
-              }
-            }
-          ]"
-        />
-      </template>
-    </BasicTable>
-  </div>
-</template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { BasicTable, useTable, BasicColumn, TableAction } from '@hobby/curd-create'
+import type { BasicColumn } from '@/components'
+import { BasicTable, TableAction, useTable } from '@/components'
 
 import { demoListApi } from '@/api/demo/table'
+
 const columns: BasicColumn[] = [
   {
     label: 'ID',
     prop: 'id',
     fixed: 'left',
-    width: 280
+    width: 280,
   },
   {
     label: '姓名',
@@ -41,31 +18,31 @@ const columns: BasicColumn[] = [
     width: 260,
     edit: true,
     editRule: async (text) => {
-      if (text === '2') {
+      if (text === '2')
         return '不能输入该值'
-      }
+
       return ''
-    }
+    },
   },
   {
     label: '地址',
-    prop: 'address'
+    prop: 'address',
   },
   {
     label: '编号',
     prop: 'no',
-    width: 300
+    width: 300,
   },
   {
     label: '开始时间',
     width: 200,
-    prop: 'beginTime'
+    prop: 'beginTime',
   },
   {
     label: '结束时间',
     prop: 'endTime',
-    width: 200
-  }
+    width: 200,
+  },
 ]
 export default defineComponent({
   components: { BasicTable, TableAction },
@@ -73,14 +50,14 @@ export default defineComponent({
     const [registerTable] = useTable({
       title: 'TableAction组件及固定列示例',
       api: demoListApi,
-      columns: columns,
+      columns,
       border: true,
       actionColumn: {
         width: 160,
         label: 'Action',
         prop: 'action',
-        slots: { cellSlot: 'action' }
-      }
+        slots: { cellSlot: 'action' },
+      },
     })
     function handleDelete(record: Recordable) {
       console.log('点击了删除', record)
@@ -91,8 +68,34 @@ export default defineComponent({
     return {
       registerTable,
       handleDelete,
-      handleOpen
+      handleOpen,
     }
-  }
+  },
 })
 </script>
+
+<template>
+  <div class="p-4">
+    <BasicTable @register="registerTable">
+      <template #action="{ row }">
+        <TableAction
+          :actions="[
+            {
+              label: '删除',
+              onClick: handleDelete.bind(null, row),
+            },
+          ]"
+          :drop-down-actions="[
+            {
+              label: '启用',
+              popConfirm: {
+                title: '是否启用？',
+                confirm: handleOpen.bind(null, row),
+              },
+            },
+          ]"
+        />
+      </template>
+    </BasicTable>
+  </div>
+</template>

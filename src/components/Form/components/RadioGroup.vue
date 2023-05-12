@@ -1,29 +1,20 @@
-<template>
-  <el-radio-group v-model="state" v-bind="attrs">
-    <template v-for="item in options" :key="item.label">
-      <component :is="isBtn ? ElRadioButton : ElRadio" v-bind="item">
-        {{ item.label }}
-      </component>
-    </template>
-  </el-radio-group>
-</template>
-
 <script lang="ts" setup>
 import type { CheckboxProps } from 'element-plus'
 import { ElRadio, ElRadioButton } from 'element-plus'
+
 // import { useAttrs, computed, defineEmits, defineProps } from 'vue'
 const props = defineProps({
   modelValue: {
-    type: [String, Number, Boolean] as PropType<string | number | boolean>
+    type: [String, Number, Boolean] as PropType<string | number | boolean>,
   },
   options: {
     type: Array as PropType<CheckboxProps[]>,
-    default: () => []
+    default: () => [],
   },
   isBtn: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 const emit = defineEmits(['update:modelValue'])
 const attrs = useAttrs()
@@ -33,8 +24,18 @@ const state = computed({
   },
   set(val) {
     emit('update:modelValue', val)
-  }
+  },
 })
 </script>
+
+<template>
+  <el-radio-group v-model="state" v-bind="attrs">
+    <template v-for="item in options" :key="item.label">
+      <component :is="isBtn ? ElRadioButton : ElRadio" v-bind="item">
+        {{ item.label }}
+      </component>
+    </template>
+  </el-radio-group>
+</template>
 
 <style lang="scss" scoped></style>

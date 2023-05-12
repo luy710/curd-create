@@ -2,9 +2,10 @@ import type { PaginationProps } from 'element-plus'
 import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults'
 import type { TreeNode } from 'element-plus/es/components/table/src/table/defaults'
 import type { CSSProperties, VNode, VNodeChild } from 'vue'
+import type { ComponentType } from './componentType'
 import type { FormProps, HelpComponentProps } from '@/components/Form/types/form'
+
 export declare type SortOrder = 'ascending' | 'descending'
-import { ComponentType } from './componentType'
 export interface FetchParams {
   searchInfo?: Recordable
   page?: number
@@ -142,13 +143,13 @@ export interface BasicColumn extends Partial<Omit<TableColumnCtx<Recordable>, 'c
   editable?: boolean
   editComponent?: ComponentType
   editComponentProps?:
-    | ((opt: {
-        text: string | number | boolean | Recordable
-        record: Recordable
-        column: BasicColumn
-        index: number
-      }) => Recordable)
-    | Recordable
+  | ((opt: {
+    text: string | number | boolean | Recordable
+    record: Recordable
+    column: BasicColumn
+    index: number
+  }) => Recordable)
+  | Recordable
   editRule?: boolean | ((text: string, record: Recordable) => Promise<string>)
   editValueMap?: (value: any) => string
   onEditRow?: () => void
@@ -162,9 +163,9 @@ export interface BasicColumn extends Partial<Omit<TableColumnCtx<Recordable>, 'c
     index: number
   }) => VNodeChild | JSX.Element
   // 动态 Disabled
-  editDynamicDisabled?: boolean | ((record: Recordable) => boolean),
+  editDynamicDisabled?: boolean | ((record: Recordable) => boolean)
   // 动态值改变
-  editDynamicChange?: boolean | ((record: Recordable) => boolean),
+  editDynamicChange?: boolean | ((record: Recordable) => boolean)
 
 }
 
@@ -198,7 +199,7 @@ export interface BasicTableProps {
     row,
     column,
     rowIndex,
-    columnIndex
+    columnIndex,
   }: {
     row: Recordable
     rowIndex: number
@@ -210,7 +211,7 @@ export interface BasicTableProps {
     row,
     column,
     rowIndex,
-    columnIndex
+    columnIndex,
   }: {
     row: Recordable
     rowIndex: number
@@ -226,7 +227,7 @@ export interface BasicTableProps {
     row,
     column,
     rowIndex,
-    columnIndex
+    columnIndex,
   }: {
     row: Recordable
     rowIndex: number
@@ -238,7 +239,7 @@ export interface BasicTableProps {
     row,
     column,
     rowIndex,
-    columnIndex
+    columnIndex,
   }: {
     row: Recordable
     rowIndex: number
@@ -268,7 +269,7 @@ export interface BasicTableProps {
     row,
     column,
     rowIndex,
-    columnIndex
+    columnIndex,
   }: {
     row: Recordable
     rowIndex: number
@@ -394,7 +395,7 @@ export interface BasicTableProps {
   onSortChange?: ({
     column,
     prop,
-    order
+    order,
   }: {
     column: Recordable
     prop: string
@@ -414,7 +415,7 @@ export interface BasicTableProps {
   onColumnsChange?: (data: ColumnChangeParam[]) => void
 }
 
-export type ColumnChangeParam = {
+export interface ColumnChangeParam {
   prop: string
   fixed: boolean | 'left' | 'right' | undefined
   visible: boolean

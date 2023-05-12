@@ -1,13 +1,8 @@
-<template>
-  <div class="p-4">
-    <BasicTable @register="registerTable" />
-  </div>
-</template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { BasicTable, useTable } from '@hobby/curd-create'
-import { getBasicColumns } from './tableData'
 import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults'
+import { getBasicColumns } from './tableData'
+import { BasicTable, useTable } from '@/components'
 import { demoListApi } from '@/api/demo/table'
 
 export default defineComponent({
@@ -26,17 +21,17 @@ export default defineComponent({
           sums[index] = '总计'
           return
         }
-        const values = data.map((item) => Number(item[column.property]))
-        if (!values.every((value) => Number.isNaN(value))) {
+        const values = data.map(item => Number(item[column.property]))
+        if (!values.every(value => Number.isNaN(value))) {
           sums[index] = `$ ${values.reduce((prev, curr) => {
             const value = Number(curr)
-            if (!Number.isNaN(value)) {
+            if (!Number.isNaN(value))
               return prev + curr
-            } else {
+             else
               return prev
-            }
           }, 0)}`
-        } else {
+        }
+        else {
           sums[index] = 'N/A'
         }
       })
@@ -55,13 +50,19 @@ export default defineComponent({
       canResize: true,
       pagination: true,
       indexColumnProps: {
-        width: 120
-      }
+        width: 120,
+      },
     })
 
     return {
-      registerTable
+      registerTable,
     }
-  }
+  },
 })
 </script>
+
+<template>
+  <div class="p-4">
+    <BasicTable @register="registerTable" />
+  </div>
+</template>

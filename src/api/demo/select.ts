@@ -1,7 +1,8 @@
+import type { selectParams } from './model/optionsModel'
 import axios from '@/request/axios'
-import { selectParams } from './model/optionsModel'
+
 enum Api {
-  OPTIONS_LIST = '/select/getDemoOptions'
+  OPTIONS_LIST = '/select/getDemoOptions',
 }
 
 /**

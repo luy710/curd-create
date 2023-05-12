@@ -1,13 +1,6 @@
-<template>
-  <ElTooltip content="全屏">
-    <el-icon :size="16" style="cursor: pointer" @click="toggle">
-      <FullScreen />
-    </el-icon>
-  </ElTooltip>
-</template>
 <script lang="ts">
 // import { defineComponent } from 'vue'
-import { ElTooltip, ElIcon } from 'element-plus'
+import { ElIcon, ElTooltip } from 'element-plus'
 import { FullScreen } from '@element-plus/icons-vue'
 import { useFullscreen } from '@vueuse/core'
 import { useTableContext } from '../../hooks/useTableContext'
@@ -17,7 +10,7 @@ export default defineComponent({
   components: {
     FullScreen,
     ElTooltip,
-    ElIcon
+    ElIcon,
   },
 
   setup() {
@@ -27,8 +20,16 @@ export default defineComponent({
 
     return {
       toggle,
-      isFullscreen
+      isFullscreen,
     }
-  }
+  },
 })
 </script>
+
+<template>
+  <ElTooltip content="全屏">
+    <ElIcon :size="16" style="cursor: pointer" @click="toggle">
+      <FullScreen />
+    </ElIcon>
+  </ElTooltip>
+</template>

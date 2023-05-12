@@ -1,20 +1,21 @@
+import type { DemoParams } from './model/tableModel'
 import axios from '@/request/axios'
-import { DemoParams } from './model/tableModel'
 
 enum Api {
-  DEMO_LIST = '/table/getDemoList'
+  DEMO_LIST = '/table/getDemoList',
 }
 
 /**
  * @description: Get sample list value
  */
 
-export const demoListApi = (params: DemoParams) =>
-  axios.get({
+export function demoListApi(params: DemoParams) {
+  return axios.get({
     url: Api.DEMO_LIST,
     params,
     headers: {
-      // @ts-ignore
-      ignoreCancelToken: true
-    }
+      // @ts-expect-error
+      ignoreCancelToken: true,
+    },
   })
+}

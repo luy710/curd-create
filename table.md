@@ -9,195 +9,112 @@
 
 **基础使用**
 ```vue
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
+import { getBasicColumns, getBasicData } from './tableData'
+import { BasicTable } from '@/components/index'
+
+export default defineComponent({
+  components: { BasicTable },
+  setup() {
+    return {
+      columns: getBasicColumns(),
+      data: getBasicData(),
+    }
+  },
+})
+</script>
+
 <template>
   <div class="p-4">
     <BasicTable
       title="基础示例"
-      titleHelpMessage="温馨提醒"
+      title-help-message="温馨提醒"
       :columns="columns"
       :data="data"
-      :canResize="canResize"
+      :can-resize="canResize"
       :loading="loading"
       :stripe="striped"
       :border="border"
       :pagination="{ pageSize: 20 }"
     >
       <template #toolbar>
-        <a-button type="primary"> 操作按钮 </a-button>
+        <a-button type="primary">
+          操作按钮
+        </a-button>
       </template>
     </BasicTable>
   </div>
 </template>
-<script lang="ts">
-  import { defineComponent, ref } from 'vue';
-  import { BasicTable } from '@/components/index';
-  import { getBasicColumns, getBasicData } from './tableData';
-
-  export default defineComponent({
-    components: { BasicTable },
-    setup() {
-      return {
-        columns: getBasicColumns(),
-        data: getBasicData(),
-      };
-    },
-  });
-</script>
 ```
 **使用API调用接口**
   
 `Methods`使用，所有methods见下方：
 
 ```vue
+<script lang="ts">
+import { defineComponent, ref, unref } from 'vue'
+import { getBasicColumns, getBasicShortColumns } from './tableData'
+import { BasicTable, TableActionType } from '@/components/index'
+import { demoListApi } from '@/api/demo/table'
+
+export default defineComponent({
+  components: { BasicTable },
+  setup() {
+    const tableRef = ref<Nullable<TableActionType>>(null)
+
+    function getTableAction() {
+      const tableAction = unref(tableRef)
+      if (!tableAction)
+        throw new Error('tableAction is null')
+
+      return tableAction
+    }
+    function changeLoading() {
+      getTableAction().setLoading(true)
+      setTimeout(() => {
+        getTableAction().setLoading(false)
+      }, 1000)
+    }
+    return {
+      tableRef,
+      api: demoListApi,
+      columns: getBasicColumns(),
+      beforeFetch: (params: Recordable) => params,
+      afterFetch: (params: Recordable) => params,
+      changeLoading,
+    }
+  },
+})
+</script>
+
 <template>
   <div class="p-4">
     <BasicTable
-      :canResize="false"
-      title="RefTable示例"
-      titleHelpMessage="使用Ref调用表格内方法"
       ref="tableRef"
+      :can-resize="false"
+      title="RefTable示例"
+      title-help-message="使用Ref调用表格内方法"
       :api="api"
       :columns="columns"
-      :beforeFetch="beforeFetch"
-      :afterFetch="afterFetch"
-      rowKey="id"
+      :before-fetch="beforeFetch"
+      :after-fetch="afterFetch"
+      row-key="id"
     />
   </div>
 </template>
-<script lang="ts">
-  import { defineComponent, ref, unref } from 'vue';
-  import { BasicTable, TableActionType } from '@/components/index';
-  import { getBasicColumns, getBasicShortColumns } from './tableData';
-  import { demoListApi } from '@/api/demo/table';
-  export default defineComponent({
-    components: { BasicTable },
-    setup() {
-      const tableRef = ref<Nullable<TableActionType>>(null);
-
-      function getTableAction() {
-        const tableAction = unref(tableRef);
-        if (!tableAction) {
-          throw new Error('tableAction is null');
-        }
-        return tableAction;
-      }
-      function changeLoading() {
-        getTableAction().setLoading(true);
-        setTimeout(() => {
-          getTableAction().setLoading(false);
-        }, 1000);
-      }
-      return {
-        tableRef,
-        api: demoListApi,
-        columns: getBasicColumns(),
-        beforeFetch: (params: Recordable) => params,
-        afterFetch: (params: Recordable) => params,
-        changeLoading,
-      };
-    },
-  });
-</script>
 ```
 
 
 ### BasicColumn 和 tableAction 通过权限和业务控制显示隐藏的示例
 
 ```vue
-<template>
-  <div class="p-4">
-    <BasicTable
-      title="基础示例"
-      titleHelpMessage="温馨提醒"
-      :columns="columns"
-      :data="data"
-      :canResize="canResize"
-      :loading="loading"
-      :stripe="striped"
-      :border="border"
-      showTableSetting
-      :pagination="pagination"
-      @columns-change="handleColumnChange"
-    >
-      <template #toolbar>
-        <el-button size="small" type="primary" @click="toggleCanResize">
-          {{ !canResize ? '自适应高度' : '取消自适应' }}
-        </el-button>
-        <el-button size="small" type="primary" @click="toggleBorder">
-          {{ !border ? '显示边框' : '隐藏边框' }}
-        </el-button>
-        <el-button size="small" type="primary" @click="toggleLoading"> 开启loading </el-button>
-        <el-button size="small" type="primary" @click="toggleStriped">
-          {{ !striped ? '显示斑马纹' : '隐藏斑马纹' }}
-        </el-button>
-        <el-button size="small" type="primary" @click="togglePagination">
-          {{ pagination ? '关闭分页' : '开启分页' }}
-        </el-button>
-      </template>
-      <template #action="scope">
-        <TableAction
-          :actions="[
-            {
-              label: '编辑',
-              onClick: () => {},
-              icon: inconFun,
-              popConfirm: {
-                title: '是否启用？',
-                confirm: configTest
-              }
-            },
-            {
-              label: '删除',
-              color: 'error',
-              popConfirm: {
-                title: '是否确认删除',
-                placement: 'left',
-                confirm: () => {}
-              }
-            }
-          ]"
-          :dropDownActions="[
-            {
-              label: '启用',
-              popConfirm: {
-                title: '是否启用？',
-                confirm: () => {}
-              },
-              ifShow: () => {
-                return scope.row.status !== 'enable'
-              }
-            },
-            {
-              label: '禁用',
-              popConfirm: {
-                title: '是否禁用？',
-                confirm: () => {}
-              },
-              ifShow: () => {
-                return scope.row.status === 'enable'
-              }
-            },
-            {
-              label: '同时控制',
-              popConfirm: {
-                title: '是否动态显示？',
-                confirm: () => {}
-              },
-              ifShow: () => {
-                return true
-              }
-            }
-          ]"
-        />
-      </template>
-    </BasicTable>
-  </div>
-</template>
 <script lang="ts">
-import { defineComponent, ref, h } from 'vue'
-import { BasicTable, ColumnChangeParam, TableAction } from '@/components/index'
-import { getBasicColumns, getBasicData } from './tableData'
+import { defineComponent, h, ref } from 'vue'
 import { Edit } from '@element-plus/icons-vue'
+import { getBasicColumns, getBasicData } from './tableData'
+import { BasicTable, ColumnChangeParam, TableAction } from '@/components/index'
+
 export default defineComponent({
   components: { BasicTable, TableAction, Edit },
   setup() {
@@ -259,6 +176,97 @@ export default defineComponent({
 })
 </script>
 
+<template>
+  <div class="p-4">
+    <BasicTable
+      title="基础示例"
+      title-help-message="温馨提醒"
+      :columns="columns"
+      :data="data"
+      :can-resize="canResize"
+      :loading="loading"
+      :stripe="striped"
+      :border="border"
+      show-table-setting
+      :pagination="pagination"
+      @columns-change="handleColumnChange"
+    >
+      <template #toolbar>
+        <el-button size="small" type="primary" @click="toggleCanResize">
+          {{ !canResize ? '自适应高度' : '取消自适应' }}
+        </el-button>
+        <el-button size="small" type="primary" @click="toggleBorder">
+          {{ !border ? '显示边框' : '隐藏边框' }}
+        </el-button>
+        <el-button size="small" type="primary" @click="toggleLoading">
+          开启loading
+        </el-button>
+        <el-button size="small" type="primary" @click="toggleStriped">
+          {{ !striped ? '显示斑马纹' : '隐藏斑马纹' }}
+        </el-button>
+        <el-button size="small" type="primary" @click="togglePagination">
+          {{ pagination ? '关闭分页' : '开启分页' }}
+        </el-button>
+      </template>
+      <template #action="scope">
+        <TableAction
+          :actions="[
+            {
+              label: '编辑',
+              onClick: () => {},
+              icon: inconFun,
+              popConfirm: {
+                title: '是否启用？',
+                confirm: configTest,
+              },
+            },
+            {
+              label: '删除',
+              color: 'error',
+              popConfirm: {
+                title: '是否确认删除',
+                placement: 'left',
+                confirm: () => {},
+              },
+            },
+          ]"
+          :drop-down-actions="[
+            {
+              label: '启用',
+              popConfirm: {
+                title: '是否启用？',
+                confirm: () => {},
+              },
+              ifShow: () => {
+                return scope.row.status !== 'enable'
+              },
+            },
+            {
+              label: '禁用',
+              popConfirm: {
+                title: '是否禁用？',
+                confirm: () => {},
+              },
+              ifShow: () => {
+                return scope.row.status === 'enable'
+              },
+            },
+            {
+              label: '同时控制',
+              popConfirm: {
+                title: '是否动态显示？',
+                confirm: () => {},
+              },
+              ifShow: () => {
+                return true
+              },
+            },
+          ]"
+        />
+      </template>
+    </BasicTable>
+  </div>
+</template>
 ```
 
 ## useTable
@@ -268,41 +276,43 @@ export default defineComponent({
 下面是一个使用简单表格的示例，
 
 ```vue
+<script lang="ts">
+import { defineComponent } from 'vue'
+import { getBasicColumns, getBasicShortColumns } from './tableData'
+import { BasicTable, useTable } from '@/components/index'
+import { demoListApi } from '@/api/demo/table'
+
+export default defineComponent({
+  components: { BasicTable },
+  setup() {
+    const [
+      registerTable,
+      {
+        setLoading,
+      },
+    ] = useTable({
+      api: demoListApi,
+      columns: getBasicColumns(),
+    })
+
+    function changeLoading() {
+      setLoading(true)
+      setTimeout(() => {
+        setLoading(false)
+      }, 1000)
+    }
+
+    return {
+      registerTable,
+      changeLoading,
+    }
+  },
+})
+</script>
+
 <template>
   <BasicTable @register="registerTable" />
 </template>
-<script lang="ts">
-  import { defineComponent } from 'vue';
-  import { BasicTable, useTable } from '@/components/index';
-  import { getBasicColumns, getBasicShortColumns } from './tableData';
-  import { demoListApi } from '@/api/demo/table';
-  export default defineComponent({
-    components: { BasicTable },
-    setup() {
-      const [
-        registerTable,
-        {
-          setLoading,
-        },
-      ] = useTable({
-        api: demoListApi,
-        columns: getBasicColumns(),
-      });
-
-      function changeLoading() {
-        setLoading(true);
-        setTimeout(() => {
-          setLoading(false);
-        }, 1000);
-      }
-      
-      return {
-        registerTable,
-        changeLoading,
-      };
-    },
-  });
-</script>
 ```
 
 ### Usage
@@ -311,7 +321,7 @@ export default defineComponent({
 
 ```ts
 // 表格的props也可以直接注册到useTable内部
-const [register, methods] = useTable(props);
+const [register, methods] = useTable(props)
 ```
 
 **register**
@@ -319,18 +329,19 @@ const [register, methods] = useTable(props);
 register 用于注册 useTable，如果需要使用`useTable`提供的 api，必须将 register 传入组件的 onRegister
 
 ```vue
+<script>
+export default defineComponent({
+  components: { BasicForm },
+  setup() {
+    const [register] = useTable()
+    return { register }
+  },
+})
+</script>
+
 <template>
   <BasicTable @register="register" />
 </template>
-<script>
-  export default defineComponent({
-    components: { BasicForm },
-    setup() {
-      const [register] = useTable();
-      return { register };
-    },
-  });
-</script>
 ```
 
 ## BasicTable 方法
@@ -436,18 +447,19 @@ expandColumnProps | 展开收起列配置 | `BasicColumn` | `{width: 40, align: 
 **DEFAULT_SORT_FN**
 ```ts
 (sortInfo: SorterResult) => {
-    const { prop, order } = sortInfo
-    if (prop && order) {
-      return {
-        // The sort prop passed to the backend you
-        prop,
-        // Sorting method passed to the background asc/desc
-        order
-      }
-    } else {
-      return {}
+  const { prop, order } = sortInfo
+  if (prop && order) {
+    return {
+      // The sort prop passed to the backend you
+      prop,
+      // Sorting method passed to the background asc/desc
+      order
     }
   }
+  else {
+    return {}
+  }
+}
 ```
 
 **SizeType**
@@ -519,8 +531,8 @@ export type ComponentType =
   | 'ApiSelect'
   | 'Checkbox'
   | 'Switch'
-  | 'DatePicker'  
-  | 'TimePicker'; 
+  | 'DatePicker'
+  | 'TimePicker'
 ```
 
 
@@ -631,25 +643,25 @@ form-submitBefore
 ```ts
 export interface ActionItem {
   // 按钮文本
-  label: string;
+  label: string
   // 是否禁用
-  disabled?: boolean;
+  disabled?: boolean
   // 按钮颜色
-  color?: 'success' | 'error' | 'warning';
+  color?: 'success' | 'error' | 'warning'
   // 按钮类型
-  type?: string;
+  type?: string
   // button组件props
-  props?: any;
+  props?: any
   // 按钮图标
-  icon?: VNode;
+  icon?: VNode
   // 气泡确认框
-  popConfirm?: PopConfirm;
+  popConfirm?: PopConfirm
   // 是否显示分隔线，v2.0.0+
-  divider?: boolean;
+  divider?: boolean
   // 根据业务状态来控制当前列是否显示，v2.4.0+
-  ifShow?: boolean | ((action: ActionItem) => boolean);
+  ifShow?: boolean | ((action: ActionItem) => boolean)
   // 点击回调
-  onClick?: Fn;
+  onClick?: Fn
   // Tooltip配置，2.5.3以上版本支持，可以配置为string，或者完整的tooltip属性
   tooltip?: string | TooltipProps
 }
@@ -659,12 +671,12 @@ export interface ActionItem {
 **PopConfirm**
 ```ts
 export interface PopConfirm {
-  title: string;
-  okText?: string;
-  cancelText?: string;
-  confirm: Fn;
-  cancel?: Fn;
-  icon?: string;
+  title: string
+  okText?: string
+  cancelText?: string
+  confirm: Fn
+  cancel?: Fn
+  icon?: string
 }
 ```
 

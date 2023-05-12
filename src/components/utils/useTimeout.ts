@@ -1,21 +1,21 @@
-import { ref, watch, onBeforeUnmount } from 'vue'
+import { onBeforeUnmount, ref, watch } from 'vue'
 import { isFunction } from '@/components/utils/is'
 
 export function useTimeoutFn(handle: Fn<any>, wait: number, native = false) {
-  if (!isFunction(handle)) {
+  if (!isFunction(handle))
     throw new Error('handle is not Function!')
-  }
 
   const { readyRef, stop, start } = useTimeoutRef(wait)
   if (native) {
     handle()
-  } else {
+  }
+  else {
     watch(
       readyRef,
       (maturity) => {
         maturity && handle()
       },
-      { immediate: false }
+      { immediate: false },
     )
   }
   return { readyRef, stop, start }

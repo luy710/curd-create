@@ -1,5 +1,6 @@
 <script lang="tsx">
 import { ElPagination } from 'element-plus'
+
 // import { defineComponent, computed } from 'vue'
 
 export default defineComponent({
@@ -8,17 +9,17 @@ export default defineComponent({
     // 是否使用小型分页样式
     small: {
       type: Boolean,
-      default: false
+      default: false,
     },
     // 是否为分页按钮添加背景色
     background: {
       type: Boolean,
-      default: false
+      default: false,
     },
     // 	每页显示条目个数，支持 v-model 双向绑定
     pageSize: {
       type: Number,
-      default: 20
+      default: 20,
     },
     // 每页显示条目数的初始值
     defaultPageSize: Number,
@@ -29,24 +30,24 @@ export default defineComponent({
     // 设置最大页码按钮数。 页码按钮的数量，当总页数超过该值时会折叠, number	5 ≤ x ≤ 21 的奇数	7
     pagerCount: {
       type: Number,
-      default: 7
+      default: 7,
     },
     // 当前页数，支持 v-model 双向绑定	number
     currentPage: {
       type: Number,
-      default: 1
+      default: 1,
     },
     // 当前页数的初始值
     defaultCurrentPage: Number,
     // 组件布局，子组件名用逗号分隔	string	sizes / prev / pager / next / jumper / -> / total / slot
     layout: {
       type: String,
-      default: 'total, sizes, prev, pager, next, jumper, ->'
+      default: 'total, sizes, prev, pager, next, jumper, ->',
     },
     // 每页显示个数选择器的选项设置
     pageSizes: {
       type: Array as PropType<number[]>,
-      default: () => [10, 20, 30, 40, 50, 100]
+      default: () => [10, 20, 30, 40, 50, 100],
     },
     // 每页显示个数选择器的下拉框类名
     popperClass: String,
@@ -57,10 +58,10 @@ export default defineComponent({
     // 是否禁用分页	boolean	—	false
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     // 只有一页时是否隐藏
-    hideOnSinglePage: Boolean
+    hideOnSinglePage: Boolean,
   },
   emits: ['change', 'update:currentPage', 'update:pageSize'],
   setup(props, { emit, attrs }) {
@@ -70,7 +71,7 @@ export default defineComponent({
       },
       set(val) {
         emit('update:currentPage', val)
-      }
+      },
     })
 
     const pageSize = computed({
@@ -79,20 +80,20 @@ export default defineComponent({
       },
       set(val) {
         emit('update:pageSize', val)
-      }
+      },
     })
 
     const handleSizeChange = (val: number) => {
       emit('change', {
         currentPage: currentPage.value,
-        pageSize: val
+        pageSize: val,
       })
     }
 
     const handleCurrentChange = (val: number) => {
       emit('change', {
         currentPage: val,
-        pageSize: pageSize.value
+        pageSize: pageSize.value,
       })
     }
 
@@ -119,7 +120,7 @@ export default defineComponent({
         onCurrentChange={handleCurrentChange}
       />
     )
-  }
+  },
 })
 </script>
 

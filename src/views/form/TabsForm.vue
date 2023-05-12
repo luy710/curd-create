@@ -1,31 +1,15 @@
-<template>
-  <el-card title="标签页+多级field表单" v-loading="loading">
-    <div class="mb-4">
-      <el-button @click="handleReset" class="mr-2"> 重置表单 </el-button>
-      <el-button @click="handleSetValues" class="mr-2"> 设置默认值 </el-button>
-      <el-button @click="handleSubmit" class="mr-2" type="primary"> 提交表单 </el-button>
-    </div>
-    <el-card title="标签页+多级field表单">
-      <el-tabs v-model:activeKey="activeKey">
-        <el-tab-pane v-for="item in tabsFormSchema" :key="item.key" v-bind="omit(item, ['Form', 'key'])">
-          <BasicForm @register="item.Form[0]" />
-        </el-tab-pane>
-      </el-tabs>
-    </el-card>
-  </el-card>
-</template>
-
 <script lang="ts">
-import { ref, defineComponent } from 'vue'
-import { omit, merge as deepMerge } from 'lodash-es'
-import { BasicForm, FormSchema, useForm, FormProps, UseFormReturnType } from '@hobby/curd-create'
+import { defineComponent, ref } from 'vue'
+import { merge as deepMerge, omit } from 'lodash-es'
 import { ElMessage } from 'element-plus'
+import type { FormProps, FormSchema, UseFormReturnType } from '@/components'
+import { BasicForm, useForm } from '@/components'
 
 export default defineComponent({
   name: 'TabsFormDemo',
   components: { BasicForm },
   setup() {
-    type TabsFormType = {
+    interface TabsFormType {
       key: string
       tab: string
       forceRender?: boolean
@@ -39,7 +23,7 @@ export default defineComponent({
     // 公共属性
     const baseFormConfig: Partial<FormProps> = {
       showActionButtonGroup: false,
-      labelWidth: 100
+      labelWidth: 100,
     }
 
     // 为每个字段模拟默认值, { tabs1: { field1: '', field2: '' }, tabs2: { field1: '' }, ... }
@@ -58,7 +42,7 @@ export default defineComponent({
           field: `${tabsKey}.field${j}`,
           label: `${tabsKey}-field${j}`,
           component: 'Input',
-          colProps: { span: 24 }
+          colProps: { span: 24 },
         })
         row[`field${j}`] = `field: ${tabsKey}.field${j}, default value`
       }
@@ -69,7 +53,7 @@ export default defineComponent({
         key: tabsKey,
         tab: tabsKey,
         forceRender: true,
-        Form: useForm(Object.assign({ schemas }, baseFormConfig) as FormProps)
+        Form: useForm(Object.assign({ schemas }, baseFormConfig) as FormProps),
       })
     }
 
@@ -95,11 +79,13 @@ export default defineComponent({
 
         console.log('submit values: ', values)
         ElMessage.success('提交成功！请打开控制台查看')
-      } catch (e) {
+      }
+      catch (e) {
         // 验证失败或出错，切换到对应标签页
         activeKey.value = lastKey
         console.log(e)
-      } finally {
+      }
+      finally {
         loading.value = false
       }
     }
@@ -118,10 +104,33 @@ export default defineComponent({
       tabsFormSchema,
       handleReset,
       handleSubmit,
-      handleSetValues
+      handleSetValues,
     }
-  }
+  },
 })
 </script>
+
+<template>
+  <el-card v-loading="loading" title="标签页+多级field表单">
+    <div class="mb-4">
+      <el-button class="mr-2" @click="handleReset">
+        重置表单
+      </el-button>
+      <el-button class="mr-2" @click="handleSetValues">
+        设置默认值
+      </el-button>
+      <el-button class="mr-2" type="primary" @click="handleSubmit">
+        提交表单
+      </el-button>
+    </div>
+    <el-card title="标签页+多级field表单">
+      <el-tabs v-model:activeKey="activeKey">
+        <el-tab-pane v-for="item in tabsFormSchema" :key="item.key" v-bind="omit(item, ['Form', 'key'])">
+          <BasicForm @register="item.Form[0]" />
+        </el-tab-pane>
+      </el-tabs>
+    </el-card>
+  </el-card>
+</template>
 
 <style scoped></style>

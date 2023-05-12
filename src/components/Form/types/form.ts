@@ -1,7 +1,7 @@
 import type { CSSProperties, VNode } from 'vue'
+import type { ButtonProps, FormItemProp, FormItemRule, RowProps } from 'element-plus'
 import type { ColEx, ComponentType } from './index'
-import type { ButtonProps, RowProps, FormItemRule, FormItemProp } from 'element-plus'
-import { TableActionType } from '@/components/Table/types/table'
+import type { TableActionType } from '@/components/Table/types/table'
 
 export type ButtonOptions = Partial<ButtonProps> & { innerTxt?: string }
 export type FieldMapToTime = [string, [string, string], string?][]
@@ -142,13 +142,13 @@ export interface FormSchema {
   component: ComponentType
   // 组件的配置参数
   componentProps?:
-    | ((opt: {
-        schema: FormSchema
-        tableAction: TableActionType
-        formActionType: FormActionType
-        formModel: Recordable
-      }) => Recordable)
-    | object
+  | ((opt: {
+    schema: FormSchema
+    tableAction: TableActionType
+    formActionType: FormActionType
+    formModel: Recordable
+  }) => Recordable)
+  | object
   // Required
   required?: boolean | ((renderCallbackParams: RenderCallbackParams) => boolean)
   suffix?: string | number | ((values: RenderCallbackParams) => string | number)
@@ -203,6 +203,6 @@ export interface HelpComponentProps {
   absolute: boolean
   // Positioning
   position: any
-  
+
   placement: string
 }

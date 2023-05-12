@@ -1,99 +1,24 @@
-<template>
-  <ElTooltip content="列设置">
-    <span style="display: inline-flex">
-      <ElPopover
-        placement="bottom-start"
-        trigger="click"
-        @show="handleVisibleChange"
-        :width="300"
-        :popper-class="`${prefixCls}__cloumn-list`"
-      >
-        <template #default>
-          <div :class="`${prefixCls}__popover-title`">
-            <ElCheckbox :indeterminate="indeterminate" v-model="checkAll" @change="onCheckAllChange">
-              列展示
-            </ElCheckbox>
-            <ElCheckbox v-model="checkIndex" @change="handleIndexCheckChange"> 序号列 </ElCheckbox>
-            <ElCheckbox
-              v-model="checkSelect"
-              @change="handleSelectCheckChange"
-              :validate-event="false"
-              :disabled="!defaultRowSelection"
-            >
-              勾选列
-            </ElCheckbox>
-
-            <ElButton type="primary" link @click="reset"> 重置 </ElButton>
-          </div>
-          <ElScrollbar :max-height="540">
-            <ElCheckboxGroup v-model="checkedList" @change="onChange" ref="columnListRef">
-              <template v-for="item in plainOptions" :key="item.value">
-                <div :class="`${prefixCls}__check-item`" v-if="!('ifShow' in item && !item.ifShow)">
-                  <!-- <el-icon class="table-column-drag-icon"><Rank /></el-icon> -->
-                  <ElCheckbox :label="item.value">
-                    {{ item.label }}
-                  </ElCheckbox>
-                  <ElTooltip placement="bottom-start" :mouseLeaveDelay="0.4" content="固定到左侧">
-                    <el-icon
-                      :class="[
-                        `${prefixCls}__fixed-left`,
-                        {
-                          active: item.fixed === 'left',
-                          disabled: !checkedList.includes(item.value)
-                        }
-                      ]"
-                      @click="handleColumnFixed(item, 'left')"
-                    >
-                      <ArrowLeftBold />
-                    </el-icon>
-                  </ElTooltip>
-                  <ElDivider direction="vertical" />
-                  <ElTooltip placement="bottom-start" :mouseLeaveDelay="0.4" content="固定到右侧">
-                    <el-icon
-                      :class="[
-                        `${prefixCls}__fixed-right`,
-                        {
-                          active: item.fixed === 'right',
-                          disabled: !checkedList.includes(item.value)
-                        }
-                      ]"
-                      @click="handleColumnFixed(item, 'right')"
-                    >
-                      <ArrowRightBold />
-                    </el-icon>
-                  </ElTooltip>
-                </div>
-              </template>
-            </ElCheckboxGroup>
-          </ElScrollbar>
-        </template>
-        <template #reference>
-          <el-icon :size="16" style="cursor: pointer"><Setting /></el-icon>
-        </template>
-      </ElPopover>
-    </span>
-  </ElTooltip>
-</template>
 <script lang="ts">
-import type { BasicColumn, ColumnChangeParam } from '../../types/table'
+import type { CheckboxValueType } from 'element-plus'
 import {
-  ElTooltip,
-  ElPopover,
+  ElButton,
   ElCheckbox,
+  ElCheckboxGroup,
   ElDivider,
   ElIcon,
+  ElPopover,
   ElScrollbar,
-  ElButton,
-  ElCheckboxGroup
+  ElTooltip,
+
 } from 'element-plus'
 
-import { Setting, Rank, ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue'
-import { useTableContext } from '../../hooks/useTableContext'
-import { isNullAndUnDef } from '@/components/utils/is'
+import { ArrowLeftBold, ArrowRightBold, Rank, Setting } from '@element-plus/icons-vue'
 import { cloneDeep, omit } from 'lodash-es'
 import Sortablejs from 'sortablejs'
 import type Sortable from 'sortablejs'
-import { CheckboxValueType } from 'element-plus'
+import { useTableContext } from '../../hooks/useTableContext'
+import type { BasicColumn, ColumnChangeParam } from '../../types/table'
+import { isNullAndUnDef } from '@/components/utils/is'
 
 interface State {
   checkAll: boolean
@@ -122,7 +47,7 @@ export default defineComponent({
     ArrowLeftBold,
     ArrowRightBold,
     ElScrollbar,
-    ElButton
+    ElButton,
   },
   emits: ['columns-change'],
 
@@ -142,7 +67,7 @@ export default defineComponent({
     const state = reactive<State>({
       checkAll: true,
       checkedList: [],
-      defaultCheckList: []
+      defaultCheckList: [],
     })
 
     const checkIndex = ref(false)
@@ -157,9 +82,8 @@ export default defineComponent({
     watchEffect(() => {
       setTimeout(() => {
         const columns = table.getColumns()
-        if (columns.length && !state.isInit) {
+        if (columns.length && !state.isInit)
           init()
-        }
       }, 0)
     })
 
@@ -175,7 +99,7 @@ export default defineComponent({
         ret.push({
           label: (item.label as string) || (item.customLabel as unknown as string),
           value: (item.prop || item.label) as string,
-          ...item
+          ...item,
         })
       })
       return ret
@@ -187,9 +111,9 @@ export default defineComponent({
       const checkList = table
         .getColumns({ ignoreAction: true, ignoreIndex: true, ignoreExpand: true })
         .map((item) => {
-          if (item.defaultHidden) {
+          if (item.defaultHidden)
             return ''
-          }
+
           return item.prop || item.label
         })
         .filter(Boolean) as string[]
@@ -199,12 +123,12 @@ export default defineComponent({
         plainSortOptions.value = columns
         cachePlainOptions.value = columns
         state.defaultCheckList = checkList
-      } else {
+      }
+      else {
         unref(plainOptions).forEach((item: BasicColumn) => {
           const findItem = columns.find((col: BasicColumn) => col.prop === item.prop)
-          if (findItem) {
+          if (findItem)
             item.fixed = findItem.fixed
-          }
         })
       }
       state.isInit = true
@@ -217,7 +141,8 @@ export default defineComponent({
       if (val) {
         state.checkedList = checkList
         setColumns(checkList)
-      } else {
+      }
+      else {
         state.checkedList = []
         setColumns([])
       }
@@ -225,7 +150,7 @@ export default defineComponent({
 
     const indeterminate = computed(() => {
       const len = plainOptions.value.length
-      let checkedLen = state.checkedList.length
+      const checkedLen = state.checkedList.length
       // unref(checkIndex) && checkedLen--
       return checkedLen > 0 && checkedLen < len
     })
@@ -255,12 +180,15 @@ export default defineComponent({
 
     // Open the pop-up window for drag and drop initialization
     function handleVisibleChange() {
-      if (inited) return
+      if (inited)
+        return
       nextTick(() => {
         const columnListEl = unref(columnListRef)
-        if (!columnListEl) return
+        if (!columnListEl)
+          return
         const el = columnListEl.$el as any
-        if (!el) return
+        if (!el)
+          return
         // Drag and drop sort
         sortable = Sortablejs.create(unref(el), {
           animation: 500,
@@ -269,16 +197,17 @@ export default defineComponent({
           handle: '.table-column-drag-icon',
           onEnd: (evt) => {
             const { oldIndex, newIndex } = evt
-            if (isNullAndUnDef(oldIndex) || isNullAndUnDef(newIndex) || oldIndex === newIndex) {
+            if (isNullAndUnDef(oldIndex) || isNullAndUnDef(newIndex) || oldIndex === newIndex)
               return
-            }
+
             // Sort column
             const columns = cloneDeep(plainSortOptions.value)
 
             if (oldIndex > newIndex) {
               columns.splice(newIndex, 0, columns[oldIndex])
               columns.splice(oldIndex + 1, 1)
-            } else {
+            }
+            else {
               columns.splice(newIndex + 1, 0, columns[oldIndex])
               columns.splice(oldIndex, 1)
             }
@@ -286,9 +215,9 @@ export default defineComponent({
             plainSortOptions.value = columns
 
             setColumns(
-              columns.map((col: Options) => col.value).filter((value: string) => state.checkedList.includes(value))
+              columns.map((col: Options) => col.value).filter((value: string) => state.checkedList.includes(value)),
             )
-          }
+          },
         })
         // 记录原始order 序列
         sortableOrder = sortable.toArray()
@@ -299,31 +228,32 @@ export default defineComponent({
     // Control whether the serial number column is displayed
     function handleIndexCheckChange(val: CheckboxValueType) {
       table.setProps({
-        showIndexColumn: val as boolean
+        showIndexColumn: val as boolean,
       })
     }
 
     // Control whether the check box is displayed
     function handleSelectCheckChange(val: CheckboxValueType) {
       table.setProps({
-        showSelectionColumn: val as boolean
+        showSelectionColumn: val as boolean,
       })
     }
 
     function handleColumnFixed(item: BasicColumn, fixed?: 'left' | 'right') {
-      if (!state.checkedList.includes(item.prop as string)) return
+      if (!state.checkedList.includes(item.prop as string))
+        return
 
       const columns = getColumns() as BasicColumn[]
       const isFixed = item.fixed === fixed ? false : fixed
-      const index = columns.findIndex((col) => col.prop === item.prop)
-      if (index !== -1) {
+      const index = columns.findIndex(col => col.prop === item.prop)
+      if (index !== -1)
         columns[index].fixed = isFixed
-      }
+
       item.fixed = isFixed
 
-      if (isFixed && !item.width) {
+      if (isFixed && !item.width)
         item.width = 100
-      }
+
       table.setCacheColumnsByField?.(item.prop as string, { fixed: isFixed })
       setColumns(columns)
     }
@@ -331,9 +261,9 @@ export default defineComponent({
     function setColumns(columns: BasicColumn[] | string[]) {
       table.setColumns(columns)
       const data: ColumnChangeParam[] = unref(plainSortOptions).map((col: any) => {
-        const visible =
-          columns.findIndex(
-            (c: BasicColumn | string) => c === col.value || (typeof c !== 'string' && c.prop === col.value)
+        const visible
+          = columns.findIndex(
+            (c: BasicColumn | string) => c === col.value || (typeof c !== 'string' && c.prop === col.value),
           ) !== -1
         return { prop: col.value, fixed: col.fixed, visible }
       })
@@ -357,11 +287,89 @@ export default defineComponent({
       handleIndexCheckChange,
       handleSelectCheckChange,
       defaultRowSelection,
-      handleColumnFixed
+      handleColumnFixed,
     }
-  }
+  },
 })
 </script>
+
+<template>
+  <ElTooltip content="列设置">
+    <span style="display: inline-flex">
+      <ElPopover
+        placement="bottom-start"
+        trigger="click"
+        :width="300"
+        :popper-class="`${prefixCls}__cloumn-list`"
+        @show="handleVisibleChange"
+      >
+        <template #default>
+          <div :class="`${prefixCls}__popover-title`">
+            <ElCheckbox v-model="checkAll" :indeterminate="indeterminate" @change="onCheckAllChange">
+              列展示
+            </ElCheckbox>
+            <ElCheckbox v-model="checkIndex" @change="handleIndexCheckChange"> 序号列 </ElCheckbox>
+            <ElCheckbox
+              v-model="checkSelect"
+              :validate-event="false"
+              :disabled="!defaultRowSelection"
+              @change="handleSelectCheckChange"
+            >
+              勾选列
+            </ElCheckbox>
+
+            <ElButton type="primary" link @click="reset"> 重置 </ElButton>
+          </div>
+          <ElScrollbar :max-height="540">
+            <ElCheckboxGroup ref="columnListRef" v-model="checkedList" @change="onChange">
+              <template v-for="item in plainOptions" :key="item.value">
+                <div v-if="!('ifShow' in item && !item.ifShow)" :class="`${prefixCls}__check-item`">
+                  <!-- <el-icon class="table-column-drag-icon"><Rank /></el-icon> -->
+                  <ElCheckbox :label="item.value">
+                    {{ item.label }}
+                  </ElCheckbox>
+                  <ElTooltip placement="bottom-start" :mouse-leave-delay="0.4" content="固定到左侧">
+                    <ElIcon
+                      :class="[
+                        `${prefixCls}__fixed-left`,
+                        {
+                          active: item.fixed === 'left',
+                          disabled: !checkedList.includes(item.value),
+                        },
+                      ]"
+                      @click="handleColumnFixed(item, 'left')"
+                    >
+                      <ArrowLeftBold />
+                    </ElIcon>
+                  </ElTooltip>
+                  <ElDivider direction="vertical" />
+                  <ElTooltip placement="bottom-start" :mouse-leave-delay="0.4" content="固定到右侧">
+                    <ElIcon
+                      :class="[
+                        `${prefixCls}__fixed-right`,
+                        {
+                          active: item.fixed === 'right',
+                          disabled: !checkedList.includes(item.value),
+                        },
+                      ]"
+                      @click="handleColumnFixed(item, 'right')"
+                    >
+                      <ArrowRightBold />
+                    </ElIcon>
+                  </ElTooltip>
+                </div>
+              </template>
+            </ElCheckboxGroup>
+          </ElScrollbar>
+        </template>
+        <template #reference>
+          <ElIcon :size="16" style="cursor: pointer"><Setting /></ElIcon>
+        </template>
+      </ElPopover>
+    </span>
+  </ElTooltip>
+</template>
+
 <style lang="scss">
 .table-column-drag-icon {
   margin: 0 5px;

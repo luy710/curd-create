@@ -1,49 +1,49 @@
 <script lang="tsx">
 import type { CSSProperties, PropType } from 'vue'
 import { Warning } from '@element-plus/icons-vue'
-import { isString, isArray } from '@/components/utils/is'
+import { ElIcon, ElTooltip } from 'element-plus'
+import { isArray, isString } from '@/components/utils/is'
+
 // import { defineComponent, computed, unref } from 'vue'
-import { ElTooltip, ElIcon } from 'element-plus'
 export default defineComponent({
   name: 'BasicHelp',
   components: { ElTooltip, ElIcon },
   props: {
     maxWidth: {
       type: String,
-      default: '600px'
+      default: '600px',
     },
     showIndex: { type: Boolean },
     color: {
       type: String,
-      default: '#fff'
+      default: '#fff',
     },
     fontSize: {
       type: String,
-      default: '14px'
+      default: '14px',
     },
     placement: {
       type: String,
-      default: 'right'
+      default: 'right',
     },
     effect: {
       type: String,
-      default: 'dark'
+      default: 'dark',
     },
     text: {
       type: [String, Array] as PropType<string | string[]>,
-      default: ''
-    }
+      default: '',
+    },
   },
   setup(props, { slots }) {
     const prefixCls = 'm-basic-help'
     const getTooltipStyle = computed(
-      (): CSSProperties => ({ color: props.color, fontSize: props.fontSize, maxWidth: props.maxWidth })
+      (): CSSProperties => ({ color: props.color, fontSize: props.fontSize, maxWidth: props.maxWidth }),
     )
     const renderContent = () => {
       const textList = props.text
-      if (isString(textList)) {
+      if (isString(textList))
         return <p>{textList}</p>
-      }
 
       if (isArray(textList)) {
         return textList.map((text, index) => {
@@ -63,24 +63,26 @@ export default defineComponent({
       <el-tooltip
         popper-class={`${prefixCls}__wrap`}
         effect={props.effect}
-        // @ts-ignore
+        // @ts-expect-error
         placement={props.placement}
         v-slots={{
-          content: () => <div style={unref(getTooltipStyle)}>{renderContent()}</div>
+          content: () => <div style={unref(getTooltipStyle)}>{renderContent()}</div>,
         }}
       >
         <span class={prefixCls}>
-          {slots?.default ? (
-            slots?.default()
-          ) : (
+          {slots?.default
+            ? (
+                slots?.default()
+              )
+            : (
             <el-icon color="#2c3e50">
               <Warning />
             </el-icon>
-          )}
+              )}
         </span>
       </el-tooltip>
     )
-  }
+  },
 })
 </script>
 

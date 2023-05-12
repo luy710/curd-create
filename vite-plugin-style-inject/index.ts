@@ -27,26 +27,27 @@ export function VitePluginStyleInject(styleId: string): Plugin {
           const chunk = bundle[key]
           // 判断是否是JS文件名的chunk
           if (
-            chunk.type === 'chunk' &&
-            chunk.fileName.match(/.[cm]?js$/) !== null &&
-            !chunk.fileName.includes('polyfill')
+            chunk.type === 'chunk'
+            && chunk.fileName.match(/.[cm]?js$/) !== null
+            && !chunk.fileName.includes('polyfill')
           ) {
             const initialCode = chunk.code // 保存原有代码
             // 重新赋值
-            chunk.code =
-              "(function(){ try {var elementStyle = document.createElement('style'); elementStyle.appendChild(document.createTextNode("
+            chunk.code
+              = '(function(){ try {var elementStyle = document.createElement(\'style\'); elementStyle.appendChild(document.createTextNode('
             chunk.code += JSON.stringify(styleCode.trim())
             chunk.code += ')); '
             // + 判断是否添加id
-            if (styleId.length > 0) chunk.code += ` elementStyle.id = "${styleId}"; `
-            chunk.code +=
-              "document.head.appendChild(elementStyle);} catch(e) {console.error('vite-plugin-css-injected-by-js', e);} })();"
+            if (styleId.length > 0)
+              chunk.code += ` elementStyle.id = "${styleId}"; `
+            chunk.code
+              += 'document.head.appendChild(elementStyle);} catch(e) {console.error(\'vite-plugin-css-injected-by-js\', e);} })();'
             // 拼接原有代码
             chunk.code += initialCode
             break // 一个bundle插入一次即可
           }
         }
       }
-    }
+    },
   }
 }

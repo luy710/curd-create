@@ -1,12 +1,8 @@
-<template>
-  <div class="p-4">
-    <BasicTable @register="registerTable" />
-  </div>
-</template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { BasicTable, useTable, BasicColumn } from '@hobby/curd-create'
 import { getMergeHeaderColumns } from './tableData'
+import type { BasicColumn } from '@/components'
+import { BasicTable, useTable } from '@/components'
 
 import { demoListApi } from '@/api/demo/table'
 
@@ -24,23 +20,23 @@ export default defineComponent({
         if (rowIndex % 2 === 0) {
           return {
             rowspan: 2,
-            colspan: 1
+            colspan: 1,
           }
-        } else {
+        }
+        else {
           return {
             rowspan: 0,
-            colspan: 0
+            colspan: 0,
           }
         }
       }
     }
     const arraySpanMethod = ({ row, column, rowIndex, columnIndex }: SpanMethodProps) => {
       if (rowIndex % 2 === 0) {
-        if (columnIndex === 0) {
+        if (columnIndex === 0)
           return [1, 2]
-        } else if (columnIndex === 1) {
+        else if (columnIndex === 1)
           return [0, 0]
-        }
       }
     }
     const [registerTable] = useTable({
@@ -49,13 +45,19 @@ export default defineComponent({
       stripe: true,
       api: demoListApi,
       columns: getMergeHeaderColumns(),
-      spanMethod: arraySpanMethod
+      spanMethod: arraySpanMethod,
       // objectSpanMethod
     })
 
     return {
-      registerTable
+      registerTable,
     }
-  }
+  },
 })
 </script>
+
+<template>
+  <div class="p-4">
+    <BasicTable @register="registerTable" />
+  </div>
+</template>

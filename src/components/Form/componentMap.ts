@@ -1,28 +1,28 @@
 import type { Component } from 'vue'
+import {
+  ElAutocomplete,
+  ElCascader,
+  ElCheckbox,
+  ElColorPicker,
+  ElDatePicker,
+  ElDivider,
+  ElInput,
+  ElInputNumber,
+  ElRadio,
+  ElRate,
+  ElSlider,
+  ElSwitch,
+  ElTimePicker,
+  ElTimeSelect,
+  ElTransfer,
+  ElTreeSelect,
+  ElTreeV2,
+} from 'element-plus'
 import type { ComponentType } from './types/index'
 
 /**
  * 组件列表
  */
-import {
-  ElInput,
-  ElColorPicker,
-  ElRadio,
-  ElCheckbox,
-  ElAutocomplete,
-  ElCascader,
-  ElDatePicker,
-  ElTimePicker,
-  ElTimeSelect,
-  ElInputNumber,
-  ElSwitch,
-  ElTreeSelect,
-  ElSlider,
-  ElRate,
-  ElDivider,
-  ElTreeV2,
-  ElTransfer
-} from 'element-plus'
 
 import RadioGroup from './components/RadioGroup.vue'
 import ApiSelect from './components/ApiSelect.vue'

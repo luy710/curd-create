@@ -3,7 +3,7 @@ export enum sizeEnum {
   SM = 'SM',
   MD = 'MD',
   LG = 'LG',
-  XL = 'XL'
+  XL = 'XL',
 }
 
 export enum screenEnum {
@@ -11,7 +11,7 @@ export enum screenEnum {
   SM = 768,
   MD = 992,
   LG = 1200,
-  XL = 1920
+  XL = 1920,
 }
 
 const screenMap = new Map<sizeEnum, number>()

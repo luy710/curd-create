@@ -1,79 +1,17 @@
-<template>
-  <div ref="wrapRef" :class="getWrapperClass">
-    <BasicForm
-      v-if="getBindValues.useSearchForm"
-      ref="formRef"
-      submitOnReset
-      v-bind="(getFormProps as any)"
-      :tableAction="tableAction"
-      @register="registerForm"
-      @submit="handleSearchInfoChange"
-      @advanced-change="redoHeight"
-    >
-      <template #[replaceFormSlotKey(item)]="data" v-for="item in getFormSlotKeys">
-        <slot :name="item" v-bind="data || {}"></slot>
-      </template>
-    </BasicForm>
-
-    <component :is="getHeaderProps.title">
-      <template #[item] v-for="item in getHeaderSlots">
-        <slot :name="item"></slot>
-      </template>
-    </component>
-
-    <ElTable
-      ref="tableRef"
-      v-loading="getLoading"
-      v-bind="getBindValues"
-      v-show="getEmptyDataIsShowTable"
-      @filter-change="filterChange"
-      @sort-change="sortChange"
-    >
-      <!-- table 内部 slots -->
-      <template #[item]="data" v-for="item in ['append', 'empty']" :key="item">
-        <slot :name="item" v-bind="data || {}"></slot>
-      </template>
-      <!-- 操控性列 需固定在表格左侧，顺序为 展开/多选/序号 -->
-      <ElTableColumn v-if="getProps?.showExpandColumn" type="expand" v-bind="getExpandColumnProps">
-        <template #header="props">
-          <slot :name="getExpandColumnProps.slots?.headerSlot || 'expandedRowHender'" v-bind="props" />
-        </template>
-        <template #default="props">
-          <slot :name="getExpandColumnProps.slots?.cellSlot || 'expandedRowRender'" v-bind="props" />
-        </template>
-      </ElTableColumn>
-      <ElTableColumn v-if="getProps?.showSelectionColumn" type="selection" v-bind="getSelectColumnProps" />
-      <ElTableColumn
-        v-if="getProps?.showIndexColumn && !getProps.isTreeTable"
-        type="index"
-        v-bind="getInndexColumnProps"
-      />
-
-      <!-- column -->
-      <InnerTableColumn :columns="getViewColumns" :slots="$slots" />
-    </ElTable>
-    <TablePagination
-      v-if="!!getPaginationInfo"
-      v-bind="isBoolean(getPaginationInfo) ? {} : getPaginationInfo"
-      @change="(pagination:any) => handlePaginationChange(pagination)"
-    />
-  </div>
-</template>
 <script lang="ts" setup>
 // import { defineEmits, defineProps, ref, computed, unref, useSlots, useAttrs, toRaw } from 'vue'
-import { BasicForm, useForm } from '@/components/index'
-import { baseProps } from './props'
 import { omit } from 'lodash-es'
-import { isBoolean, isFunction, isString } from '@/components/utils/is'
+import { ElTable, ElTableColumn, ElLoadingDirective as vLoading } from 'element-plus'
+import { baseProps } from './props'
 import InnerTableColumn from './components/InnerTableColumn.vue'
 import TablePagination from './components/Pagination.vue'
-import {
+import type {
   BasicTableProps,
   ColumnChangeParam,
   InnerHandlers,
   SizeType,
+  SorterResult,
   TableActionType,
-  SorterResult
 } from './types/table'
 import { useLoading } from './hooks/useLoading'
 import { useTableForm } from './hooks/useTableForm'
@@ -83,8 +21,11 @@ import { useTableHeader } from './hooks/useTableHeader'
 import { createTableContext } from './hooks/useTableContext'
 import { useColumns } from './hooks/useColumns'
 import { useTableHeight } from './hooks/useTableHeight'
-import { ElTable, ElTableColumn, ElLoadingDirective as vLoading } from 'element-plus'
+import { isBoolean, isFunction, isString } from '@/components/utils/is'
+import { BasicForm, useForm } from '@/components/index'
 
+// 基础props
+const props = defineProps(baseProps)
 // 定义emit事件
 const emit = defineEmits([
   'fetch-success',
@@ -110,13 +51,11 @@ const emit = defineEmits([
   // 'headerContextmenu',
   'change',
   'sort-change',
-  'filter-change'
+  'filter-change',
   // 'currentChange',
   // 'headerDragend',
   // 'expandChange'
 ])
-// 基础props
-const props = defineProps(baseProps)
 // 额外属性
 const attrs = useAttrs()
 // 动态设置的props
@@ -138,8 +77,8 @@ const { getLoading, setLoading } = useLoading(getProps)
 // 注册form表单
 const [registerForm, formActions] = useForm()
 // 注册分页器
-const { getPaginationInfo, getPagination, setPagination, setShowPagination, getShowPagination } =
-  usePagination(getProps)
+const { getPaginationInfo, getPagination, setPagination, setShowPagination, getShowPagination }
+  = usePagination(getProps)
 const {
   handlePaginationChange,
   handleFilterChange,
@@ -158,7 +97,7 @@ const {
   getRowKey,
   reload,
   getAutoCreateKey,
-  updateTableData
+  updateTableData,
 } = useDataSource(
   getProps,
   {
@@ -167,9 +106,9 @@ const {
     setLoading,
     setPagination,
     getFieldsValue: formActions.getFieldsValue,
-    clearSelectedRowKeys: () => tableRef.value.clearSelection()
+    clearSelectedRowKeys: () => tableRef.value.clearSelection(),
   },
-  emit as EmitType
+  emit as EmitType,
 )
 const {
   getViewColumns,
@@ -180,7 +119,7 @@ const {
   getCacheColumns,
   getExpandColumnProps,
   getInndexColumnProps,
-  getSelectColumnProps
+  getSelectColumnProps,
 } = useColumns(getProps)
 const { getTableHeightRef, redoHeight } = useTableHeight(getProps, tableRef, wrapRef, formRef, getPaginationInfo)
 // 处理表单 table 参数
@@ -188,7 +127,7 @@ const { getFormProps, replaceFormSlotKey, getFormSlotKeys, handleSearchInfoChang
   getProps,
   slots,
   fetch,
-  getLoading
+  getLoading,
 )
 const getBindValues = computed<any>(() => {
   const dataSource = unref(getDataSourceRef)
@@ -201,7 +140,7 @@ const getBindValues = computed<any>(() => {
     rowKey: unref(getRowKey),
     columns: toRaw(unref(getViewColumns)),
     pagination: toRaw(unref(getPaginationInfo)),
-    data: dataSource
+    data: dataSource,
   }
   propsData = omit(propsData, ['class', 'onChange', 'loading'])
   return propsData
@@ -215,16 +154,16 @@ const getWrapperClass = computed(() => {
     attrs.class,
     {
       [`${prefixCls}-form-container`]: values.useSearchForm,
-      [`${prefixCls}--inset`]: values.inset
-    }
+      [`${prefixCls}--inset`]: values.inset,
+    },
   ]
 })
 // 空数据 显示效果xian
 const getEmptyDataIsShowTable = computed(() => {
   const { emptyDataIsShowTable, useSearchForm } = unref(getProps)
-  if (emptyDataIsShowTable || !useSearchForm) {
+  if (emptyDataIsShowTable || !useSearchForm)
     return true
-  }
+
   return !!unref(getDataSourceRef).length
 })
 const handlers: InnerHandlers = {
@@ -232,7 +171,7 @@ const handlers: InnerHandlers = {
     emit('columns-change', data)
     // support useTable
     unref(getProps)?.onColumnsChange?.(data)
-  }
+  },
 }
 const { getHeaderProps, getHeaderSlots } = useTableHeader(getProps, slots, handlers)
 
@@ -240,12 +179,12 @@ const { getHeaderProps, getHeaderSlots } = useTableHeader(getProps, slots, handl
 function setProps(props: Partial<BasicTableProps>) {
   innerPropsRef.value = { ...unref(innerPropsRef), ...props }
 }
-const filterChange = (filter: Recordable) => {
+function filterChange(filter: Recordable) {
   const { onFilterChange } = unref(getProps)
   handleFilterChange(filter)
   onFilterChange && isFunction(onFilterChange) && onFilterChange(filter as Recordable)
 }
-const sortChange = (sort: SorterResult) => {
+function sortChange(sort: SorterResult) {
   const { onSortChange } = unref(getProps)
   handleSortChange(sort)
   onSortChange && isFunction(onSortChange) && onSortChange(sort as SorterResult)
@@ -328,26 +267,24 @@ const tableAction: TableActionType = {
   getSelectRowKeys: (): (string | number)[] => {
     const key = unref(getRowKey)
     return tableRef.value.getSelectionRows().map((item: Recordable) => {
-      if (isString(key)) {
+      if (isString(key))
         return item[key]
-      }
-      if (isFunction(key)) {
+
+      if (isFunction(key))
         return key(item)
-      }
     })
   },
   // 根据rowkey设置选中
   setSelectedRowKeys: (keys: (string | number)[]) => {
     const key = unref(getRowKey)
     getDataSource().forEach((row: Recordable) => {
-      if (isString(key)) {
+      if (isString(key))
         keys.includes(row[key]) && tableRef.value.toggleRowSelection(row, true)
-      }
-      if (isFunction(key)) {
+
+      if (isFunction(key))
         keys.includes(key(row)) && tableRef.value.toggleRowSelection(row, true)
-      }
     })
-  }
+  },
 }
 createTableContext({ ...tableAction, wrapRef, getBindValues })
 // 导出内部事件方法
@@ -355,6 +292,69 @@ defineExpose(tableAction)
 // 注册表格
 emit('register', tableAction, formActions)
 </script>
+
+<template>
+  <div ref="wrapRef" :class="getWrapperClass">
+    <BasicForm
+      v-if="getBindValues.useSearchForm"
+      ref="formRef"
+      submit-on-reset
+      v-bind="getFormProps as any"
+      :table-action="tableAction"
+      @register="registerForm"
+      @submit="handleSearchInfoChange"
+      @advanced-change="redoHeight"
+    >
+      <template v-for="item in getFormSlotKeys" #[replaceFormSlotKey(item)]="data">
+        <slot :name="item" v-bind="data || {}" />
+      </template>
+    </BasicForm>
+
+    <component :is="getHeaderProps.title">
+      <template v-for="item in getHeaderSlots" #[item]>
+        <slot :name="item" />
+      </template>
+    </component>
+
+    <ElTable
+      v-show="getEmptyDataIsShowTable"
+      ref="tableRef"
+      v-loading="getLoading"
+      v-bind="getBindValues"
+      @filter-change="filterChange"
+      @sort-change="sortChange"
+    >
+      <!-- table 内部 slots -->
+      <template v-for="item in ['append', 'empty']" #[item]="data" :key="item">
+        <slot :name="item" v-bind="data || {}" />
+      </template>
+      <!-- 操控性列 需固定在表格左侧，顺序为 展开/多选/序号 -->
+      <ElTableColumn v-if="getProps?.showExpandColumn" type="expand" v-bind="getExpandColumnProps">
+        <template #header="props">
+          <slot :name="getExpandColumnProps.slots?.headerSlot || 'expandedRowHender'" v-bind="props" />
+        </template>
+        <template #default="props">
+          <slot :name="getExpandColumnProps.slots?.cellSlot || 'expandedRowRender'" v-bind="props" />
+        </template>
+      </ElTableColumn>
+      <ElTableColumn v-if="getProps?.showSelectionColumn" type="selection" v-bind="getSelectColumnProps" />
+      <ElTableColumn
+        v-if="getProps?.showIndexColumn && !getProps.isTreeTable"
+        type="index"
+        v-bind="getInndexColumnProps"
+      />
+
+      <!-- column -->
+      <InnerTableColumn :columns="getViewColumns" :slots="$slots" />
+    </ElTable>
+    <TablePagination
+      v-if="!!getPaginationInfo"
+      v-bind="isBoolean(getPaginationInfo) ? {} : getPaginationInfo"
+      @change="(pagination:any) => handlePaginationChange(pagination)"
+    />
+  </div>
+</template>
+
 <style lang="scss" scoped>
 .basic-table {
   padding: 8px;

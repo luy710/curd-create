@@ -1,22 +1,8 @@
-<template>
-  <ElTooltip content="密度">
-    <ElDropdown placement="bottom" trigger="click" @command="handleTitleClick">
-      <el-icon :size="16" style="cursor: pointer"><Box /></el-icon>
-      <template #dropdown>
-        <el-dropdown-menu>
-          <el-dropdown-item command="large">偏大</el-dropdown-item>
-          <el-dropdown-item command="default">默认</el-dropdown-item>
-          <el-dropdown-item command="small">紧凑</el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </ElDropdown>
-  </ElTooltip>
-</template>
 <script lang="ts">
-import type { SizeType } from '../../types/table'
 import { defineComponent, ref } from 'vue'
-import { ElTooltip, ElDropdown, ElIcon } from 'element-plus'
+import { ElDropdown, ElIcon, ElTooltip } from 'element-plus'
 import { Box } from '@element-plus/icons-vue'
+import type { SizeType } from '../../types/table'
 import { useTableContext } from '../../hooks/useTableContext'
 
 export default defineComponent({
@@ -27,7 +13,7 @@ export default defineComponent({
     ElTooltip,
     ElDropdown,
     ElDropdownMenu: ElDropdown.DropdownMenu,
-    ElDropdownItem: ElDropdown.DropdownItem
+    ElDropdownItem: ElDropdown.DropdownItem,
   },
   setup() {
     const table = useTableContext()
@@ -37,14 +23,37 @@ export default defineComponent({
     function handleTitleClick(key: SizeType) {
       selectedKeysRef.value = [key]
       table.setProps({
-        size: key
+        size: key,
       })
     }
 
     return {
       handleTitleClick,
-      selectedKeysRef
+      selectedKeysRef,
     }
-  }
+  },
 })
 </script>
+
+<template>
+  <ElTooltip content="密度">
+    <ElDropdown placement="bottom" trigger="click" @command="handleTitleClick">
+      <ElIcon :size="16" style="cursor: pointer">
+        <Box />
+      </ElIcon>
+      <template #dropdown>
+        <ElDropdownMenu>
+          <ElDropdownItem command="large">
+            偏大
+          </ElDropdownItem>
+          <ElDropdownItem command="default">
+            默认
+          </ElDropdownItem>
+          <ElDropdownItem command="small">
+            紧凑
+          </ElDropdownItem>
+        </ElDropdownMenu>
+      </template>
+    </ElDropdown>
+  </ElTooltip>
+</template>

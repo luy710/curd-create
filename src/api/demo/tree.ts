@@ -1,7 +1,7 @@
 import axios from '@/request/axios'
 
 enum Api {
-  TREE_OPTIONS_LIST = '/tree/getDemoOptions'
+  TREE_OPTIONS_LIST = '/tree/getDemoOptions',
 }
 
 /**

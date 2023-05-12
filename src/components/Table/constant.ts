@@ -1,4 +1,5 @@
-import { SorterResult } from './types/table'
+import type { SorterResult } from './types/table'
+
 const table = {
   // Form interface request general configuration
   // support xxx.xxx.xxx
@@ -10,7 +11,7 @@ const table = {
     // Field name of the form data returned by the interface
     listField: 'items',
     // Total number of tables returned by the interface field name
-    totalField: 'total'
+    totalField: 'total',
   },
   // Number of pages that can be selected
   pageSizeOptions: [10, 20, 30, 40, 50, 80, 100],
@@ -26,16 +27,17 @@ const table = {
         // The sort prop passed to the backend you
         prop,
         // Sorting method passed to the background asc/desc
-        order
+        order,
       }
-    } else {
+    }
+    else {
       return {}
     }
   },
   // Custom general filter function
   defaultFilterFn: (data: Recordable) => {
     return data
-  }
+  },
 }
 
 const { pageSizeOptions, defaultPageSize, fetchSetting, defaultSize, defaultSortFn, defaultFilterFn } = table

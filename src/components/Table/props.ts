@@ -1,10 +1,10 @@
-import type { TableSetting, SizeType, SorterResult, FetchSetting, BasicColumn } from './types/table'
 import type { CSSProperties } from 'vue'
-import { DEFAULT_SORT_FN, DEFAULT_FILTER_FN, FETCH_SETTING } from './constant'
 import type { TreeNode } from 'element-plus/es/components/table/src/table/defaults'
 import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults'
-import { FormProps } from '@/components/Form/types/form'
-import { PaginationProps } from 'element-plus'
+import type { PaginationProps } from 'element-plus'
+import { DEFAULT_FILTER_FN, DEFAULT_SORT_FN, FETCH_SETTING } from './constant'
+import type { BasicColumn, FetchSetting, SizeType, SorterResult, TableSetting } from './types/table'
+import type { FormProps } from '@/components/Form/types/form'
 
 export const baseProps = {
   // 显示的数据
@@ -16,38 +16,38 @@ export const baseProps = {
   // 是否为斑马纹 table
   stripe: {
     type: Boolean,
-    default: false
+    default: false,
   },
   // 是否带有纵向边框
   border: {
     type: Boolean,
-    default: false
+    default: false,
   },
   // Table 的尺寸
   size: {
     type: String as PropType<SizeType>,
-    default: 'default'
+    default: 'default',
   },
   // 列的宽度是否自撑开
   fit: {
     type: Boolean,
-    default: true
+    default: true,
   },
   // 是否显示表头
   showHeader: {
     type: Boolean,
-    default: true
+    default: true,
   },
   // 是否要高亮当前行
   highlightCurrentRow: {
     type: Boolean,
-    default: false
+    default: false,
   },
   // 当前行的 key，只写属性
   currentRowKey: [String, Number] as PropType<string | number>,
   // 行的 className 的回调方法，也可以使用字符串为所有行设置一个固定的 className。
   rowClassName: {
-    type: [Function, String] as PropType<({ row, rowIndex }: { row: Recordable; rowIndex: number }) => void | string>
+    type: [Function, String] as PropType<({ row, rowIndex }: { row: Recordable; rowIndex: number }) => void | string>,
   },
   // 行的 style 的回调方法，也可以使用一个固定的 Object 为所有行设置一样的 Style。
   rowStyle: [Function, Object] as PropType<
@@ -59,7 +59,7 @@ export const baseProps = {
       row,
       column,
       rowIndex,
-      columnIndex
+      columnIndex,
     }: {
       row: Recordable
       rowIndex: number
@@ -73,7 +73,7 @@ export const baseProps = {
       row,
       column,
       rowIndex,
-      columnIndex
+      columnIndex,
     }: {
       row: Recordable
       rowIndex: number
@@ -95,7 +95,7 @@ export const baseProps = {
       row,
       column,
       rowIndex,
-      columnIndex
+      columnIndex,
     }: {
       row: Recordable
       rowIndex: number
@@ -109,7 +109,7 @@ export const baseProps = {
       row,
       column,
       rowIndex,
-      columnIndex
+      columnIndex,
     }: {
       row: Recordable
       rowIndex: number
@@ -122,28 +122,28 @@ export const baseProps = {
   // 	空数据时显示的文本内容， 也可以通过 #empty 设置
   emptyText: {
     type: String,
-    default: 'No Data'
+    default: 'No Data',
   },
   // 	是否默认展开所有行，当 Table 包含展开行存在或者为树形表格时有效
   defaultExpandAll: {
     type: Boolean,
-    default: false
+    default: false,
   },
   // 	可以通过该属性设置 Table 目前的展开行，需要设置 row-key 属性才能使用，该属性为展开行的 keys 数组。
   expandRowKeys: Array as PropType<Recordable[]>,
   // 	默认的排序列的 prop 和顺序。 它的 prop 属性指定默认的排序的列，order 指定默认排序的顺序 如果只指定了 prop, 没有指定 order, 则默认顺序是 ascending
   defaultSort: {
-    type: Object as PropType<Recordable>
+    type: Object as PropType<Recordable>,
   },
   // 	tooltip effect 属性
   tooltipEffect: {
     type: String as PropType<'dark' | 'light'>,
-    default: 'dark'
+    default: 'dark',
   },
   // 	是否在表尾显示合计行
   showSummary: {
     type: Boolean,
-    default: false
+    default: false,
   },
   // 自定义的合计计算方法
   summaryMethod: Function as PropType<
@@ -152,7 +152,7 @@ export const baseProps = {
   // 自定义合计数据。如果有则显示该数据
   summaryData: {
     type: Array as PropType<Recordable[]>,
-    default: null
+    default: null,
   },
   // 	合并行或列的计算方法
   spanMethod: Function as PropType<
@@ -160,7 +160,7 @@ export const baseProps = {
       row,
       column,
       rowIndex,
-      columnIndex
+      columnIndex,
     }: {
       row: Recordable
       rowIndex: number
@@ -171,12 +171,12 @@ export const baseProps = {
   // 	在多选表格中，当仅有部分行被选中时，点击表头的多选框时的行为。 若为 true，则选中所有行；若为 false，则取消选择所有行
   selectOnIndeterminate: {
     type: Boolean,
-    default: true
+    default: true,
   },
   // 	展示树形数据时，树节点的缩进
   indent: {
     type: Number,
-    default: 16
+    default: 16,
   },
   // 是否懒加载子节点数据
   lazy: Boolean,
@@ -185,92 +185,92 @@ export const baseProps = {
   // 	渲染嵌套数据的配置选项
   treeProps: {
     type: Object as PropType<Recordable>,
-    default: () => ({ hasChildren: 'hasChildren', children: 'children' })
+    default: () => ({ hasChildren: 'hasChildren', children: 'children' }),
   },
   // 	设置表格单元、行和列的布局方式
   tableLayout: {
     type: String as PropType<'fixed' | 'auto'>,
-    default: 'fixed'
+    default: 'fixed',
   },
   // 总是显示滚动条
   scrollbarAlwaysOn: {
     type: Boolean,
-    default: false
+    default: false,
   },
   // 2.2.1	确保主轴的最小尺寸
   flexible: {
     type: Boolean,
-    default: false
+    default: false,
   },
   sortFetchImmediate: {
     type: Boolean,
-    default: true
+    default: true,
   },
   // 排序参数处理方法
   sortFn: {
     type: Function as PropType<(sortInfo: SorterResult) => any>,
-    default: DEFAULT_SORT_FN
+    default: DEFAULT_SORT_FN,
   },
   filterFetchImmediate: {
     type: Boolean,
-    default: true
+    default: true,
   },
   // 过滤参数处理方法
   filterFn: {
     type: Function as PropType<(data: Partial<Recordable<string[]>>) => any>,
-    default: DEFAULT_FILTER_FN
+    default: DEFAULT_FILTER_FN,
   },
   // 是否是树形表格
   isTreeTable: {
     type: Boolean,
-    default: false
+    default: false,
   },
   // 表格设置
   tableSetting: {
     type: Object as PropType<TableSetting>,
-    default: () => ({})
+    default: () => ({}),
   },
   // 是否显示表格设置
   showTableSetting: {
     type: Boolean,
-    default: true
+    default: true,
   },
   // 是否取消表格内的padding
   inset: {
     type: Boolean,
-    default: false
+    default: false,
   },
   // 是否自动生成key，针对v-for遍历
   autoCreateKey: {
     type: Boolean,
-    default: true
+    default: true,
   },
   // 接口
   api: {
     type: Function as PropType<(...arg: any[]) => Promise<any>>,
-    default: null
+    default: null,
   },
   // 请求前参数处理
   beforeFetch: {
     type: Function as PropType<Fn>,
-    default: null
+    default: null,
   },
   // 请求结束后返回数据处理
   afterFetch: {
     type: Function as PropType<Fn>,
-    default: null
+    default: null,
   },
   // 开启表单后，在请求之前处理搜索条件参数
   handleSearchInfoFn: {
     type: Function as PropType<Fn>,
-    default: null
+    default: null,
   },
   // 接口请求配置，可以配置请求的字段和响应的字段名，
   fetchSetting: {
     type: Object as PropType<FetchSetting>,
     default: () => {
       return FETCH_SETTING
-    }
+    },
   },
   // 立即请求接口
   immediate: { type: Boolean, default: true },
@@ -279,57 +279,57 @@ export const baseProps = {
   // 额外的请求参数
   searchInfo: {
     type: Object as PropType<Recordable>,
-    default: null
+    default: null,
   },
   // 表格的标题
   title: {
     type: [String, Function] as PropType<string | ((data: Recordable) => string)>,
-    default: null
+    default: null,
   },
   // 标题的解释说明
   titleHelpMessage: {
-    type: [String, Array] as PropType<string | string[]>
+    type: [String, Array] as PropType<string | string[]>,
   },
   // 使用搜索表单
   useSearchForm: {
     type: Boolean,
-    default: false
+    default: false,
   },
   // 表单配置
   formConfig: {
     type: Object as PropType<FormProps>,
-    default: null
+    default: null,
   },
   // 表单列信息 BasicColumn[]
   columns: {
     type: [Array] as PropType<BasicColumn[]>,
-    default: () => []
+    default: () => [],
   },
   // 是否显示序号列
   showIndexColumn: { type: Boolean, default: true },
   // 序号列配置 BasicColumn
   indexColumnProps: {
     type: Object as PropType<BasicColumn>,
-    default: null
+    default: null,
   },
   // 显示多选框列
   showSelectionColumn: { type: Boolean, default: false },
   // 多选列配置
   selectionColumnProps: {
     type: Object as PropType<BasicColumn>,
-    default: null
+    default: null,
   },
   // 显示展开收起
   showExpandColumn: { type: Boolean, default: false },
   // 展开收起列配置
   expandColumnProps: {
     type: Object as PropType<BasicColumn>,
-    default: null
+    default: null,
   },
   // 表格右侧操作列配置 BasicColumn
   actionColumn: {
     type: Object as PropType<BasicColumn>,
-    default: null
+    default: null,
   },
   // 文本过长是否显示ellipsis
   ellipsis: { type: Boolean, default: true },
@@ -340,22 +340,22 @@ export const baseProps = {
   // 分页配置
   pagination: {
     type: [Object, Boolean] as PropType<Partial<PaginationProps> | boolean>,
-    default: false
+    default: false,
   },
   // 分页的时候自动清除已选的table column
   clearSelectOnPageChange: {
     type: Boolean,
-    default: true
+    default: true,
   },
   // 表格 loading 状态
   loading: {
     type: Boolean,
-    default: false
+    default: false,
   },
   // 单元格编辑状态提交回调，返回false将阻止单元格提交数据到table。该回调在行编辑模式下无效。
   beforeEditSubmit: {
     type: Function as PropType<
       (data: { record: Recordable; index: number; key: string | number; value: any }) => Promise<any>
-    >
-  }
+    >,
+  },
 }

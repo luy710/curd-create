@@ -1,7 +1,8 @@
-import type { FormProps, FormActionType, FormSchema, UseFormReturnType } from '../types/form'
 import type { FormItemProp } from 'element-plus'
-import { DynamicProps } from '#/utils.d'
+import type { FormActionType, FormProps, FormSchema, UseFormReturnType } from '../types/form'
+import type { DynamicProps } from '#/utils.d'
 import { getDynamicProps } from '@/components/utils'
+
 // import { ref, unref, nextTick, onUnmounted, watch } from 'vue'
 
 export declare type ValidateFields = (nameList?: FormItemProp) => Promise<Recordable>
@@ -16,7 +17,7 @@ export function useForm(props?: Props): UseFormReturnType {
     const form = unref(formRef)
     if (!form) {
       throw new Error(
-        'The form instance has not been obtained, please make sure that the form has been rendered when performing the form operation!'
+        'The form instance has not been obtained, please make sure that the form has been rendered when performing the form operation!',
       )
     }
     await nextTick()
@@ -28,7 +29,8 @@ export function useForm(props?: Props): UseFormReturnType {
       formRef.value = null
       loadedRef.value = null
     })
-    if (unref(loadedRef) && instance === unref(formRef)) return
+    if (unref(loadedRef) && instance === unref(formRef))
+      return
 
     formRef.value = instance
     loadedRef.value = true
@@ -40,8 +42,8 @@ export function useForm(props?: Props): UseFormReturnType {
       },
       {
         immediate: true,
-        deep: true
-      }
+        deep: true,
+      },
     )
   }
 
@@ -108,7 +110,7 @@ export function useForm(props?: Props): UseFormReturnType {
     validateField: async (nameList?: FormItemProp): Promise<Recordable> => {
       const form = await getForm()
       return form.validateField(nameList)
-    }
+    },
   }
 
   return [register, methods]

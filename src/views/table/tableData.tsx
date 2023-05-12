@@ -1,5 +1,5 @@
-import { FormProps, FormSchema } from '@hobby/curd-create';
-import { BasicColumn } from '@/components/Table/types/table';
+import type { FormProps, FormSchema } from '@/components'
+import type { BasicColumn } from '@/components/Table/types/table'
 
 export function getBasicColumns(): BasicColumn[] {
   return [
@@ -8,7 +8,7 @@ export function getBasicColumns(): BasicColumn[] {
       prop: 'id',
       fixed: 'left',
       width: 200,
-      slots: {cellSlot: 'id'}
+      slots: { cellSlot: 'id' },
     },
     {
       label: '姓名',
@@ -29,7 +29,7 @@ export function getBasicColumns(): BasicColumn[] {
     {
       label: '地址',
       prop: 'address',
-      minWidth: 240
+      minWidth: 240,
     },
     {
       label: '编号',
@@ -55,9 +55,9 @@ export function getBasicColumns(): BasicColumn[] {
       width: 200,
       prop: 'action',
       slots: {
-        cellSlot: 'action'
-      }
-    }
+        cellSlot: 'action',
+      },
+    },
   ]
 }
 
@@ -83,7 +83,7 @@ export function getBasicShortColumns(): BasicColumn[] {
       prop: 'no',
       width: 80,
     },
-  ];
+  ]
 }
 
 export function getMultipleHeaderColumns(): BasicColumn[] {
@@ -103,9 +103,9 @@ export function getMultipleHeaderColumns(): BasicColumn[] {
       prop: 'address',
       sortable: true,
       // isMulti: true,
-      helpMessage: ['地址信息','多级表头'],
+      helpMessage: ['地址信息', '多级表头'],
       slots: {
-        headerSlot: 'addressSlot'
+        headerSlot: 'addressSlot',
       },
       columns: [
         {
@@ -123,8 +123,8 @@ export function getMultipleHeaderColumns(): BasicColumn[] {
           minWidth: 120,
           helpMessage: ['开始时间', 'beginTime'],
           slots: {
-            headerSlot: 'beginTime'
-          }
+            headerSlot: 'beginTime',
+          },
         },
         {
           label: '结束时间',
@@ -133,7 +133,7 @@ export function getMultipleHeaderColumns(): BasicColumn[] {
         },
       ] as BasicColumn[],
     },
-  ];
+  ]
 }
 
 export function getCustomHeaderColumns(): BasicColumn[] {
@@ -163,8 +163,8 @@ export function getCustomHeaderColumns(): BasicColumn[] {
       prop: 'no',
       width: 120,
       filters: [
-        { text: 'Male', value: 'male', },
-        { text: 'Female', value: 'female', },
+        { text: 'Male', value: 'male' },
+        { text: 'Female', value: 'female' },
       ],
     },
     {
@@ -177,31 +177,31 @@ export function getCustomHeaderColumns(): BasicColumn[] {
       prop: 'endTime',
       // width: 120,
     },
-  ];
+  ]
 }
-const renderContent = ({ text, index }: { text: any; index: number }) => {
+function renderContent({ text, index }: { text: any; index: number }) {
   const obj: any = {
     children: text,
     attrs: {},
-  };
-  if (index === 9) {
-    obj.attrs.colSpan = 0;
   }
-  return obj;
-};
+  if (index === 9)
+    obj.attrs.colSpan = 0
+
+  return obj
+}
 export function getMergeHeaderColumns(): BasicColumn[] {
   return [
     {
       label: 'ID',
       prop: 'id',
       width: 300,
-      
+
     },
     {
       label: '姓名',
       prop: 'name',
       width: 300,
-      
+
     },
     {
       label: '地址',
@@ -213,27 +213,27 @@ export function getMergeHeaderColumns(): BasicColumn[] {
       label: '编号',
       prop: 'no',
       filters: [
-        { text: 'Male', value: 'male', },
-        { text: 'Female', value: 'female', },
+        { text: 'Male', value: 'male' },
+        { text: 'Female', value: 'female' },
       ],
-      
+
     },
     {
       label: '开始时间',
       prop: 'beginTime',
       width: 200,
-      
+
     },
     {
       label: '结束时间',
       prop: 'endTime',
       width: 200,
-      
+
     },
-  ];
+  ]
 }
-export const getAdvanceSchema = (itemNumber = 6): FormSchema[] => {
-  const arr: any = [];
+export function getAdvanceSchema(itemNumber = 6): FormSchema[] {
+  const arr: any = []
   for (let index = 0; index < itemNumber; index++) {
     arr.push({
       field: `field${index}`,
@@ -243,18 +243,18 @@ export const getAdvanceSchema = (itemNumber = 6): FormSchema[] => {
         xl: 12,
         xxl: 8,
       },
-    });
+    })
   }
-  return arr;
-};
+  return arr
+}
 export function getFormConfig(): Partial<FormProps> {
   return {
     labelWidth: 100,
     schemas: [
       ...getAdvanceSchema(5),
       {
-        field: `field11`,
-        label: `Slot示例`,
+        field: 'field11',
+        label: 'Slot示例',
         component: 'Select',
         slot: 'custom',
         colProps: {
@@ -263,11 +263,11 @@ export function getFormConfig(): Partial<FormProps> {
         },
       },
     ],
-  };
+  }
 }
 export function getBasicData() {
   return (() => {
-    const arr: any = [];
+    const arr: any = []
     for (let index = 0; index < 40; index++) {
       arr.push({
         id: `${index}`,
@@ -277,15 +277,15 @@ export function getBasicData() {
         address: 'New York No. 1 Lake ParkNew York No. 1 Lake Park',
         beginTime: new Date().toLocaleString(),
         endTime: new Date().toLocaleString(),
-      });
+      })
     }
-    return arr;
-  })();
+    return arr
+  })()
 }
 
 export function getTreeTableData() {
   return (() => {
-    const arr: any = [];
+    const arr: any = []
     for (let index = 0; index < 40; index++) {
       arr.push({
         id: `${index}`,
@@ -358,15 +358,15 @@ export function getTreeTableData() {
                                 address: 'New York No. 1 Lake ParkNew York No. 1 Lake Park',
                                 beginTime: new Date().toLocaleString(),
                                 endTime: new Date().toLocaleString(),
-                              }]
-                          }]
-                      }]
-                  }]
-              }]
+                              }],
+                          }],
+                      }],
+                  }],
+              }],
           },
         ],
-      });
+      })
     }
-    return arr;
-  })();
+    return arr
+  })()
 }

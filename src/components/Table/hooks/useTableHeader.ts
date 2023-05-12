@@ -1,5 +1,6 @@
 import type { ComputedRef, Slots } from 'vue'
 import type { BasicTableProps, InnerHandlers } from '../types/table'
+
 // import { unref, computed, h } from 'vue'
 import TableHeader from '../components/TableHeader.vue'
 import { isString } from '@/components/utils/is'
@@ -10,9 +11,8 @@ export function useTableHeader(propsRef: ComputedRef<BasicTableProps>, slots: Sl
     const { title, showTableSetting, titleHelpMessage, tableSetting } = unref(propsRef)
 
     const hideTitle = !slots.tableTitle && !title && !slots.toolbar && !showTableSetting
-    if (hideTitle && !isString(title)) {
+    if (hideTitle && !isString(title))
       return {}
-    }
 
     return {
       title: hideTitle
@@ -25,31 +25,31 @@ export function useTableHeader(propsRef: ComputedRef<BasicTableProps>, slots: Sl
                 titleHelpMessage,
                 showTableSetting,
                 tableSetting,
-                onColumnsChange: handlers.onColumnsChange
+                onColumnsChange: handlers.onColumnsChange,
               } as Recordable,
               {
                 ...(slots.toolbar
                   ? {
-                      toolbar: () => getSlot(slots, 'toolbar')
+                      toolbar: () => getSlot(slots, 'toolbar'),
                     }
                   : {}),
                 ...(slots.tableTitle
                   ? {
-                      tableTitle: () => getSlot(slots, 'tableTitle')
+                      tableTitle: () => getSlot(slots, 'tableTitle'),
                     }
                   : {}),
                 ...(slots.headerTop
                   ? {
-                      headerTop: () => getSlot(slots, 'headerTop')
+                      headerTop: () => getSlot(slots, 'headerTop'),
                     }
-                  : {})
-              }
-            )
+                  : {}),
+              },
+            ),
     }
   })
 
   const getHeaderSlots = computed(() => {
-    return Object.keys(slots).filter((name) => ['toolbar', 'headerTop', 'tableTitle'].includes(name))
+    return Object.keys(slots).filter(name => ['toolbar', 'headerTop', 'tableTitle'].includes(name))
   })
   return { getHeaderProps, getHeaderSlots }
 }
