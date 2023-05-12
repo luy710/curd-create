@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { ElButton, ElCol, ElFormItem } from 'element-plus'
 import type { ColEx } from '../types/index'
 import type { ButtonOptions } from '../types/form'
 
@@ -91,24 +92,24 @@ function submit() {
 </script>
 
 <template>
-  <el-col v-if="showActionButtonGroup" v-bind="actionColOpt">
-    <el-form-item style="width: 100%">
+  <ElCol v-if="showActionButtonGroup" v-bind="actionColOpt">
+    <ElFormItem style="width: 100%">
       <slot name="resetBefore" />
-      <el-button v-if="showResetButton" class="mr-2" v-bind="getResetButtonOptions" @click="reset">
+      <ElButton v-if="showResetButton" class="mr-2" v-bind="getResetButtonOptions" @click="reset">
         {{ getResetButtonOptions.innerTxt }}
-      </el-button>
+      </ElButton>
       <slot name="submitBefore" />
-      <el-button v-if="showSubmitButton" class="mr-2" type="primary" v-bind="getSubmitButtonOptions" @click="submit">
+      <ElButton v-if="showSubmitButton" class="mr-2" type="primary" v-bind="getSubmitButtonOptions" @click="submit">
         {{ getSubmitButtonOptions.innerTxt }}
-      </el-button>
+      </ElButton>
 
       <slot name="advanceBefore" />
-      <el-button v-if="showAdvancedButton && !hideAdvanceBtn" type="primary" link size="small" @click="toggleAdvanced">
+      <ElButton v-if="showAdvancedButton && !hideAdvanceBtn" type="primary" link size="small" @click="toggleAdvanced">
         {{ isAdvanced ? '收起' : '展开' }}
-      </el-button>
+      </ElButton>
       <slot name="advanceAfter" />
-    </el-form-item>
-  </el-col>
+    </ElFormItem>
+  </ElCol>
 </template>
 
 <style lang="scss" scoped>

@@ -1,5 +1,6 @@
 <script lang="tsx">
 import { cloneDeep, pick, upperFirst } from 'lodash-es'
+import { ElCol, ElDivider, ElFormItem } from 'element-plus'
 import type { FormActionType, FormProps, FormSchema, RenderCallbackParams, Rule } from '../types/form'
 import { createPlaceholderMessage, setComponentRuleType } from '../helper'
 import { componentMap } from '../componentMap'
@@ -296,9 +297,9 @@ export default defineComponent({
       const itemProps = pick(props.schema, ['size', 'required', 'showMessage', 'inlineMessage', 'error', 'labelWidth'])
       if (component === 'Divider') {
         return (
-          <el-col span={24}>
-            <el-divider {...unref(getComponentsProps)}>{renderLabelHelpMessage()}</el-divider>
-          </el-col>
+          <ElCol span={24}>
+            <ElDivider {...unref(getComponentsProps)}>{renderLabelHelpMessage()}</ElDivider>
+          </ElCol>
         )
       }
 
@@ -310,7 +311,7 @@ export default defineComponent({
       const getSuffix = isFunction(suffix) ? suffix(unref(getValues)) : suffix
 
       return (
-        <el-form-item
+        <ElFormItem
           prop={field}
           class={{ 'suffix-name': showSuffix }}
           {...(itemProps as Recordable)}
@@ -323,7 +324,7 @@ export default defineComponent({
             <div style="flex: 1">{getContent()}</div>
             {showSuffix && <span class="suffix">{getSuffix}</span>}
           </div>
-        </el-form-item>
+        </ElFormItem>
       )
     }
 
@@ -345,9 +346,9 @@ export default defineComponent({
 
       return (
         isIfShow && (
-          <el-col {...realColProps} v-show={isShow}>
+          <ElCol {...realColProps} v-show={isShow}>
             {getContent()}
-          </el-col>
+          </ElCol>
         )
       )
     }
