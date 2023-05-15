@@ -96,7 +96,7 @@ async function setProps(data: Partial<FormProps>): Promise<void> {
 }
 
 // 控制表单操作的展开收起
-const { handleToggleAdvanced } = useAdvanced({
+const { handleToggleAdvanced, fieldsIsAdvancedMap } = useAdvanced({
   advanceState,
   emit,
   getProps,
@@ -270,6 +270,7 @@ onMounted(() => {
       <slot name="formHeader" />
       <template v-for="schema in getSchema" :key="schema.field">
         <FormItem
+          :is-advanced="fieldsIsAdvancedMap[schema.field]"
           :table-action="tableAction"
           :form-action-type="formActionType"
           :schema="schema"

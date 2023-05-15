@@ -1,6 +1,7 @@
 <script lang="tsx">
 import { cloneDeep, pick, upperFirst } from 'lodash-es'
 import { ElCol, ElDivider, ElFormItem } from 'element-plus'
+import type { PropType } from 'vue'
 import type { FormActionType, FormProps, FormSchema, RenderCallbackParams, Rule } from '../types/form'
 import { createPlaceholderMessage, setComponentRuleType } from '../helper'
 import { componentMap } from '../componentMap'
@@ -8,8 +9,6 @@ import type { TableActionType } from '@/components/Table/types/table'
 import { BasicHelp } from '@/components/Basic'
 import { isBoolean, isFunction, isNull } from '@/components/utils/is'
 import { getSlot } from '@/components/utils/tsxHelper'
-
-// import { defineComponent, computed, unref } from 'vue'
 
 export default defineComponent({
   name: 'BasicFormItem',
@@ -40,6 +39,9 @@ export default defineComponent({
     },
     formActionType: {
       type: Object as PropType<FormActionType>,
+    },
+    isAdvanced: {
+      type: Boolean,
     },
   },
   setup(props, { slots }) {
@@ -92,11 +94,15 @@ export default defineComponent({
     })
 
     // formitem 判断是否显示，如果是动态显示 需要传入form参数
-    const getShow = (): { isShow: Boolean; isIfShow: boolean } => {
-      const { show, ifShow, isAdvanced } = props.schema
+    function getShow(): { isShow: boolean; isIfShow: boolean } {
+      const { show, ifShow } = props.schema
       const { showAdvancedButton } = props.formProps
-      // 如果是form的操作按钮组, 需要优先判断是否显示, 默认显示底部操作按钮
-      const itemIsAdvanceButton = showAdvancedButton ? (isBoolean(isAdvanced) ? isAdvanced : true) : true
+      const itemIsAdvanced = showAdvancedButton
+        ? isBoolean(props.isAdvanced)
+          ? props.isAdvanced
+          : true
+        : true
+
       let isShow = true
       let isIfShow = true
 
@@ -112,7 +118,7 @@ export default defineComponent({
       if (isFunction(ifShow))
         isIfShow = ifShow(unref(getValues))
 
-      isShow = isShow && itemIsAdvanceButton
+      isShow = isShow && itemIsAdvanced
       return { isShow, isIfShow }
     }
 
@@ -159,16 +165,14 @@ export default defineComponent({
       // 如果是必须则需要强制加入 强校验
       if (getRequired) {
         if (!rules || rules.length === 0) {
-          // @ts-expect-error
           rules = [{ required: getRequired, validator }]
         }
         else {
           const requiredRuleIndex = rules.findIndex(rule => Reflect.has(rule, 'required'))
 
-          if (requiredRuleIndex === -1) {
-            // @ts-expect-error
+          if (requiredRuleIndex === -1)
+
             rules.push({ required: getRequired, validator })
-          }
         }
       }
 
