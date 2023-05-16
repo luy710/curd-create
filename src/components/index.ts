@@ -1,4 +1,5 @@
 import BasicForm from './Form/BasicForm.vue'
+import { createBreakpointListen } from '@/components/utils/useBreakpoint'
 
 export { /* BasicArrow, BasicTitle */ BasicHelp } from './Basic/index'
 
@@ -11,7 +12,7 @@ export { default as ApiSelect } from './Form/components/ApiSelect.vue'
 export { default as RadioGroup } from './Form/components/RadioGroup.vue'
 export { default as CheckboxGroup } from './Form/components/CheckboxGroup.vue'
 
-export { BasicForm }
+export { BasicForm, createBreakpointListen }
 
 export { default as BasicTable } from './Table/BasicTable.vue'
 export { default as TableAction } from './Table/components/TableAction.vue'

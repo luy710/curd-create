@@ -39,7 +39,7 @@ export default defineComponent({
   <ElTooltip content="密度">
     <ElDropdown placement="bottom" trigger="click" @command="handleTitleClick">
       <ElIcon :size="16" style="cursor: pointer">
-        <Box />
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M7 11.5v-9M9.5 5L7 2.5L4.5 5m5 4L7 11.5L4.5 9m9-8.5H.5m13 13H.5" /></svg>
       </ElIcon>
       <template #dropdown>
         <ElDropdownMenu>

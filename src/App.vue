@@ -1,4 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { createBreakpointListen } from '@/components/utils/useBreakpoint'
+
+createBreakpointListen()
+</script>
 
 <template>
   <RouterView />

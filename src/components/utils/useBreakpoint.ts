@@ -56,9 +56,6 @@ export function createBreakpointListen(fn?: (opt: CreateCallbackParams) => void)
     else if (width < xl)
       screenRef.value = sizeEnum.XL
 
-    else
-      screenRef.value = sizeEnum.XXL
-
     realWidthRef.value = width
   }
 

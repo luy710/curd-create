@@ -29,7 +29,6 @@ export default function ({
   const vm = getCurrentInstance()
 
   const { realWidthRef, screenEnum, screenRef } = useBreakpoint()
-
   const getEmptySpan = computed((): number => {
     if (!advanceState.isAdvanced)
       return 0
@@ -54,7 +53,7 @@ export default function ({
 
   watch(
     [() => unref(getSchema), () => advanceState.isAdvanced, () => unref(realWidthRef)],
-    () => {
+    (val) => {
       const { showAdvancedButton } = unref(getProps)
       if (showAdvancedButton)
         debounceUpdateAdvanced()
@@ -64,7 +63,6 @@ export default function ({
 
   function getAdvanced(itemCol: Partial<ColEx>, itemColSum = 0, isLastAction = false) {
     const width = unref(realWidthRef)
-
     const mdWidth
       = parseInt(itemCol.md as string)
       || parseInt(itemCol.xs as string)
@@ -74,19 +72,12 @@ export default function ({
 
     const lgWidth = parseInt(itemCol.lg as string) || mdWidth
     const xlWidth = parseInt(itemCol.xl as string) || lgWidth
-    const xxlWidth = parseInt(itemCol.xxl as string) || xlWidth
-    if (width <= screenEnum.LG)
+    if (width <= screenEnum.MD)
       itemColSum += mdWidth
-
-    else if (width < screenEnum.XL)
+    else if (width < screenEnum.LG)
       itemColSum += lgWidth
-
-    else if (width < screenEnum.XXL)
-      itemColSum += xlWidth
-
     else
-      itemColSum += xxlWidth
-
+      itemColSum += xlWidth
     if (isLastAction) {
       advanceState.hideAdvanceBtn = false
       if (itemColSum <= BASIC_COL_LEN * 2) {
@@ -148,7 +139,6 @@ export default function ({
           { ...baseColProps, ...colProps },
           itemColSum,
         )
-
         itemColSum = sum || 0
         if (isAdvanced)
           realItemColSum = itemColSum

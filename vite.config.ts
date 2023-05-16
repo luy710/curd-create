@@ -57,7 +57,7 @@ export default ({ command }: ConfigEnv): UserConfig => {
         filename: './node_modules/.cache/visualizer/stats.html',
         open: true,
         gzipSize: true,
-        brotliSize: true
+        brotliSize: true,
       }),
       dts({
         insertTypesEntry: true,
@@ -72,7 +72,7 @@ export default ({ command }: ConfigEnv): UserConfig => {
           globals: {
             'vue': 'Vue',
             'element-plus': 'element-plus',
-            'lodash-es': 'lodash-es'
+            'lodash-es': 'lodash-es',
           },
         },
       },

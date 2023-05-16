@@ -249,20 +249,119 @@ export function getAdvanceSchema(itemNumber = 6): FormSchema[] {
 }
 export function getFormConfig(): Partial<FormProps> {
   return {
-    labelWidth: 100,
-    schemas: [
-      ...getAdvanceSchema(5),
-      {
-        field: 'field11',
-        label: 'Slot示例',
-        component: 'Select',
-        slot: 'custom',
-        colProps: {
-          xl: 12,
-          xxl: 8,
+    labelWidth: 120,
+    labelPosition: 'right',
+    showAdvancedButton: true,
+    alwaysShowLines: 2,
+    actionColOptions: {
+      span: 24,
+    },
+    baseColProps: {
+      lg: 8,
+      xl: 6,
+    },
+    schemas: [{
+      field: 'payApplyNo',
+      label: '支付申请号',
+      component: 'Input',
+      componentProps: {
+
+      },
+    }, {
+      field: 'contractNo',
+      label: '合同编号',
+      component: 'Input',
+    }, {
+      field: 'orderId',
+      label: '订单编号',
+      component: 'Input',
+    }, {
+      field: 'payApplyTime',
+      label: '申请日期',
+      component: 'DatePicker',
+      componentProps: {
+        type: 'daterange',
+        rangeSeparator: '至',
+        startPlaceholder: '开始',
+        endPlaceholder: '结束',
+        style: {
+          width: '100%',
         },
       },
-    ],
+    }, {
+      field: 'passDate',
+      label: '审批完成日期',
+      component: 'DatePicker',
+      componentProps: {
+        type: 'daterange',
+        rangeSeparator: '至',
+        startPlaceholder: '开始',
+        endPlaceholder: '结束',
+        style: {
+          width: '100%',
+        },
+      },
+    }, {
+      field: 'requireDate',
+      label: '付款日期要求',
+      component: 'DatePicker',
+      componentProps: {
+        type: 'daterange',
+        rangeSeparator: '至',
+        startPlaceholder: '开始',
+        endPlaceholder: '结束',
+        style: {
+          width: '100%',
+        },
+      },
+    }, {
+      field: 'payDate',
+      label: '支付日期',
+      component: 'DatePicker',
+      componentProps: {
+        type: 'daterange',
+        rangeSeparator: '至',
+        startPlaceholder: '开始',
+        endPlaceholder: '结束',
+        style: {
+          width: '100%',
+        },
+      },
+    }, {
+      field: 'householder',
+      label: '收款人姓名',
+      component: 'Input',
+    }, {
+      field: 'costScope',
+      label: '费用范围',
+      component: 'Select',
+      componentProps: {
+        options: [{
+          label: '生产经营类',
+          value: '01-01-000013-01',
+        }, {
+          label: '产业升级项目',
+          value: '01-01-000013-10',
+        }, {
+          label: '乙烯项目',
+          value: '01-01-000441-01',
+        }],
+      },
+    }, {
+      field: 'payApplyerName',
+      label: '申请人',
+      component: 'Input',
+    }, {
+      label: '状态',
+      field: 'state',
+      component: 'Select',
+      componentProps: {
+        options: [],
+        style: {
+          width: '100%',
+        },
+      },
+    }],
   }
 }
 export function getBasicData() {
