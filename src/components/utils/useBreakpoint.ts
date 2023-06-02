@@ -33,9 +33,11 @@ export function useBreakpoint() {
 export function createBreakpointListen(fn?: (opt: CreateCallbackParams) => void) {
   const screenRef = ref<sizeEnum>(sizeEnum.XL)
   const realWidthRef = ref(window.innerWidth)
+  if (window.__POWERED_BY_WUJIE__)
+    realWidthRef.value = window.parent.innerWidth
 
   function getWindowWidth() {
-    const width = document.body.clientWidth
+    const width = window.__POWERED_BY_WUJIE__ ? window.parent.document.body.clientWidth : document.body.clientWidth
     const xs = screenMap.get(sizeEnum.XS)!
     const sm = screenMap.get(sizeEnum.SM)!
     const md = screenMap.get(sizeEnum.MD)!

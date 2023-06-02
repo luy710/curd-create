@@ -97,13 +97,14 @@ export function getViewportOffset(element: Element): ViewportOffsetResult {
   const pageYOffset = window.pageYOffset
 
   const box = getBoundingClientRect(element)
+  const bodyBox = getBoundingClientRect(document.body) as DOMRect
 
   const { left: retLeft, top: rectTop, width: rectWidth, height: rectHeight } = box as DOMRect
 
   const scrollLeft = (pageXOffset || docScrollLeft) - (docClientLeft || 0)
   const scrollTop = (pageYOffset || docScrollTop) - (docClientTop || 0)
-  const offsetLeft = retLeft + pageXOffset
-  const offsetTop = rectTop + pageYOffset
+  const offsetLeft = retLeft + pageXOffset - bodyBox.left
+  const offsetTop = rectTop + pageYOffset - bodyBox.top
 
   const left = offsetLeft - scrollLeft
   const top = offsetTop - scrollTop
