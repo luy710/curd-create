@@ -1,7 +1,5 @@
 <script lang="tsx">
 import type { CSSProperties, PropType } from 'vue'
-
-// import { computed, defineComponent, nextTick, ref, toRaw, unref, watchEffect } from 'vue'
 import { Check, Close, Edit } from '@element-plus/icons-vue'
 import { ElIcon, ElLoadingDirective } from 'element-plus'
 import { pick, set } from 'lodash-es'
@@ -10,12 +8,16 @@ import { useTableContext } from '../../hooks/useTableContext'
 import { CellComponent } from './CellComponent'
 import { createPlaceholderMessage } from './helper'
 import type { EditRecordRow } from './index'
-
 import clickOutside from '@/directives/clickOutside'
-
 import { isArray, isBoolean, isFunction, isNumber, isString } from '@/components/utils/is'
 import { treeToList } from '@/components/utils/treeHelper'
 
+interface PropsState {
+  value: string | number | boolean | Recordable
+  record: EditRecordRow
+  column: BasicColumn
+  index: number
+}
 export default defineComponent({
   name: 'EditableCell',
   components: { Edit, Close, Check, CellComponent, ElIcon },
@@ -40,7 +42,8 @@ export default defineComponent({
       default: -1,
     },
   },
-  setup(props) {
+  setup(_props) {
+    const props = _props as PropsState
     const table = useTableContext()
     const isEdit = ref(false)
     const elRef = ref()
@@ -65,13 +68,26 @@ export default defineComponent({
       return ['Checkbox', 'Switch'].includes(component)
     })
 
+    const getDisable = computed(() => {
+      const { editDynamicDisabled } = props.column
+      let disabled = false
+      if (isBoolean(editDynamicDisabled))
+        disabled = editDynamicDisabled
+
+      if (isFunction(editDynamicDisabled)) {
+        const { record } = props
+        disabled = editDynamicDisabled({ record })
+      }
+      return disabled
+    })
+
     const getComponentProps = computed(() => {
       const isCheckValue = unref(getIsCheckComp)
 
       const valueField = 'modelValue'
       const val = unref(currentValueRef)
 
-      const value = isCheckValue ? (isNumber(val) && isBoolean(val) ? val : !!val) : val
+      const value = isCheckValue ? ((isNumber(val) && isBoolean(val)) ? val : !!val) : val
 
       let compProps = props.column?.editComponentProps ?? {}
 
@@ -130,18 +146,6 @@ export default defineComponent({
       const dataKey = (prop || columnKey) as string
       set(record, dataKey, value)
     }
-    const getDisable = computed(() => {
-      const { editDynamicDisabled } = props.column
-      let disabled = false
-      if (isBoolean(editDynamicDisabled))
-        disabled = editDynamicDisabled
-
-      if (isFunction(editDynamicDisabled)) {
-        const { record } = props
-        disabled = editDynamicDisabled({ record })
-      }
-      return disabled
-    })
     const getValues = computed(() => {
       const { editValueMap } = props.column
 
@@ -160,6 +164,11 @@ export default defineComponent({
       return option?.label ?? value
     })
 
+    const getRowEditable = computed(() => {
+      const { editable } = props.record || {}
+      return !!editable
+    })
+
     const getWrapperStyle = computed((): CSSProperties => {
       if (unref(getIsCheckComp) || unref(getRowEditable))
         return {}
@@ -173,11 +182,6 @@ export default defineComponent({
     const getWrapperClass = computed(() => {
       const { align = 'center' } = props.column
       return `edit-cell-align-${align}`
-    })
-
-    const getRowEditable = computed(() => {
-      const { editable } = props.record || {}
-      return !!editable
     })
 
     watchEffect(() => {
@@ -362,10 +366,8 @@ export default defineComponent({
     }
 
     function initCbs(cbs: 'submitCbs' | 'validCbs' | 'cancelCbs', handle: Fn) {
-      if (props.record) {
-        /* eslint-disable  */
+      if (props.record)
         isArray(props.record[cbs]) ? props.record[cbs]?.push(handle) : (props.record[cbs] = [handle])
-      }
     }
 
     if (props.record) {
@@ -374,19 +376,19 @@ export default defineComponent({
       initCbs('cancelCbs', handleCancel)
 
       if (props.column.prop) {
-        if (!props.record.editValueRefs) props.record.editValueRefs = {}
+        if (!props.record.editValueRefs)
+          props.record.editValueRefs = {}
         props.record.editValueRefs[props.column.prop as any] = currentValueRef
       }
-      /* eslint-disable  */
       props.record.onCancelEdit = () => {
-        isArray(props.record?.cancelCbs) && props.record?.cancelCbs.forEach((fn) => fn())
+        isArray(props.record?.cancelCbs) && props.record?.cancelCbs.forEach(fn => fn())
       }
-      /* eslint-disable */
       props.record.onSubmitEdit = async () => {
         if (isArray(props.record?.submitCbs)) {
-          if (!props.record?.onValid?.()) return
+          if (!props.record?.onValid?.())
+            return
           const submitFns = props.record?.submitCbs || []
-          submitFns.forEach((fn) => fn(false, false))
+          submitFns.forEach(fn => fn(false, false))
           table.emit?.('edit-row-end')
           return true
         }
@@ -416,28 +418,31 @@ export default defineComponent({
       getValues,
       handleEnter,
       handleSubmitClick,
-      spinning
+      spinning,
     }
   },
   render() {
+    const column = this.column as BasicColumn
+    const value = this.value as string | number | boolean | Recordable
+    const index = this.index as number
     return (
       <div class={this.prefixCls}>
         <div
           v-show={!this.isEdit}
-          class={{ [`${this.prefixCls}__normal`]: true, 'ellipsis-cell': this.column.showOverflowTooltip }}
+          class={{ [`${this.prefixCls}__normal`]: true, 'ellipsis-cell': column.showOverflowTooltip }}
           onClick={this.handleEdit}
         >
-          <div class="cell-content" title={this.column.showOverflowTooltip ? this.getValues ?? '' : ''}>
-            {this.column.editRender
-              ? this.column.editRender({
-                  text: this.value,
-                  record: this.record as Recordable,
-                  column: this.column,
-                  index: this.index
-                })
+          <div class="cell-content" title={column.showOverflowTooltip ? this.getValues ?? '' : ''}>
+            {column.editRender
+              ? column.editRender({
+                text: value,
+                record: this.record as Recordable,
+                column,
+                index,
+              })
               : this.getValues}
           </div>
-          {!this.column.editRow && (
+          {!column.editRow && (
             <el-icon class={`${this.prefixCls}__normal-icon`}>
               <Edit />
             </el-icon>
@@ -472,9 +477,10 @@ export default defineComponent({
         )}
       </div>
     )
-  }
+  },
 })
 </script>
+
 <style lang="scss">
 .edit-cell-align-left {
   text-align: left;

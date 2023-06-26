@@ -61,7 +61,7 @@ export function useTableHeight(
   let bodyEl: HTMLElement | null
 
   async function calcTableHeight() {
-    const { maxHeight, useSearchForm, isCanResizeParent } = unref(propsRef)
+    const { maxHeight, useSearchForm, isCanResizeParent, minHeight } = unref(propsRef)
     const pagination = unref(getPaginationInfo)
     if (!unref(getCanResize))
       return
@@ -129,9 +129,20 @@ export function useTableHeight(
     }
 
     let height = bottomIncludeBody - paddingHeight - paginationHeight
-    height = (height > maxHeight! ? (maxHeight as number) : height) ?? height
-    setHeight(height)
 
+    const _max = isString(maxHeight) ? Number(maxHeight.replace('px', '') || 0) : maxHeight
+    const _min = isString(minHeight) ? Number(minHeight.replace('px', '') || 0) : minHeight
+
+    if (_min && _max && _min > _max)
+      height = height + 0
+
+    if (_max && _max < height)
+      height = _max
+
+    if (_min && _min > height)
+      height = _min
+
+    setHeight(height)
     bodyEl!.style.height = `${height}px`
   }
   useWindowSizeFn<Promise<void>>(calcTableHeight, 280)

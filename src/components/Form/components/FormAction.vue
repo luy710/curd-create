@@ -3,56 +3,31 @@ import { ElButton, ElCol, ElFormItem } from 'element-plus'
 import type { ColEx } from '../types/index'
 import type { ButtonOptions } from '../types/form'
 
-// import { defineProps, computed, defineEmits } from 'vue'
-// type xxx=x&{sex:string}
-// 可以实现接口和接口的交叉,但是只能赋值给type类型
-// type x=接口&接口
-// 当接口和type都&时,如果其中一个是基本类型,则&结果为基本类型,都是基本类型&结果为never,都是对象进行属性的添加
-
-const props = defineProps({
-  showActionButtonGroup: {
-    type: Boolean,
-    default: true,
-  },
-  showResetButton: {
-    type: Boolean,
-    default: true,
-  },
-  showSubmitButton: {
-    type: Boolean,
-    default: true,
-  },
-  showAdvancedButton: {
-    type: Boolean,
-    default: true,
-  },
-  resetButtonOptions: {
-    type: Object as PropType<ButtonOptions>,
-    default: () => ({}),
-  },
-  submitButtonOptions: {
-    type: Object as PropType<ButtonOptions>,
-    default: () => ({}),
-  },
-  actionColOptions: {
-    type: Object as PropType<Partial<ColEx>>,
-    default: () => ({}),
-  },
-  actionSpan: {
-    type: Number,
-    default: 6,
-  },
-  isAdvanced: {
-    type: Boolean,
-    default: false,
-  },
-  hideAdvanceBtn: {
-    type: Boolean,
-    default: false,
-  },
+const props = withDefaults(defineProps<{
+  showActionButtonGroup?: boolean
+  showResetButton?: boolean
+  showSubmitButton?: boolean
+  showAdvancedButton?: boolean
+  resetButtonOptions?: ButtonOptions
+  submitButtonOptions?: ButtonOptions
+  actionColOptions?: Partial<ColEx>
+  actionSpan?: number
+  isAdvanced?: boolean
+  hideAdvanceBtn?: boolean
+}>(), {
+  showActionButtonGroup: false,
+  showResetButton: false,
+  showSubmitButton: false,
+  showAdvancedButton: false,
+  resetButtonOptions: () => ({}),
+  submitButtonOptions: () => ({}),
+  actionColOptions: () => ({}),
+  actionSpan: 24,
+  isAdvanced: false,
+  hideAdvanceBtn: false,
 })
 
-const emit = defineEmits(['toggle-advanced', 'reset', 'submit'])
+const emit = defineEmits(['toggleAdvanced', 'reset', 'submit'])
 
 const actionColOpt = computed<any>(() => {
   const { showAdvancedButton, actionSpan: span, actionColOptions } = props
@@ -79,7 +54,7 @@ const getSubmitButtonOptions = computed((): ButtonOptions => {
 })
 
 function toggleAdvanced() {
-  emit('toggle-advanced')
+  emit('toggleAdvanced')
 }
 
 function reset() {

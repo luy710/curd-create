@@ -1,7 +1,6 @@
 import type { SorterResult } from './types/table'
 
 const table = {
-  // Form interface request general configuration
   // support xxx.xxx.xxx
   fetchSetting: {
     // The field name of the current page passed to the background

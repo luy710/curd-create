@@ -21,7 +21,7 @@ export type NamePath = string | number | string | number[]
 
 export interface FormActionType {
   submit: () => Promise<void>
-  setFieldsValue: <T>(values: T) => Promise<void>
+  setFieldsValue: (values: Recordable) => Promise<void>
   resetFields: () => Promise<void>
   getFieldsValue: () => Recordable
   clearValidate: (name?: string | string[]) => Promise<void>
@@ -95,7 +95,7 @@ export interface FormProps {
   showAdvancedButton?: boolean
   // 是否聚焦第一个输入框，只在第一个表单项为 input 的时候作用
   autoFocusFirstItem?: boolean
-  // 	如果 showAdvancedButton 为 true，超过指定行数行默认折叠
+  // 如果 showAdvancedButton 为 true，超过指定行数行默认折叠
   autoAdvancedLine?: number
   // 折叠时始终保持显示的行数
   alwaysShowLines?: number
@@ -149,6 +149,8 @@ export interface FormSchema {
     formModel: Recordable
   }) => Recordable)
   | object
+  // 使用setFormModel是否自动检测
+  autoCheck?: boolean
   // Required
   required?: boolean | ((renderCallbackParams: RenderCallbackParams) => boolean)
   suffix?: string | number | ((values: RenderCallbackParams) => string | number)
@@ -166,7 +168,7 @@ export interface FormSchema {
   showMessage?: boolean
   // 是否在行内显示校验信息
   inlineMessage?: boolean
-  // 用于控制该表单域下组件的默认尺寸	 'default'
+  // 用于控制该表单域下组件的默认尺寸'default'
   size?: 'large' | 'default' | 'small'
   isAdvanced?: boolean
   // 是否加载

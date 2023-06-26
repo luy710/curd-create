@@ -1,28 +1,17 @@
 <script lang="ts" setup>
-// import { computed, defineProps } from 'vue'
-// import { Icon } from '/@/components/Icon'
 const props = defineProps({
-  /**
-   * Arrow expand state
-   */
+
   expand: { type: Boolean },
-  /**
-   * Arrow up by default
-   */
+
   up: { type: Boolean },
-  /**
-   * Arrow down by default
-   */
+
   down: { type: Boolean },
-  /**
-   * Cancel padding/margin for inline
-   */
+
   inset: { type: Boolean },
 })
 
 const prefixCls = 'm-basic-arrow'
 
-// get component class
 const getClass = computed(() => {
   const { expand, up, down, inset } = props
   return [

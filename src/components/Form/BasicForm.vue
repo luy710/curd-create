@@ -17,7 +17,7 @@ import { dateUtil } from '@/components/utils/dateUtil'
 // import { reactive, computed, useAttrs, ref, unref, watch, nextTick, onMounted } from 'vue'
 // 获取props
 const props = defineProps(basicProps)
-const emit = defineEmits(['advanced-change', 'reset', 'submit', 'register', 'field-value-change'])
+const emit = defineEmits(['advancedChange', 'reset', 'submit', 'register', 'fieldValueChange'])
 // 定义表单对象
 const formModel = reactive<Recordable>({})
 // 表单默认值对象
@@ -34,6 +34,8 @@ const formElRef = ref<Nullable<FormActionType>>(null)
 const prefixCls = 'basic-form'
 // 除props 额外的参数
 const attrs = useAttrs()
+// 获取form 的基础配置
+const getProps = computed((): FormProps => ({ ...props, ...unref(propsRef) } as FormProps))
 // 动态样式
 const getFormClass = computed(() => {
   return [
@@ -51,8 +53,6 @@ const advanceState = reactive<AdvanceState>({
   isLoad: false,
   actionSpan: 6,
 })
-// 获取form 的基础配置
-const getProps = computed((): FormProps => ({ ...props, ...unref(propsRef) } as FormProps))
 // 组合 props
 const getBindValue = computed<Recordable>(() => ({ ...attrs, ...unref(getProps) }))
 // 获取row的style以及组件配置
@@ -166,13 +166,12 @@ const formActionType: FormActionType = {
 }
 
 // 手动设置formModel的value
-function setFormModel(key: string, value: any) {
+function setFormModel(key: string, value: any, schema: FormSchema) {
   formModel[key] = value
-  const { validateTrigger } = unref(getBindValue)
-  if (!validateTrigger || validateTrigger === 'change')
-    validateField([key])
+  if (schema && schema.autoCheck)
+    validateField([key]).catch((_) => {})
 
-  emit('field-value-change', key, value)
+  emit('fieldValueChange', key, value)
 }
 
 // 回车触发提交
@@ -214,6 +213,7 @@ watch(
     const { model } = unref(getProps)
     if (!model)
       return
+
     setFieldsValue(model)
   },
   {

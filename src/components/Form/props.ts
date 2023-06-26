@@ -1,5 +1,5 @@
 import type { RowProps } from 'element-plus'
-import type { CSSProperties } from 'vue'
+import type { CSSProperties, PropType } from 'vue'
 import type { ButtonOptions, FieldMapToTime, FormSchema } from './types/form'
 import type { ColEx } from './types'
 import type { TableActionType } from '@/components/Table/types/table'

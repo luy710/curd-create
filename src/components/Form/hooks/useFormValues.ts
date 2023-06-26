@@ -50,6 +50,26 @@ function tryDeconstructObject(key: string, value: any, target: Recordable) {
 }
 
 export default function useFormValues({ defaultValueRef, getSchema, formModel, getProps }: UseFormValuesContext) {
+  // 通过预设的字段格式 处理时间范围
+  const handleRangeTimeValue = (values: Recordable) => {
+    const fieldMapToTime = unref(getProps).fieldMapToTime
+
+    if (!fieldMapToTime && !isArray(fieldMapToTime))
+      return values
+
+    for (const [field, [startTimeKey, endTimeKey], format = 'YYYY-MM-DD'] of fieldMapToTime) {
+      if (!field || !startTimeKey || !endTimeKey || !values[field])
+        continue
+
+      const [startTime, endTime]: string[] = values[field]
+
+      values[startTimeKey] = dateUtil(startTime).format(format)
+      values[endTimeKey] = dateUtil(endTime).format(format)
+      Reflect.deleteProperty(values, field)
+    }
+    return values
+  }
+
   // 预处理表单 values
   const handleFormValues = (values: Recordable) => {
     if (!isObject(values))
@@ -82,26 +102,6 @@ export default function useFormValues({ defaultValueRef, getSchema, formModel, g
     }
 
     return handleRangeTimeValue(res)
-  }
-
-  // 通过预设的字段格式 处理时间范围
-  const handleRangeTimeValue = (values: Recordable) => {
-    const fieldMapToTime = unref(getProps).fieldMapToTime
-
-    if (!fieldMapToTime && !isArray(fieldMapToTime))
-      return values
-
-    for (const [field, [startTimeKey, endTimeKey], format = 'YYYY-MM-DD'] of fieldMapToTime) {
-      if (!field || !startTimeKey || !endTimeKey || !values[field])
-        continue
-
-      const [startTime, endTime]: string[] = values[field]
-
-      values[startTimeKey] = dateUtil(startTime).format(format)
-      values[endTimeKey] = dateUtil(endTime).format(format)
-      Reflect.deleteProperty(values, field)
-    }
-    return values
   }
 
   // 初始化设置默认值

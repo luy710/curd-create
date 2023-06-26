@@ -1,68 +1,38 @@
 <script lang="ts" setup>
-import { ElOption, ElOptionGroup, ElSelect } from 'element-plus'
+import { ElSelectV2 } from 'element-plus'
 import { get, omit } from 'lodash-es'
 import { isArray, isFunction } from '@/components/utils/is'
 
-// import { computed, useAttrs, ref, unref, watchEffect, watch } from 'vue'
+interface PropsState {
+  modelValue: any[] | string | number | boolean | Record<string, any> | any
+  numberToString?: boolean
+  api?: (args?: Recordable) => Promise<OptionsItem>
+  params?: Recordable
+  resultField?: string
+  labelField?: string
+  valueField?: string
+  groupField?: string
+  immediate?: boolean
+  alwaysLoad?: boolean
+  options?: Recordable[]
+  afterFetch?: Fn
+  beforeFetch?: Fn
+}
 interface OptionsItem { label: string; value: string; disabled?: boolean }
-const props = defineProps({
-  modelValue: [Array, String, Number, Boolean, Object] as PropType<
-    any[] | string | number | boolean | Record<string, any> | any
-  >,
-  // value数字转换为字符串
-  numberToString: {
-    type: Boolean,
-    default: false,
-  },
-  api: {
-    type: Function as PropType<(args?: Recordable) => Promise<OptionsItem>>,
-    default: null,
-  },
-  // 请求参数
-  params: {
-    type: Object as PropType<Recordable>,
-    default: () => ({}),
-  },
-  // support xxx.xxx.xx
-  resultField: {
-    type: String,
-    default: '',
-  },
-  labelField: {
-    type: String,
-    default: 'label',
-  },
-  valueField: {
-    type: String,
-    default: 'value',
-  },
-  groupField: {
-    type: String,
-    default: 'options',
-  },
-  immediate: {
-    type: Boolean,
-    default: false,
-  },
-  alwaysLoad: {
-    type: Boolean,
-    default: false,
-  },
-  isGroup: {
-    type: Boolean,
-    default: false,
-  },
-  options: {
-    type: Array as PropType<Recordable[]>,
-    default: () => [],
-  },
-  // 调用接口返回数据处理
-  afterFetch: { type: Function as PropType<Fn> },
-  // 请求前的参数处理
-  beforeFetch: { type: Function as PropType<Fn> },
+const props = withDefaults(defineProps<PropsState>(), {
+  numberToString: false,
+  modelValue: '',
+  params: () => ({}),
+  resultField: '',
+  labelField: 'label',
+  valueField: 'value',
+  groupField: 'options',
+  immediate: false,
+  alwaysLoad: false,
+  options: () => [],
 })
 
-const emit = defineEmits(['update:modelValue', 'options-change', 'change'])
+const emit = defineEmits(['update:modelValue', 'optionsChange', 'change'])
 
 const state = computed({
   set: (val) => {
@@ -82,10 +52,18 @@ const getOptions = computed(() => {
   const maps = unref(optionsList).reduce((prev, next: Recordable) => {
     if (next) {
       const value = next[valueField]
+      let children = []
+      if (isArray(next[groupField]) && next[groupField].length) {
+        children = next[groupField].map((el: Recordable) => ({
+          ...omit(el, [labelField, valueField]),
+          label: el[labelField],
+          value: numberToString ? `${el[valueField]}` : el[valueField],
+        }))
+      }
       prev.push({
         ...omit(next, [labelField, valueField, groupField]),
         label: next[labelField],
-        options: next[groupField] || null,
+        options: children,
         value: numberToString ? `${value}` : value,
       })
     }
@@ -121,7 +99,7 @@ async function fetch(params?: Recordable) {
     optionsList.value = (result as Recordable[]) || []
     isFirstLoad.value = false
 
-    emit('options-change', getOptions.value)
+    emit('optionsChange', getOptions.value)
   }
   catch (error) {
     console.error(error)
@@ -144,7 +122,6 @@ const getProps = computed(() => {
   const obj: Recordable = {}
   if (attrs.filterable && attrs.remote && (!attrs.remoteMethod || !isFunction(attrs.remoteMethod)))
     obj.remoteMethod = remoteMethod
-
   return Object.assign(obj, attrs)
 })
 
@@ -175,16 +152,11 @@ watch(
 </script>
 
 <template>
-  <ElSelect v-model="state" :loading="loading" v-bind="getProps" :options="getOptions" @visible-change="handleFetch">
-    <template v-if="!isGroup">
-      <ElOption v-for="item in getOptions" :key="item.value" :label="item.label" :value="item.value" />
-    </template>
-    <template v-else>
-      <ElOptionGroup v-for="group in getOptions" :key="group.label" :label="group.label">
-        <ElOption v-for="item in group.options" :key="item.value" :label="item.label" :value="item.value" />
-      </ElOptionGroup>
-    </template>
-  </ElSelect>
+  <ElSelectV2 v-model="state" :size="$attrs.size || 'default'" :loading="loading" v-bind="getProps" :options="getOptions" @visible-change="handleFetch" />
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+  .el-select-v2 {
+    width: 100%;
+  }
+</style>

@@ -1,5 +1,5 @@
 import type { Component } from 'vue'
-import { ElAutocomplete, ElCheckbox, ElDatePicker, ElInput, ElInputNumber, ElSwitch, ElTimePicker, ElTreeSelect } from 'element-plus'
+import { ElAutocomplete, ElCheckbox, ElCheckboxGroup, ElDatePicker, ElInput, ElInputNumber, ElRadioGroup, ElSwitch, ElTimePicker, ElTreeSelect } from 'element-plus'
 import type { ComponentType } from './types/componentType'
 import ApiSelect from '@/components/Form/components/ApiSelect.vue'
 
@@ -14,6 +14,8 @@ componentMap.set('Switch', ElSwitch)
 componentMap.set('Checkbox', ElCheckbox)
 componentMap.set('DatePicker', ElDatePicker)
 componentMap.set('TimePicker', ElTimePicker)
+componentMap.set('CheckboxGroup', ElCheckboxGroup)
+componentMap.set('RadioGroup', ElRadioGroup)
 
 export function add(compName: ComponentType, component: Component) {
   componentMap.set(compName, component)

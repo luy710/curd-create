@@ -8,3 +8,5 @@ export type ComponentType =
   | 'Switch'
   | 'DatePicker'
   | 'TimePicker'
+  | 'CheckboxGroup'
+  | 'RadioGroup'

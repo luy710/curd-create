@@ -48,6 +48,10 @@ const schemas: FormSchema[] = [
         rangeSeparator: 'To',
         startPlaceholder: 'Start date',
         endPlaceholder: 'End date',
+        style: {
+          width: '100%',
+          boxSizing: 'border-box',
+        },
       }
     },
   },

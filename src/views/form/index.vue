@@ -142,7 +142,7 @@ const schemas: FormSchema[] = [
       span: 8,
     },
     componentProps: {
-      multiple: false,
+      multiple: true,
       filterable: true,
       collapseTags: true,
       collapseTagsTooltip: true,
@@ -212,6 +212,9 @@ const schemas: FormSchema[] = [
     },
     componentProps: {
       type: 'date',
+      style: {
+        width: '100%',
+      },
       valueFormat: 'YYYY-MM-DD',
     },
   },
@@ -223,6 +226,9 @@ const schemas: FormSchema[] = [
       span: 8,
     },
     componentProps: {
+      style: {
+        width: '100%',
+      },
       arrowControl: false,
       isRange: true,
       rangeSeparator: 'To',
@@ -237,8 +243,10 @@ const schemas: FormSchema[] = [
     colProps: {
       span: 8,
     },
+    defaultValue: null,
     subLabel: 'subLabel',
     componentProps: {
+      placeholder: 'hhhhh',
       options: [
         {
           label: '选项1',
@@ -408,7 +416,7 @@ const schemas: FormSchema[] = [
       params: {
         id: 1,
       },
-      resultField: 'result.list',
+      resultField: 'list',
       // use name as label
       labelField: 'name',
       // use id as value
@@ -452,7 +460,7 @@ const schemas: FormSchema[] = [
       params: {
         id: 2,
       },
-      resultField: 'result.list',
+      resultField: 'list',
       // use name as label
       labelField: 'name',
       // use id as value
@@ -490,7 +498,7 @@ const schemas: FormSchema[] = [
       collapseTagsTooltip: true,
       validateTrigger: 'blur',
       afterFetch: (params: Recordable) => {
-        return params.result
+        return params
       },
       multiple: true,
       resultField: 'list',
@@ -669,7 +677,7 @@ const schemas: FormSchema[] = [
 
 export default defineComponent({
   // BasicForm, CollapseContainer, ApiSelect,
-  components: { BasicForm, ApiSelect, AlarmClock },
+  components: { BasicForm, ApiSelect },
   setup() {
     const check = ref(null)
     const keyword = ref<string>('')
@@ -757,6 +765,7 @@ export default defineComponent({
       :row-props="{ gutter: 20 }"
       auto-focus-first-item
       :label-width="150"
+      label-position="right"
       :schemas="schemas"
       :action-col-options="{ span: 24 }"
       @submit="handleSubmit"
@@ -764,22 +773,22 @@ export default defineComponent({
     >
       <template #selectA="{ model, field }">
         <ApiSelect
+          v-model="model[field]"
           :options="optionsA"
-          :model-value="model[field]"
           :collapse-tags="true"
           :collapse-tags-tooltip="true"
           :multiple="true"
-          @change="(params: any) => (model[field] = params)"
+          @change="valueSelectA = model[field]"
         />
       </template>
       <template #selectB="{ model, field }">
         <ApiSelect
+          v-model="model[field]"
           :options="optionsB"
-          :model-value="model[field]"
           :collapse-tags="true"
           :collapse-tags-tooltip="true"
           :multiple="true"
-          @change="(params: any) => (model[field] = params)"
+          @change="valueSelectB = model[field]"
         />
       </template>
     </BasicForm>

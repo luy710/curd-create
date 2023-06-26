@@ -83,13 +83,13 @@ export function useForm(props?: Props): UseFormReturnType {
     },
 
     // TODO promisify
-    getFieldsValue: <T>() => {
-      return unref(formRef)?.getFieldsValue() as T
+    getFieldsValue: () => {
+      return unref(formRef)?.getFieldsValue() as Recordable
     },
 
-    setFieldsValue: async <T>(values: T) => {
+    setFieldsValue: async (values: Recordable) => {
       const form = await getForm()
-      form.setFieldsValue<T>(values)
+      form.setFieldsValue(values)
     },
 
     appendSchemaByField: async (schema: FormSchema, prefixField: string | undefined, first?: boolean) => {

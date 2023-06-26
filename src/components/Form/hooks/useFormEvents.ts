@@ -9,7 +9,7 @@ import { dateUtil } from '@/components/utils/dateUtil'
 // import { unref, nextTick, toRaw } from 'vue'
 
 interface UseFormActionContext {
-  emit: (event: 'submit' | 'reset' | 'advanced-change' | 'register' | 'field-value-change', ...args: any[]) => void
+  emit: EmitType
   getProps: ComputedRef<FormProps>
   getSchema: ComputedRef<FormSchema[]>
   formModel: Recordable
@@ -29,36 +29,17 @@ export default function useFormEvents({
   schemaRef,
   handleFormValues,
 }: UseFormActionContext) {
-  // 异步重置表单数据
-  async function resetFields(): Promise<void> {
-    // 获取重置回调函数以及重置之后是否立即触发submit
-    const { resetFunc, submitOnReset } = unref(getProps)
-
-    if (resetFunc && isFunction(resetFunc))
-      await resetFunc()
-
-    const formEl = unref(formElRef)
-    if (!formEl)
-      return
-    // 重置之后恢复默认值
-    Object.keys(formModel).forEach((key) => {
-      const schema = unref(getSchema).find(item => item.field === key)
-      const isInput = schema?.component && schema.component.includes('Input')
-
-      const defaultValue = cloneDeep(unref(defaultValueRef)[key])
-
-      formModel[key] = isInput ? defaultValue || '' : defaultValue
+  // 判断是不是时间类型
+  const itemIsDateType = (key?: string) => {
+    return unref(getSchema).some((item) => {
+      return item.field === key ? dateItemType.includes(item.component) : false
     })
-    // 清除表单错误信息
-    nextTick(() => clearValidate())
-
-    // 执行reset 并将表单数据导出
-    emit('reset', toRaw(formModel))
-
-    // 如果需要重置提交
-    submitOnReset && handleSubmit()
   }
 
+  // 验证某个字段
+  const validateField = async (props?: FormItemProp): Promise<any> => {
+    return await unref(formElRef)?.validateField(props)
+  }
   // 异步设置表单的某个参数的数据
   const setFieldsValue = async (values: Recordable): Promise<void> => {
     // 获取所有的key
@@ -77,7 +58,7 @@ export default function useFormEvents({
       // 判断有没有key, 因为可以设置a.b.c
       const hasKey = Reflect.has(values, key)
 
-      value = schema?.component.includes('Input') ? (value && isNumber(value) ? `${value}` : value) : value
+      value = schema?.component.includes('Input') ? ((value && isNumber(value)) ? `${value}` : value) : value
 
       if (hasKey && fields.includes(key)) {
         // 事件类型
@@ -124,6 +105,16 @@ export default function useFormEvents({
     validateField(validKeys).catch((_) => {})
   }
 
+  // 根据参数名称删除 formitem
+  const _removeSchemaByField = (field: string, schemaList: FormSchema[]) => {
+    const index = schemaList.findIndex(item => item.field === field)
+    if (index > -1) {
+      delete formModel[field]
+      // 引用类型会改变=元数据
+      schemaList.splice(index, 1)
+    }
+  }
+
   // 通过参数名称删除对应的schema
   const removeSchemaByFiled = async (fields: string | string[]): Promise<any> => {
     const schemaList = cloneDeep(unref(getSchema))
@@ -138,31 +129,12 @@ export default function useFormEvents({
     schemaRef.value = schemaList
   }
 
-  // 根据参数名称删除 formitem
-  const _removeSchemaByField = (field: string, schemaList: FormSchema[]) => {
-    const index = schemaList.findIndex(item => item.field === field)
-    if (index > -1) {
-      delete formModel[field]
-      // 引用类型会改变=元数据
-      schemaList.splice(index, 1)
-    }
-  }
-
-  // 动态添加 form-item，如果设置prefixField在添加在之后，如果设置了first 则加在第一个， 都没有则push
-  const appendSchemaByField = async (schema: FormSchema, prefixField?: string, first = false): Promise<any> => {
-    const schemaList = cloneDeep(unref(getSchema))
-
-    if (!prefixField) {
-      first ? schemaList.unshift(schema) : schemaList.push(schema)
-    }
-    else {
-      const index = schemaList.findIndex(item => item.field === prefixField)
-      if (index > -1)
-        schemaList.splice(index + 1, 0, schema)
-    }
-
-    _setDefaultValue(schema)
-    schemaRef.value = schemaList
+  // 获取表单值
+  const getFieldsValue = (): Recordable => {
+    const formEl = unref(formElRef)
+    if (!formEl)
+      return {}
+    return handleFormValues(toRaw(unref(formModel)))
   }
 
   // 新增form-item设置默认值
@@ -191,12 +163,21 @@ export default function useFormEvents({
     setFieldsValue(obj)
   }
 
-  // 获取表单值
-  const getFieldsValue = (): Recordable => {
-    const formEl = unref(formElRef)
-    if (!formEl)
-      return {}
-    return handleFormValues(toRaw(unref(formModel)))
+  // 动态添加 form-item，如果设置prefixField在添加在之后，如果设置了first 则加在第一个， 都没有则push
+  const appendSchemaByField = async (schema: FormSchema, prefixField?: string, first = false): Promise<any> => {
+    const schemaList = cloneDeep(unref(getSchema))
+
+    if (!prefixField) {
+      first ? schemaList.unshift(schema) : schemaList.push(schema)
+    }
+    else {
+      const index = schemaList.findIndex(item => item.field === prefixField)
+      if (index > -1)
+        schemaList.splice(index + 1, 0, schema)
+    }
+
+    _setDefaultValue(schema)
+    schemaRef.value = schemaList
   }
 
   // 表单清除, 亦可清除指定参数的错误信息
@@ -259,18 +240,6 @@ export default function useFormEvents({
     schemaRef.value = uniqBy(schemas, 'field')
   }
 
-  // 判断是不是时间类型
-  const itemIsDateType = (key?: string) => {
-    return unref(getSchema).some((item) => {
-      return item.field === key ? dateItemType.includes(item.component) : false
-    })
-  }
-
-  // 验证某个字段
-  const validateField = async (props?: FormItemProp): Promise<any> => {
-    return await unref(formElRef)?.validateField(props)
-  }
-
   // 验证整个表单
   const validate = async (): Promise<Recordable> => {
     return new Promise((resolve, reject) => {
@@ -309,6 +278,36 @@ export default function useFormEvents({
     catch (error: any) {
       throw new Error(error)
     }
+  }
+
+  // 异步重置表单数据
+  async function resetFields(): Promise<void> {
+    // 获取重置回调函数以及重置之后是否立即触发submit
+    const { resetFunc, submitOnReset } = unref(getProps)
+
+    if (resetFunc && isFunction(resetFunc))
+      await resetFunc()
+
+    const formEl = unref(formElRef)
+    if (!formEl)
+      return
+    // 重置之后恢复默认值
+    Object.keys(formModel).forEach((key) => {
+      const schema = unref(getSchema).find(item => item.field === key)
+      const isInput = schema?.component && schema.component.includes('Input')
+
+      const defaultValue = cloneDeep(unref(defaultValueRef)[key])
+
+      formModel[key] = isInput ? (defaultValue || '') : defaultValue
+    })
+    // 清除表单错误信息
+    nextTick(() => clearValidate())
+
+    // 执行reset 并将表单数据导出
+    emit('reset', toRaw(formModel))
+
+    // 如果需要重置提交
+    submitOnReset && handleSubmit()
   }
 
   return {

@@ -108,7 +108,7 @@ export default function ({
     }
   }
 
-  const fieldsIsAdvancedMap = shallowReactive({})
+  const fieldsIsAdvancedMap = shallowReactive<Recordable>({})
 
   function updateAdvanced() {
     let itemColSum = 0
@@ -154,7 +154,7 @@ export default function ({
 
     getAdvanced(unref(getProps).actionColOptions || { span: BASIC_COL_LEN }, itemColSum, true)
 
-    emit('advanced-change')
+    emit('advancedChange')
   }
 
   function handleToggleAdvanced() {

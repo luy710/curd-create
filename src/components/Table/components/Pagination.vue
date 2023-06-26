@@ -1,7 +1,6 @@
 <script lang="tsx">
 import { ElPagination } from 'element-plus'
-
-// import { defineComponent, computed } from 'vue'
+import type { PropType } from 'vue'
 
 export default defineComponent({
   name: 'TablePagination',
@@ -16,7 +15,7 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    // 	每页显示条目个数，支持 v-model 双向绑定
+    // 每页显示条目个数，支持 v-model 双向绑定
     pageSize: {
       type: Number,
       default: 20,
@@ -27,19 +26,19 @@ export default defineComponent({
     total: Number,
     // 总页数 total 和 page-count 设置任意一个就可以达到显示页码的功能；如果要支持 page-sizes 的更改，则需要使用 total 属性
     pageCount: Number,
-    // 设置最大页码按钮数。 页码按钮的数量，当总页数超过该值时会折叠, number	5 ≤ x ≤ 21 的奇数	7
+    // 设置最大页码按钮数。 页码按钮的数量，当总页数超过该值时会折叠, number5 ≤ x ≤ 21 的奇数7
     pagerCount: {
       type: Number,
       default: 7,
     },
-    // 当前页数，支持 v-model 双向绑定	number
+    // 当前页数，支持 v-model 双向绑定number
     currentPage: {
       type: Number,
       default: 1,
     },
     // 当前页数的初始值
     defaultCurrentPage: Number,
-    // 组件布局，子组件名用逗号分隔	string	sizes / prev / pager / next / jumper / -> / total / slot
+    // 组件布局，子组件名用逗号分隔 string sizes / prev / pager / next / jumper / -> / total / slot
     layout: {
       type: String,
       default: 'total, sizes, prev, pager, next, jumper, ->',
@@ -55,7 +54,7 @@ export default defineComponent({
     prevText: String,
     // 替代图标显示的下一页文字
     nextText: String,
-    // 是否禁用分页	boolean	—	false
+    // 是否禁用分页 boolean — false
     disabled: {
       type: Boolean,
       default: false,
@@ -108,7 +107,7 @@ export default defineComponent({
         page-count={props.pageCount}
         pager-count={props.pagerCount}
         default-current-page={props.defaultCurrentPage}
-        layout={props.layout}
+        layout={`${props.layout}`}
         page-sizes={props.pageSizes}
         popper-class={props.popperClass}
         prev-text={props.prevText}

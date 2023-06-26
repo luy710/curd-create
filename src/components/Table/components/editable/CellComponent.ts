@@ -3,8 +3,6 @@ import { ElPopover } from 'element-plus'
 import type { ComponentType } from '../../types/componentType'
 import { componentMap } from '@/components/Table/componentMap'
 
-// import { h } from 'vue'
-
 export interface ComponentProps {
   component: ComponentType
   rule: boolean

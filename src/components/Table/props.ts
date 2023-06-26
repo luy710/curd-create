@@ -13,6 +13,8 @@ export const baseProps = {
   height: [String, Number] as PropType<string | number>,
   // Table 的最大高度。 合法的值为数字或者单位为 px 的高度。
   maxHeight: [String, Number] as PropType<string | number>,
+  // Table 的最小高度。 合法的值为数字或者单位为 px 的高度。
+  minHeight: [String, Number] as PropType<string | number>,
   // 是否为斑马纹 table
   stripe: {
     type: Boolean,
@@ -53,7 +55,7 @@ export const baseProps = {
   rowStyle: [Function, Object] as PropType<
     ({ row, rowIndex }: { row: Recordable; rowIndex: number }) => void | CSSProperties
   >,
-  // 	单元格的 className 的回调方法，也可以使用字符串为所有单元格设置一个固定的 className。
+  // 单元格的 className 的回调方法，也可以使用字符串为所有单元格设置一个固定的 className。
   cellClassName: [Function, String] as PropType<
     ({
       row,
@@ -81,15 +83,15 @@ export const baseProps = {
       columnIndex: number
     }) => void | CSSProperties
   >,
-  // 	表头行的 className 的回调方法，也可以使用字符串为所有表头行设置一个固定的 className。
+  // 表头行的 className 的回调方法，也可以使用字符串为所有表头行设置一个固定的 className。
   headerRowClassName: [Function, String] as PropType<
     ({ row, rowIndex }: { row: Recordable; rowIndex: number }) => void | string
   >,
-  // 	表头行的 style 的回调方法，也可以使用一个固定的 Object 为所有表头行设置一样的 Style。
+  // 表头行的 style 的回调方法，也可以使用一个固定的 Object 为所有表头行设置一样的 Style。
   headerRowStyle: [Function, Object] as PropType<
     ({ row, rowIndex }: { row: Recordable; rowIndex: number }) => void | CSSProperties
   >,
-  // 	表头单元格的 className 的回调方法，也可以使用字符串为所有表头单元格设置一个固定的 className。
+  // 表头单元格的 className 的回调方法，也可以使用字符串为所有表头单元格设置一个固定的 className。
   headerCellClassName: [Function, String] as PropType<
     ({
       row,
@@ -117,30 +119,30 @@ export const baseProps = {
       columnIndex: number
     }) => void | CSSProperties
   >,
-  // 	行数据的 Key，用来优化 Table 的渲染； 在使用reserve-selection功能与显示树形数据时，该属性是必填的。 类型为 String 时，支持多层访问：user.info.id，但不支持 user.info[0].id，此种情况请使用 Function。
+  // 行数据的 Key，用来优化 Table 的渲染； 在使用reserve-selection功能与显示树形数据时，该属性是必填的。 类型为 String 时，支持多层访问：user.info.id，但不支持 user.info[0].id，此种情况请使用 Function。
   rowKey: [Function, String] as PropType<((row: Recordable) => any) | string>,
-  // 	空数据时显示的文本内容， 也可以通过 #empty 设置
+  // 空数据时显示的文本内容， 也可以通过 #empty 设置
   emptyText: {
     type: String,
     default: 'No Data',
   },
-  // 	是否默认展开所有行，当 Table 包含展开行存在或者为树形表格时有效
+  // 是否默认展开所有行，当 Table 包含展开行存在或者为树形表格时有效
   defaultExpandAll: {
     type: Boolean,
     default: false,
   },
-  // 	可以通过该属性设置 Table 目前的展开行，需要设置 row-key 属性才能使用，该属性为展开行的 keys 数组。
+  // 可以通过该属性设置 Table 目前的展开行，需要设置 row-key 属性才能使用，该属性为展开行的 keys 数组。
   expandRowKeys: Array as PropType<Recordable[]>,
-  // 	默认的排序列的 prop 和顺序。 它的 prop 属性指定默认的排序的列，order 指定默认排序的顺序 如果只指定了 prop, 没有指定 order, 则默认顺序是 ascending
+  // 默认的排序列的 prop 和顺序。 它的 prop 属性指定默认的排序的列，order 指定默认排序的顺序 如果只指定了 prop, 没有指定 order, 则默认顺序是 ascending
   defaultSort: {
     type: Object as PropType<Recordable>,
   },
-  // 	tooltip effect 属性
+  // tooltip effect 属性
   tooltipEffect: {
     type: String as PropType<'dark' | 'light'>,
     default: 'dark',
   },
-  // 	是否在表尾显示合计行
+  // 是否在表尾显示合计行
   showSummary: {
     type: Boolean,
     default: false,
@@ -154,7 +156,7 @@ export const baseProps = {
     type: Array as PropType<Recordable[]>,
     default: null,
   },
-  // 	合并行或列的计算方法
+  // 合并行或列的计算方法
   spanMethod: Function as PropType<
     ({
       row,
@@ -168,12 +170,12 @@ export const baseProps = {
       columnIndex: number
     }) => void
   >,
-  // 	在多选表格中，当仅有部分行被选中时，点击表头的多选框时的行为。 若为 true，则选中所有行；若为 false，则取消选择所有行
+  // 在多选表格中，当仅有部分行被选中时，点击表头的多选框时的行为。 若为 true，则选中所有行；若为 false，则取消选择所有行
   selectOnIndeterminate: {
     type: Boolean,
     default: true,
   },
-  // 	展示树形数据时，树节点的缩进
+  // 展示树形数据时，树节点的缩进
   indent: {
     type: Number,
     default: 16,
@@ -182,12 +184,12 @@ export const baseProps = {
   lazy: Boolean,
   // 加载子节点数据的函数，lazy 为 true 时生效，函数第二个参数包含了节点的层级信息
   load: Function as PropType<(row: Recordable, treeNode: TreeNode, resolve: (data: Recordable[]) => void) => void>,
-  // 	渲染嵌套数据的配置选项
+  // 渲染嵌套数据的配置选项
   treeProps: {
     type: Object as PropType<Recordable>,
     default: () => ({ hasChildren: 'hasChildren', children: 'children' }),
   },
-  // 	设置表格单元、行和列的布局方式
+  // 设置表格单元、行和列的布局方式
   tableLayout: {
     type: String as PropType<'fixed' | 'auto'>,
     default: 'fixed',
@@ -197,7 +199,7 @@ export const baseProps = {
     type: Boolean,
     default: false,
   },
-  // 2.2.1	确保主轴的最小尺寸
+  // 2.2.1确保主轴的最小尺寸
   flexible: {
     type: Boolean,
     default: false,

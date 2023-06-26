@@ -1,27 +1,13 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue'
-
-// import { useSlots, computed, defineProps } from 'vue'
 import BasicHelp from './BasicHelp.vue'
 
 const props = defineProps({
-  /**
-   * Help text list or string
-   * @default: ''
-   */
   helpMessage: {
     type: [String, Array] as PropType<string | string[]>,
     default: '',
   },
-  /**
-   * Whether the color block on the left side of the title
-   * @default: false
-   */
   span: { type: Boolean },
-  /**
-   * Whether to default the text, that is, not bold
-   * @default: false
-   */
   normal: { type: Boolean },
 })
 

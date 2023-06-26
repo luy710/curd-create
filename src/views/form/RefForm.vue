@@ -39,6 +39,7 @@ const schemas: FormSchema[] = [
     field: 'field4',
     component: 'Select',
     label: '字段4',
+    defaultValue: null,
     colProps: {
       span: 8,
     },

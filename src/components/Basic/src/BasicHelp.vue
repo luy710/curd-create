@@ -4,7 +4,16 @@ import { Warning } from '@element-plus/icons-vue'
 import { ElIcon, ElTooltip } from 'element-plus'
 import { isArray, isString } from '@/components/utils/is'
 
-// import { defineComponent, computed, unref } from 'vue'
+interface PropState {
+  maxWidth: string
+  showIndex: string
+  color: string
+  fontSize: string
+  placement: string
+  effect: string
+  text: string | string[]
+}
+
 export default defineComponent({
   name: 'BasicHelp',
   components: { ElTooltip, ElIcon },
@@ -15,7 +24,7 @@ export default defineComponent({
     },
     showIndex: { type: Boolean },
     color: {
-      type: String,
+      type: String as PropType<string>,
       default: '#fff',
     },
     fontSize: {
@@ -35,7 +44,8 @@ export default defineComponent({
       default: '',
     },
   },
-  setup(props, { slots }) {
+  setup(_props, { slots }) {
+    const props = _props as unknown as PropState
     const prefixCls = 'm-basic-help'
     const getTooltipStyle = computed(
       (): CSSProperties => ({ color: props.color, fontSize: props.fontSize, maxWidth: props.maxWidth }),
@@ -63,7 +73,6 @@ export default defineComponent({
       <el-tooltip
         popper-class={`${prefixCls}__wrap`}
         effect={props.effect}
-        // @ts-expect-error
         placement={props.placement}
         v-slots={{
           content: () => <div style={unref(getTooltipStyle)}>{renderContent()}</div>,

@@ -2,20 +2,16 @@
 import type { CheckboxProps } from 'element-plus'
 import { ElCheckbox, ElCheckboxButton } from 'element-plus'
 
-// import { defineProps, useAttrs, computed } from 'vue'
-const props = defineProps({
-  modelValue: {
-    type: Array as PropType<(string | number | boolean)[]>,
-  },
-  options: {
-    type: Array as PropType<CheckboxProps[]>,
-    default: () => [],
-  },
-  isBtn: {
-    type: Boolean,
-    default: false,
-  },
+const props = withDefaults(defineProps<{
+  modelValue: string | number | boolean
+  options?: CheckboxProps[]
+  isBtn?: boolean
+}>(), {
+  modelValue: '',
+  options: () => [],
+  isBtn: false,
 })
+
 const emit = defineEmits(['update:modelValue'])
 const attrs = useAttrs()
 const state = computed<any>({

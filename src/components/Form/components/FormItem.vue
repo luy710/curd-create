@@ -10,6 +10,16 @@ import { BasicHelp } from '@/components/Basic'
 import { isBoolean, isFunction, isNull } from '@/components/utils/is'
 import { getSlot } from '@/components/utils/tsxHelper'
 
+interface PropsState {
+  schema: FormSchema
+  formProps: FormProps
+  allDefaultValues: Recordable
+  formModel: Recordable
+  setFormModel: (key: string, value: any, schema: FormSchema) => void
+  tableAction: TableActionType
+  formActionType: FormActionType
+  isAdvanced: boolean
+}
 export default defineComponent({
   name: 'BasicFormItem',
   inheritAttrs: false,
@@ -31,7 +41,7 @@ export default defineComponent({
       default: () => ({}),
     },
     setFormModel: {
-      type: Function as PropType<(key: string, value: any) => void>,
+      type: Function as PropType<(key: string, value: any, schema: FormSchema) => void>,
       default: null,
     },
     tableAction: {
@@ -44,7 +54,8 @@ export default defineComponent({
       type: Boolean,
     },
   },
-  setup(props, { slots }) {
+  setup(_props, { slots }) {
+    const props = _props as unknown as PropsState
     const Slots = slots
     // 将作为slot 绑定的data传给 作用于插槽
     const getValues = computed<RenderCallbackParams>(() => {
@@ -165,6 +176,7 @@ export default defineComponent({
       // 如果是必须则需要强制加入 强校验
       if (getRequired) {
         if (!rules || rules.length === 0) {
+          // @ts-expect-error
           rules = [{ required: getRequired, validator }]
         }
         else {
@@ -172,6 +184,7 @@ export default defineComponent({
 
           if (requiredRuleIndex === -1)
 
+          // @ts-expect-error
             rules.push({ required: getRequired, validator })
         }
       }
@@ -233,7 +246,7 @@ export default defineComponent({
           if (propsData[eventKey] && isFunction(propsData[eventKey]))
             propsData[eventKey](...args)
 
-          props.setFormModel(field, e)
+          props.setFormModel(field, e, props.schema)
         },
       }
 
@@ -276,12 +289,12 @@ export default defineComponent({
 
       const renderLabel = subLabel
         ? (
-        <span>
+        <span class="form-item-label">
           {label} <span class="text-secondary">{subLabel}</span>
         </span>
           )
         : (
-            label
+          <span class="form-item-label">{label}</span>
           )
 
       const getHelpMessage = isFunction(helpMessage) ? helpMessage(unref(getValues)) : helpMessage
@@ -290,7 +303,7 @@ export default defineComponent({
         return renderLabel
 
       return (
-        <span>
+        <span class='form-label-tooltip'>
           {renderLabel} <BasicHelp placement="top" text={getHelpMessage} {...helpComponentProps} />
         </span>
       )
@@ -364,5 +377,15 @@ export default defineComponent({
 .el-form-item__wrap {
   width: 100%;
   display: flex;
+}
+.form-label-tooltip {
+  display: flex;
+  align-items: center;
+}
+.form-item-label {
+  color: var(--el-text-color-primary);
+  .text-secondary {
+   color: var(--el-text-color-secondary)
+  }
 }
 </style>

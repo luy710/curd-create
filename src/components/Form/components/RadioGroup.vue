@@ -2,20 +2,16 @@
 import type { CheckboxProps } from 'element-plus'
 import { ElRadio, ElRadioButton } from 'element-plus'
 
-// import { useAttrs, computed, defineEmits, defineProps } from 'vue'
-const props = defineProps({
-  modelValue: {
-    type: [String, Number, Boolean] as PropType<string | number | boolean>,
-  },
-  options: {
-    type: Array as PropType<CheckboxProps[]>,
-    default: () => [],
-  },
-  isBtn: {
-    type: Boolean,
-    default: false,
-  },
+const props = withDefaults(defineProps<{
+  modelValue: string | number | boolean
+  options?: CheckboxProps[]
+  isBtn?: boolean
+}>(), {
+  modelValue: '',
+  options: () => [],
+  isBtn: false,
 })
+
 const emit = defineEmits(['update:modelValue'])
 const attrs = useAttrs()
 const state = computed({
