@@ -34,17 +34,23 @@ export interface TableSetting {
   size?: boolean
   setting?: boolean
   fullScreen?: boolean
+  settingConfig?: {
+    showColumn?: boolean
+    indexColumn?: boolean
+    checkColumn?: boolean
+    dragColumn?: boolean
+  }
 }
 
 export interface FetchSetting {
   // 请求接口当前页数
-  pageField: string
+  pageField?: string
   // 每页显示多少条
-  sizeField: string
+  sizeField?: string
   // 请求结果列表字段  支持 a.b.c
-  listField: string
+  listField?: string
   // 请求结果总数字段  支持 a.b.c
-  totalField: string
+  totalField?: string
 }
 
 export interface TableActionType {
@@ -53,7 +59,7 @@ export interface TableActionType {
   // 设置分页器配置
   setPagination: (info: Partial<PaginationProps>) => void
   // 重置原数据
-  setTableData: <T = Recordable>(values: T[]) => void
+  setTableData: (values: Recordable[]) => void
   updateTableDataRecord: (rowKey: string | number, record: Recordable) => Recordable | void
   deleteTableDataRecord: (rowKey: string | number | string[] | number[]) => void
   insertTableDataRecord: (record: Recordable, index?: number) => Recordable[]
@@ -402,7 +408,7 @@ export interface BasicTableProps {
     prop: string
     order: 'ascending' | 'descending' | null
   }) => void
-  // column 的 key， 如果需要使用 filter-change 事件，则需要此属性标识是哪个 column 的筛选条件
+  // column 的 key， 如果需要使用 filterChange 事件，则需要此属性标识是哪个 column 的筛选条件
   onFilterChange?: (filters: { [k: string]: string[] }) => void
   // // 当表格的当前行发生变化的时候会触发该事件，如果要高亮当前行，请打开表格的 highlight-current-row 属性
   // onCurrentChange?: (currentRow: Recordable, oldCurrentRow: Recordable) => void

@@ -49,11 +49,22 @@ export default defineComponent({
     ElScrollbar,
     ElButton,
   },
-  emits: ['columns-change'],
+  props: {
+    config: {
+      type: Object,
+      default: () => ({
+        showColumn: true,
+        indexColumn: true,
+        checkColumn: true,
+        dragColumn: true,
+      }),
+    },
+  },
+  emits: ['columnsChange'],
 
-  setup(_, { emit, attrs }) {
+  setup(props, { emit }) {
     const table = useTableContext()
-
+    const configProps = computed(() => props.config)
     const defaultRowSelection = omit({}, 'selectedRowKeys')
     let inited = false
 
@@ -268,13 +279,13 @@ export default defineComponent({
         return { prop: col.value, fixed: col.fixed, visible }
       })
 
-      emit('columns-change', data)
-      console.log('data: ', data)
+      emit('columnsChange', data)
     }
 
     return {
       ...toRefs(state),
       indeterminate,
+      configProps,
       onCheckAllChange,
       onChange,
       plainOptions,
@@ -300,16 +311,18 @@ export default defineComponent({
         placement="bottom-start"
         trigger="click"
         :width="300"
+        :teleported="false"
         :popper-class="`${prefixCls}__cloumn-list`"
         @show="handleVisibleChange"
       >
         <template #default>
           <div :class="`${prefixCls}__popover-title`">
-            <ElCheckbox v-model="checkAll" :indeterminate="indeterminate" @change="onCheckAllChange">
+            <ElCheckbox v-model="checkAll" :disabled="!configProps.showColumn" :indeterminate="indeterminate" @change="onCheckAllChange">
               列展示
             </ElCheckbox>
-            <ElCheckbox v-model="checkIndex" @change="handleIndexCheckChange"> 序号列 </ElCheckbox>
+            <ElCheckbox v-if="configProps.indexColumn" v-model="checkIndex" @change="handleIndexCheckChange"> 序号列 </ElCheckbox>
             <ElCheckbox
+              v-if="configProps.checkColumn"
               v-model="checkSelect"
               :validate-event="false"
               :disabled="!defaultRowSelection"
@@ -324,8 +337,8 @@ export default defineComponent({
             <ElCheckboxGroup ref="columnListRef" v-model="checkedList" @change="onChange">
               <template v-for="item in plainOptions" :key="item.value">
                 <div v-if="!('ifShow' in item && !item.ifShow)" :class="`${prefixCls}__check-item`">
-                  <!-- <el-icon class="table-column-drag-icon"><Rank /></el-icon> -->
-                  <ElCheckbox :label="item.value">
+                  <ElIcon v-if="configProps.dragColumn" class="table-column-drag-icon"><Rank /></ElIcon>
+                  <ElCheckbox :disabled="!configProps.showColumn" :label="item.value">
                     {{ item.label }}
                   </ElCheckbox>
                   <ElTooltip placement="bottom-start" :mouse-leave-delay="0.4" content="固定到左侧">

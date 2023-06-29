@@ -1,8 +1,7 @@
 <script lang="ts">
 // import { defineComponent } from 'vue'
-import { ElTooltip } from 'element-plus'
+import { ElIcon, ElTooltip } from 'element-plus'
 import { RefreshRight } from '@element-plus/icons-vue'
-import { ElIcon } from 'element-plus'
 import { useTableContext } from '../../hooks/useTableContext'
 
 export default defineComponent({

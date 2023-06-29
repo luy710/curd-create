@@ -1,14 +1,12 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { ElDropdown, ElIcon, ElTooltip } from 'element-plus'
-import { Box } from '@element-plus/icons-vue'
 import type { SizeType } from '../../types/table'
 import { useTableContext } from '../../hooks/useTableContext'
 
 export default defineComponent({
   name: 'SizeSetting',
   components: {
-    Box,
     ElIcon,
     ElTooltip,
     ElDropdown,

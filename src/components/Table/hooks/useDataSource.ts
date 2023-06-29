@@ -2,8 +2,6 @@ import type { PaginationProps } from 'element-plus'
 import type { ComputedRef, Ref } from 'vue'
 import { cloneDeep, get, merge, omit } from 'lodash-es'
 import type { BasicTableProps, FetchParams, SorterResult } from '../types/table'
-
-// import { ref, unref, ComputedRef, computed, onMounted, watch, reactive, Ref, watchEffect } from 'vue'
 import { FETCH_SETTING, PAGE_SIZE, ROW_KEY } from '../constant'
 import { useTimeoutFn } from '@/components/utils/useTimeout'
 import { buildUUID } from '@/components/utils/uuid'
@@ -43,10 +41,10 @@ export function useDataSource(
   // 手动进行分页
   const pickPageData = () => {
     if (!isBoolean(getPaginationInfo)) {
-      const { currentPage, pageSize } = unref(getPaginationInfo) as PaginationProps
+      const { currentPage, pageSize } = unref(getPaginationInfo) as unknown as PaginationProps
       const data = unref(propsRef).data
-      const p = currentPage || 1
-      const s = pageSize || 10
+      const p = (currentPage as number) || 1
+      const s = (pageSize as number) || 10
       dataSourceRef.value = data?.slice(s * (p - 1), s * p - 1) || []
     }
   }
@@ -81,6 +79,13 @@ export function useDataSource(
     else fetch()
   }
 
+  const handleChange = () => {
+    const { onChange } = unref(propsRef)
+    const { filterInfo, sortInfo } = searchState
+    emit('change', unref(getPaginationInfo), filterInfo, sortInfo)
+    onChange && isFunction(onChange) && onChange(unref(getPaginationInfo), filterInfo, sortInfo)
+  }
+
   // 过滤
   const handleFilterChange = (filter: Recordable) => {
     const { filterFn, filterFetchImmediate } = unref(propsRef)
@@ -91,7 +96,7 @@ export function useDataSource(
     else {
       searchState.filterInfo = Object.assign(searchState.filterInfo, filter)
     }
-    emit('filter-change', searchState.filterInfo)
+    emit('filterChange', searchState.filterInfo)
     handleChange()
     if (!filterFetchImmediate)
       return
@@ -105,7 +110,7 @@ export function useDataSource(
     else
       searchState.filterInfo = omit(searchState.filterInfo, columnKeys)
 
-    emit('filter-change', searchState.filterInfo)
+    emit('filterChange', searchState.filterInfo)
     handleChange()
     if (!filterFetchImmediate)
       return
@@ -121,7 +126,7 @@ export function useDataSource(
     else {
       searchState.sortInfo = sort
     }
-    emit('sort-change', searchState.sortInfo)
+    emit('sortChange', searchState.sortInfo)
     handleChange()
     if (!sortFetchImmediate)
       return
@@ -131,18 +136,11 @@ export function useDataSource(
   const handleClearSort = () => {
     const { sortFetchImmediate } = unref(propsRef)
     searchState.sortInfo = {}
-    emit('sort-change', {})
+    emit('sortChange', {})
     handleChange()
     if (!sortFetchImmediate)
       return
     fetch()
-  }
-
-  const handleChange = () => {
-    const { onChange } = unref(propsRef)
-    const { filterInfo, sortInfo } = searchState
-    emit('change', unref(getPaginationInfo), filterInfo, sortInfo)
-    onChange && isFunction(onChange) && onChange(unref(getPaginationInfo), filterInfo, sortInfo)
   }
 
   // 分页数据变化设置
@@ -228,7 +226,7 @@ export function useDataSource(
   }
 
   function deleteTableDataRecord(rowKey: string | number | string[] | number[]) {
-    if (!dataSourceRef.value || dataSourceRef.value.length == 0)
+    if (!dataSourceRef.value || dataSourceRef.value.length === 0)
       return
     const rowKeyName = unref(getRowKey)
     if (!rowKeyName)
@@ -280,7 +278,7 @@ export function useDataSource(
 
   // 查找数据
   function findTableDataRecord(rowKey: string | number) {
-    if (!dataSourceRef.value || dataSourceRef.value.length == 0)
+    if (!dataSourceRef.value || dataSourceRef.value.length === 0)
       return
 
     const rowKeyName = unref(getRowKey)
@@ -359,8 +357,8 @@ export function useDataSource(
 
       // 假如数据变少，导致总页数变少并小于当前选中页码，通过getPaginationRef获取到的页码是不正确的，需获取正确的页码再次执行
       if (resultTotal) {
-        const currentTotalPage = Math.ceil(resultTotal / pageSize)
-        if (currentPage > currentTotalPage) {
+        const currentTotalPage = Math.ceil(resultTotal / Number(pageSize))
+        if (Number(currentPage) > currentTotalPage) {
           setPagination({
             currentPage: currentTotalPage,
           })
@@ -380,14 +378,14 @@ export function useDataSource(
           currentPage: opt.page || 1,
         })
       }
-      emit('fetch-success', {
+      emit('fetchSuccess', {
         items: unref(resultItems),
         total: resultTotal,
       })
       return resultItems
     }
     catch (error) {
-      emit('fetch-error', error)
+      emit('fetchError', error)
       dataSourceRef.value = []
       setPagination({
         total: 0,
@@ -398,7 +396,7 @@ export function useDataSource(
     }
   }
 
-  function setTableData<T = Recordable>(values: T[]) {
+  function setTableData(values: Recordable[]) {
     dataSourceRef.value = values
     resetPage()
   }

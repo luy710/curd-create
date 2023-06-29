@@ -1,4 +1,3 @@
-// import { ref, ComputedRef, unref, computed, watch } from 'vue'
 import type { ComputedRef } from 'vue'
 import type { BasicTableProps } from '../types/table'
 

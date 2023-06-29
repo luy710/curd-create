@@ -1,5 +1,5 @@
 <script lang="ts">
-// import { defineComponent, PropType, computed, toRaw } from 'vue'
+import type { PropType } from 'vue'
 import { MoreFilled } from '@element-plus/icons-vue'
 import { ElButton, ElDivider, ElDropdown, ElIcon, ElPopconfirm, ElTooltip } from 'element-plus'
 import type { SizeType } from '../types/table'
@@ -72,7 +72,7 @@ export default defineComponent({
     }
 
     const getActions = computed(() => {
-      const listAction = (toRaw(props.actions) || [])
+      const listAction = (toRaw(props.actions as ActionItem[]) || [])
         .filter((action) => {
           return isIfShow(action)
         })
@@ -93,7 +93,7 @@ export default defineComponent({
     })
 
     const getDropdownList = computed((): any[] => {
-      const list = (toRaw(props.dropDownActions) || []).filter((action) => {
+      const list = (toRaw(props.dropDownActions as ActionItem[]) || []).filter((action) => {
         return isIfShow(action)
       })
 
@@ -204,6 +204,7 @@ export default defineComponent({
         <ElDropdownMenu>
           <ElPopconfirm
             v-for="item in getDropdownList"
+            :key="item.title"
             :teleported="false"
             :title="item.title"
             v-bind="item.popConfirm"

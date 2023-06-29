@@ -53,12 +53,12 @@ export default function useFormEvents({
     const validKeys: string[] = []
 
     Object.keys(values).forEach((key) => {
-      const schema = unref(getSchema).find(item => item.field === key)
+      const schema = unref(getSchema).find(item => item.field === key) as FormSchema
       let value = values[key]
       // 判断有没有key, 因为可以设置a.b.c
       const hasKey = Reflect.has(values, key)
 
-      value = schema?.component.includes('Input') ? ((value && isNumber(value)) ? `${value}` : value) : value
+      value = ['Input'].includes(schema.component) ? ((value && isNumber(value)) ? `${value}` : value) : value
 
       if (hasKey && fields.includes(key)) {
         // 事件类型

@@ -1,12 +1,10 @@
 <script lang="ts">
-import type { CSSProperties } from 'vue'
-
-// import { defineComponent, computed } from 'vue'?
-// import { ElImage, ElBadge } from 'element-plus'
+import type { CSSProperties, PropType } from 'vue'
+import { ElBadge, ElImage } from 'element-plus'
 
 export default defineComponent({
   name: 'TableImage',
-  // components: { ElImage, ElBadge },
+  components: { ElImage, ElBadge },
   props: {
     imgList: {
       type: Array as PropType<Array<string>>,
@@ -43,37 +41,37 @@ export default defineComponent({
       const s = `${size}px`
       return { height: s, width: s }
     })
-
+    const photoList = computed(() => props.imgList as string[])
     const prefixCls = 'basic-table-img'
-    return { prefixCls, getWrapStyle }
+    return { prefixCls, getWrapStyle, photoList }
   },
 })
 </script>
 
 <template>
-  <div v-if="imgList && imgList.length" :class="prefixCls" :style="getWrapStyle">
-    <ElBadge v-if="simpleShow" :value="!showBadge || imgList.length == 1 ? 0 : imgList.length">
+  <div v-if="photoList && photoList.length" :class="prefixCls" :style="getWrapStyle">
+    <ElBadge v-if="simpleShow" :value="!showBadge || photoList.length == 1 ? 0 : photoList.length">
       <div class="img-div">
-        <template v-for="(img, index) in imgList" :key="img">
+        <template v-for="(img, index) in photoList" :key="img">
           <ElImage
             :width="size"
             :style="{
               display: index === 0 ? '' : 'none !important',
             }"
             :src="srcPrefix + img"
-            :preview-src-list="imgList"
+            :preview-src-list="photoList"
             v-bind="$attrs"
           />
         </template>
       </div>
     </ElBadge>
-    <template v-for="(img, index) in imgList" v-else :key="img">
+    <template v-for="(img, index) in photoList" v-else :key="img">
       <ElImage
         class="inline-image"
         :width="size"
         :style="{ marginLeft: index === 0 ? 0 : margin }"
         :src="srcPrefix + img"
-        :preview-src-list="imgList"
+        :preview-src-list="photoList"
         v-bind="$attrs"
       />
     </template>

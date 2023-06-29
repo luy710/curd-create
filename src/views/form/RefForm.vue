@@ -56,6 +56,9 @@ const schemas: FormSchema[] = [
           key: '2',
         },
       ],
+      onChange(value) {
+        console.log(value, '111111')
+      },
     },
   },
   {

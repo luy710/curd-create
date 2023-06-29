@@ -1,8 +1,6 @@
 import type { ComputedRef, Ref } from 'vue'
 import { cloneDeep, isEqual, omit } from 'lodash-es'
 import type { BasicColumn, BasicTableProps, CellFormat, GetColumnsParams } from '../types/table'
-
-// import { computed, ref, reactive, toRaw, unref, watch } from 'vue'
 import { ACTION_COLUMN_FLAG } from '../constant'
 import { isArray, isBoolean, isFunction, isMap, isString } from '@/components/utils/is'
 import { buildUUID } from '@/components/utils/uuid'

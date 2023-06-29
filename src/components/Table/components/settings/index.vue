@@ -1,56 +1,44 @@
-<script lang="ts">
-import type { PropType } from 'vue'
+<script lang="ts" setup>
 import type { ColumnChangeParam, TableSetting } from '../../types/table'
-
-// import { defineComponent, computed } from 'vue'
-import { useTableContext } from '../../hooks/useTableContext'
 import ColumnSetting from './ColumnSetting.vue'
 import SizeSetting from './SizeSetting.vue'
 import RedoSetting from './RedoSetting.vue'
 import FullScreenSetting from './FullScreenSetting.vue'
 
-export default defineComponent({
-  name: 'TableSetting',
-  components: {
-    ColumnSetting,
-    SizeSetting,
-    RedoSetting,
-    FullScreenSetting,
-  },
-  props: {
-    setting: {
-      type: Object as PropType<TableSetting>,
-      default: () => ({}),
-    },
-  },
-  emits: ['columns-change'],
-  setup(props, { emit }) {
-    const table = useTableContext()
-
-    const getSetting = computed((): TableSetting => {
-      return {
-        redo: true,
-        size: true,
-        setting: true,
-        fullScreen: true,
-        ...props.setting,
-      }
-    })
-
-    function handleColumnChange(data: ColumnChangeParam[]) {
-      emit('columns-change', data)
-    }
-
-    return { getSetting, handleColumnChange }
-  },
+const props = withDefaults(defineProps<{
+  setting: TableSetting
+}>(), {
+  setting: () => ({}),
 })
+
+const emit = defineEmits(['columnsChange'])
+
+const getSetting = computed(() => {
+  return {
+    redo: true,
+    size: true,
+    setting: true,
+    fullScreen: true,
+    settingConfig: {
+      showColumn: true,
+      indexColumn: true,
+      checkColumn: true,
+      dragColumn: true,
+    },
+    ...props.setting,
+  }
+})
+
+function handleColumnChange(data: ColumnChangeParam[]) {
+  emit('columnsChange', data)
+}
 </script>
 
 <template>
   <div class="table-settings">
     <RedoSetting v-if="getSetting.redo" />
     <SizeSetting v-if="getSetting.size" />
-    <ColumnSetting v-if="getSetting.setting" @columns-change="handleColumnChange" />
+    <ColumnSetting v-if="getSetting.setting" :config="getSetting.settingConfig" @columns-change="handleColumnChange" />
     <FullScreenSetting v-if="getSetting.fullScreen" />
   </div>
 </template>

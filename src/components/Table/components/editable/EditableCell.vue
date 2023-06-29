@@ -221,9 +221,9 @@ export default defineComponent({
 
       const onChange = unref(getComponentProps)?.onChange
       if (onChange && isFunction(onChange))
-        onChange(...arguments)
+        onChange(e)
 
-      table.emit?.('edit-change', {
+      table.emit?.('editChange', {
         column: props.column,
         value: unref(currentValueRef),
         record: toRaw(props.record),
@@ -307,7 +307,7 @@ export default defineComponent({
 
       set(record, dataKey, value)
       // const record = await table.updateTableData(index, dataKey, value);
-      needEmit && table.emit?.('edit-end', { record, index, key: dataKey, value })
+      needEmit && table.emit?.('editEnd', { record, index, key: dataKey, value })
       isEdit.value = false
     }
 
@@ -327,7 +327,7 @@ export default defineComponent({
       currentValueRef.value = defaultValueRef.value
       const { column, index, record } = props
       const { columnKey, prop } = column
-      table.emit?.('edit-cancel', {
+      table.emit?.('editCancel', {
         record,
         index,
         key: prop || columnKey,
@@ -389,7 +389,7 @@ export default defineComponent({
             return
           const submitFns = props.record?.submitCbs || []
           submitFns.forEach(fn => fn(false, false))
-          table.emit?.('edit-row-end')
+          table.emit?.('editRowEnd')
           return true
         }
       }

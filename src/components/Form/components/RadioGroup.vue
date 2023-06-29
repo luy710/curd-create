@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { CheckboxProps } from 'element-plus'
-import { ElRadio, ElRadioButton } from 'element-plus'
+import { ElRadio, ElRadioButton, ElRadioGroup } from 'element-plus'
 
 const props = withDefaults(defineProps<{
   modelValue: string | number | boolean
@@ -25,13 +25,13 @@ const state = computed({
 </script>
 
 <template>
-  <el-radio-group v-model="state" v-bind="attrs">
+  <ElRadioGroup v-model="state" v-bind="attrs" :size="attrs.size">
     <template v-for="item in options" :key="item.label">
       <component :is="isBtn ? ElRadioButton : ElRadio" v-bind="item">
         {{ item.label }}
       </component>
     </template>
-  </el-radio-group>
+  </ElRadioGroup>
 </template>
 
 <style lang="scss" scoped></style>

@@ -1,11 +1,9 @@
 <script lang="tsx">
 import { ElTableColumn } from 'element-plus'
-import type { Slots } from 'vue'
+import type { PropType, Slots } from 'vue'
 import type { BasicColumn } from '../types/table'
 import type { CI, CellRenderParams } from './renderCell'
 import { renderCell, renderHeader } from './renderCell'
-
-// import { Slots, defineComponent, computed } from 'vue'
 
 export default defineComponent({
   name: 'InnerTableColumn',
@@ -20,7 +18,7 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const columnData = computed(() => props.columns)
+    const columnData = computed(() => props.columns as BasicColumn[])
     const hasChild = (column: BasicColumn): BasicColumn[] => {
       if (column.children?.length && column.columns?.length) {
         const map = new Map()
@@ -38,15 +36,16 @@ export default defineComponent({
       const defaultSlots = {
         header: (params: CI) => {
           params.column = Object.assign(params.column, record)
-          return renderHeader(params, props.slots)
+          return renderHeader(params, props.slots as Slots)
         },
         default: (params: CellRenderParams) => {
           params.column = Object.assign(params.column, record)
-          return renderCell(params, props.slots)
+          return renderCell(params, props.slots as Slots)
         },
       }
       if (hasChild(record) && hasChild(record).length) {
         Object.assign(defaultSlots, {
+          // eslint-disable-next-line @typescript-eslint/no-use-before-define
           default: () => hasChild(record).map(item => renderColumn(item)),
         })
       }

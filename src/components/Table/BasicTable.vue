@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-// import { defineEmits, defineProps, ref, computed, unref, useSlots, useAttrs, toRaw } from 'vue'
 import { omit } from 'lodash-es'
-import { ElTable, ElTableColumn, ElLoadingDirective as vLoading } from 'element-plus'
+import { ElTable, ElTableColumn } from 'element-plus'
 import { baseProps } from './props'
 import InnerTableColumn from './components/InnerTableColumn.vue'
 import TablePagination from './components/Pagination.vue'
@@ -28,33 +27,17 @@ import { BasicForm, useForm } from '@/components/index'
 const props = defineProps(baseProps)
 // 定义emit事件
 const emit = defineEmits([
-  'fetch-success',
-  'fetch-error',
+  'fetchSuccess',
+  'fetchError',
   'register',
-  'edit-end',
-  'edit-cancel',
-  'edit-row-end',
-  'edit-change',
-  'columns-change',
-  // 'select',
-  // 'selectAll',
-  // 'selectionChange',
-  // 'cellMouseEnter',
-  // 'cellMouseLeave',
-  // 'cellClick',
-  // 'cellDblclick',
-  // 'cellContextmenu',
-  // 'rowClick',
-  // 'rowContextmenu',
-  // 'rowDblclick',
-  // 'headerClick',
-  // 'headerContextmenu',
+  'editEnd',
+  'editCancel',
+  'editRowEnd',
+  'editChange',
+  'columnsChange',
   'change',
-  'sort-change',
-  'filter-change',
-  // 'currentChange',
-  // 'headerDragend',
-  // 'expandChange'
+  'sortChange',
+  'filterChange',
 ])
 // 额外属性
 const attrs = useAttrs()
@@ -168,7 +151,7 @@ const getEmptyDataIsShowTable = computed(() => {
 })
 const handlers: InnerHandlers = {
   onColumnsChange: (data: ColumnChangeParam[]) => {
-    emit('columns-change', data)
+    emit('columnsChange', data)
     // support useTable
     unref(getProps)?.onColumnsChange?.(data)
   },
@@ -266,12 +249,14 @@ const tableAction: TableActionType = {
   // 获取所有选中行的row-key
   getSelectRowKeys: (): (string | number)[] => {
     const key = unref(getRowKey)
-    return tableRef.value.getSelectionRows().map((item: Recordable) => {
+    return (tableRef.value.getSelectionRows() as Recordable[]).map((item: Recordable) => {
       if (isString(key))
         return item[key]
 
       if (isFunction(key))
         return key(item)
+
+      return null
     })
   },
   // 根据rowkey设置选中
@@ -319,16 +304,14 @@ emit('register', tableAction, formActions)
     <ElTable
       v-show="getEmptyDataIsShowTable"
       ref="tableRef"
-      v-loading="getLoading"
+      :loading="getLoading"
       v-bind="getBindValues"
-      @filter-change="filterChange"
-      @sort-change="sortChange"
+      @filterChange="filterChange"
+      @sortChange="sortChange"
     >
-      <!-- table 内部 slots -->
       <template v-for="item in ['append', 'empty']" #[item]="data" :key="item">
         <slot :name="item" v-bind="data || {}" />
       </template>
-      <!-- 操控性列 需固定在表格左侧，顺序为 展开/多选/序号 -->
       <ElTableColumn v-if="getProps?.showExpandColumn" type="expand" v-bind="getExpandColumnProps">
         <template #header="props">
           <slot :name="getExpandColumnProps.slots?.headerSlot || 'expandedRowHender'" v-bind="props" />

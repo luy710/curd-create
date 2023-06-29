@@ -2,8 +2,6 @@ import type { ComputedRef, Ref } from 'vue'
 import { debounce as useDebounceFn } from 'lodash-es'
 import type { PaginationProps } from 'element-plus'
 import type { BasicTableProps } from '../types/table'
-
-// import { computed, unref, nextTick, watch, ref, onMounted, onActivated } from 'vue'
 import { isBoolean, isNumber, isObject, isString } from '@/components/utils/is'
 import { useWindowSizeFn } from '@/components/utils/useWindowSizeFn'
 import { getViewportOffset } from '@/components/utils/domUtils'

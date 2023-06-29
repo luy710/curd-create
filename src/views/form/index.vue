@@ -146,6 +146,7 @@ const schemas: FormSchema[] = [
       filterable: true,
       collapseTags: true,
       collapseTagsTooltip: true,
+      placeholder: '你好',
       options: [
         {
           label: '选项1',
@@ -166,6 +167,34 @@ const schemas: FormSchema[] = [
     //     type: 'array'
     //   }
     // ]
+  },
+  {
+    field: 'field4',
+    component: 'Select',
+    label: '字段4',
+    colProps: {
+      span: 8,
+    },
+    defaultValue: null,
+    subLabel: 'subLabel',
+    componentProps: {
+      multiple: true,
+      filterable: true,
+      collapseTags: true,
+      collapseTagsTooltip: true,
+      options: [
+        {
+          label: '选项1',
+          value: '1',
+          key: '1',
+        },
+        {
+          label: '选项2',
+          value: '2',
+          key: '2',
+        },
+      ],
+    },
   },
   {
     field: 'field2_2',
@@ -234,31 +263,6 @@ const schemas: FormSchema[] = [
       rangeSeparator: 'To',
       startPlaceholder: 'Start time',
       endPlaceholder: 'End time',
-    },
-  },
-  {
-    field: 'field4',
-    component: 'Select',
-    label: '字段4',
-    colProps: {
-      span: 8,
-    },
-    defaultValue: null,
-    subLabel: 'subLabel',
-    componentProps: {
-      placeholder: 'hhhhh',
-      options: [
-        {
-          label: '选项1',
-          value: '1',
-          key: '1',
-        },
-        {
-          label: '选项2',
-          value: '2',
-          key: '2',
-        },
-      ],
     },
   },
   {
@@ -395,6 +399,16 @@ const schemas: FormSchema[] = [
           ],
         },
       ],
+    },
+  },
+  {
+    field: 'field10',
+    component: 'InputNumber',
+    label: '数字输入框',
+    defaultValue: 1111,
+    render({ model, field }) {
+      console.log(model, '????')
+      return <el-input-number v-model={model[field]} max={15000000000} controlsPosition='right' precision={2} min={0} placeholder='请输入金额' clearable />
     },
   },
   {
@@ -679,6 +693,7 @@ export default defineComponent({
   // BasicForm, CollapseContainer, ApiSelect,
   components: { BasicForm, ApiSelect },
   setup() {
+    const formRef = ref()
     const check = ref(null)
     const keyword = ref<string>('')
     const searchParams = computed<Recordable>(() => {
@@ -693,6 +708,12 @@ export default defineComponent({
       () => valuesKeys.value,
       value => console.log(value, '111-----------'),
     )
+
+    onMounted(() => {
+      formRef.value.setFieldsValue({
+        field10: 123123,
+      })
+    })
     return {
       schemas,
       valuesKeys,
@@ -701,6 +722,7 @@ export default defineComponent({
       optionsB,
       valueSelectA,
       valueSelectB,
+      formRef,
       changeHandler: (params: any[]) => {
         valuesKeys.value = params
         console.log(params, '1111111', valuesKeys.value)
@@ -759,8 +781,9 @@ export default defineComponent({
 </script>
 
 <template>
-  <el-card title="基础示例">
+  <el-card title="基础示例" class="h-full">
     <BasicForm
+      ref="formRef"
       :field-map-to-time="[['timerpicker', ['startTime', 'endTime'], 'HH:mm:ss']]"
       :row-props="{ gutter: 20 }"
       auto-focus-first-item
@@ -795,7 +818,7 @@ export default defineComponent({
     <el-select-v2
       :model-value="valuesKeys"
       :options="options"
-      placeholder="Please select"
+      v-bind="{ multiple: false, placeholder: 'Please select' }"
       style="width: 240px"
       multiple
       collapse-tags
@@ -804,3 +827,10 @@ export default defineComponent({
     />
   </el-card>
 </template>
+
+<style lang="scss" scoped>
+  .h-full {
+    height: 100%;
+    overflow: scroll;
+  }
+</style>

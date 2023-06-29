@@ -19,11 +19,11 @@ export const CellComponent: FunctionalComponent = (
 
   /* @ts-expect-error */
   const DefaultComp = h('div', [h(Comp, attrs)])
-  // const DefaultComp =h(Comp, attrs)
   if (!rule)
     return DefaultComp
 
   return h(
+    // @ts-expect-error
     ElPopover,
     {
       popperClass: 'edit-cell-rule-popover',

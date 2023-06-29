@@ -1,5 +1,5 @@
 <script lang="ts">
-// import { computed, defineComponent, PropType } from 'vue'
+import type { PropType } from 'vue'
 import BasicTitle from '@/components/Basic/src/BasicTitle.vue'
 import { isFunction } from '@/components/utils/is'
 
@@ -21,12 +21,12 @@ export default defineComponent({
     const prefixCls = 'basic-table-title'
 
     const getTitle = computed(() => {
-      const { title, getSelectRows = () => {} } = props
+      const { title, getSelectRows = () => ([]) } = props
       let tit = title
 
       if (isFunction(title)) {
         tit = title({
-          selectRows: getSelectRows(),
+          selectRows: (getSelectRows as () => Recordable[])(),
         })
       }
       return tit

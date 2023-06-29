@@ -211,7 +211,7 @@ const comp = {
           },
         },
         {
-          path: 'editCellTable',
+          path: '/comp/table/editCellTable',
           name: 'EditCellTableDemo',
           component: () => import('@views/table/EditCellTable.vue'),
           meta: {
@@ -219,7 +219,7 @@ const comp = {
           },
         },
         {
-          path: 'editRowTable',
+          path: '/comp/table/editRowTable',
           name: 'EditRowTableDemo',
           component: () => import('@views/table/EditRowTable.vue'),
           meta: {

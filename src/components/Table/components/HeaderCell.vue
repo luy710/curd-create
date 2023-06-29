@@ -1,33 +1,20 @@
-<script lang="ts">
-import type { PropType } from 'vue'
+<script lang="ts" setup>
 import type { BasicColumn } from '../types/table'
-
-// import { defineComponent, computed } from 'vue'
 import EditTableHeaderCell from './EditTableHeaderIcon.vue'
 import BasicHelp from '@/components/Basic/src/BasicHelp.vue'
 
-export default defineComponent({
-  name: 'TableHeaderCell',
-  components: {
-    EditTableHeaderCell,
-    BasicHelp,
-  },
-  props: {
-    column: {
-      type: Object as PropType<BasicColumn>,
-      default: () => ({}),
-    },
-  },
-  setup(props) {
-    const prefixCls = 'basic-table-header-cell'
-
-    const getIsEdit = computed(() => !!props.column?.edit)
-    const getTitle = computed(() => props.column?.label || props.column?.prop)
-    const getHelpMessage = computed(() => props.column?.helpMessage)
-    const getHelpComponentProps = computed(() => props.column?.helpComponentProps)
-    return { prefixCls, getIsEdit, getTitle, getHelpMessage, getHelpComponentProps }
-  },
+const props = withDefaults(defineProps<{
+  column: BasicColumn
+}>(), {
+  column: () => ({}),
 })
+
+const prefixCls = 'basic-table-header-cell'
+
+const getIsEdit = computed(() => !!props.column?.edit)
+const getTitle = computed(() => props.column?.label || props.column?.prop)
+const getHelpMessage = computed(() => props.column?.helpMessage)
+const getHelpComponentProps = computed(() => props.column?.helpComponentProps)
 </script>
 
 <template>

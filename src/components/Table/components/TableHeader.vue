@@ -29,11 +29,11 @@ export default defineComponent({
       default: '',
     },
   },
-  emits: ['columns-change'],
+  emits: ['columnsChange'],
   setup(_, { emit }) {
     const prefixCls = 'basic-table-header'
     function handleColumnChange(data: ColumnChangeParam[]) {
-      emit('columns-change', data)
+      emit('columnsChange', data)
     }
     return { prefixCls, handleColumnChange }
   },
