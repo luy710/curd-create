@@ -3,11 +3,7 @@
 ## 安装
 
 ```shell
-# 请切换小象内部npm数据源 http://npm.xiaoxiangyoupin.cn:4873/
-nrm use basestone
-
-yarn add @hobby/curd-create
-
+# 暂未发布npm，
 ```
 
 ## 表单组件 API
