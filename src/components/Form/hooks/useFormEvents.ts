@@ -58,7 +58,7 @@ export default function useFormEvents({
       // 判断有没有key, 因为可以设置a.b.c
       const hasKey = Reflect.has(values, key)
 
-      value = ['Input'].includes(schema.component) ? ((value && isNumber(value)) ? `${value}` : value) : value
+      value = (schema && ['Input'].includes(schema.component)) ? ((value && isNumber(value)) ? `${value}` : value) : value
 
       if (hasKey && fields.includes(key)) {
         // 事件类型
