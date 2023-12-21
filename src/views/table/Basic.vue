@@ -78,6 +78,7 @@ export default defineComponent({
       :loading="loading"
       :stripe="striped"
       :border="border"
+      :max-height="600"
       show-table-setting
       :pagination="pagination"
       @columns-change="handleColumnChange"

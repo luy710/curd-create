@@ -40,7 +40,7 @@ export function useDataSource(
 
   // 手动进行分页
   const pickPageData = () => {
-    if (!isBoolean(getPaginationInfo)) {
+    if (!isBoolean(getPaginationInfo.value)) {
       const { currentPage, pageSize } = unref(getPaginationInfo) as unknown as PaginationProps
       const data = unref(propsRef).data
       const p = (currentPage as number) || 1
@@ -54,9 +54,8 @@ export function useDataSource(
     () => unref(propsRef).data,
     () => {
       const { data, api } = unref(propsRef)
-
       if (!api && data) {
-        if (!isBoolean(getPaginationInfo)) {
+        if (!isBoolean(getPaginationInfo.value)) {
           pickPageData()
           setPagination({
             total: data?.length,
@@ -322,7 +321,7 @@ export function useDataSource(
 
       const { currentPage = 1, pageSize = PAGE_SIZE } = unref(getPaginationInfo) as PaginationProps
       // 如果配置了pagination
-      if ((isBoolean(pagination) && !pagination) || isBoolean(getPaginationInfo)) {
+      if ((isBoolean(pagination) && !pagination) || isBoolean(getPaginationInfo.value)) {
         pageParams = {}
       }
       else {
